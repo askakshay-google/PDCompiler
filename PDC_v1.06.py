@@ -94,6 +94,7 @@ class PDCompilerApp(tk.Tk):
         self.log_visible = False
         self.is_continuing_run = False
         self.update_queue = queue.Queue()
+        self.current_selected_stages = DEFAULT_STAGES[:] # Initialize with all stages
 
         self._setup_style()
         self._setup_ui()
@@ -151,8 +152,8 @@ class PDCompilerApp(tk.Tk):
         self.setup_inputs = SetupFrame(setup_frame, self.show_stage_selection)
         self.setup_inputs.grid(row=0, column=0, sticky="ew", padx=(0, 10))
 
-        self.stage_selection = StageSelectionFrame(setup_frame)
-        self.stage_selection.grid(row=0, column=1, sticky="nsew")
+        # self.stage_selection = StageSelectionFrame(setup_frame) # Dialog now, created on demand
+        # self.stage_selection.grid(row=0, column=1, sticky="nsew")
 
         status_header = ttk.Label(main_frame, text="Current Status", style="Header.TLabel")
         status_header.pack(fill=tk.X, pady=(20, 5))
@@ -176,7 +177,7 @@ class PDCompilerApp(tk.Tk):
             return
 
         inputs = self.setup_inputs.get_values()
-        stages = self.stage_selection.get_selected_stages()
+        stages = self.current_selected_stages # Use the updated list of stages
 
         if not self._validate_inputs(inputs): return
         if not stages:
@@ -237,7 +238,7 @@ class PDCompilerApp(tk.Tk):
         self.after(200, self._periodic_queue_check)
 
     def set_controls_state(self, state):
-        for widget in [self.setup_inputs, self.stage_selection]:
+        for widget in [self.setup_inputs]: # self.stage_selection is no longer a persistent widget here
             for child in widget.winfo_children():
                 try: child.config(state=state)
                 except tk.TclError: pass
@@ -250,8 +251,19 @@ class PDCompilerApp(tk.Tk):
         self.stop_button.config(state='disabled')
         self.status_bar.config(background="#F0F0F0")
 
-    def _validate_inputs(self, inputs): return True 
-    def show_stage_selection(self): self.stage_selection.show()
+    def _validate_inputs(self, inputs): return True
+    def show_stage_selection(self):
+        # Create and show the dialog
+        dialog = StageSelectionFrame(self, current_stages=self.current_selected_stages)
+        self.wait_window(dialog) # Wait for the dialog to close
+
+        if hasattr(dialog, 'confirmed') and dialog.confirmed:
+            self.current_selected_stages = dialog.final_selection
+            # Optionally, update UI or log the change
+            # print("Updated selected stages:", self.current_selected_stages)
+        # else:
+            # print("Stage selection cancelled or dialog closed without confirmation.")
+
     def log_text_append(self, text, tag=None):
         self.log_text.config(state='normal')
         self.log_text.insert(tk.END, text + "\n", tag)
@@ -265,7 +277,7 @@ class PDCompilerApp(tk.Tk):
 class SetupFrame(ttk.LabelFrame):
     def __init__(self, parent, stage_callback, **kwargs):
         super(SetupFrame, self).__init__(parent, text="Configuration", **kwargs)
-        self.stage_callback = stage_callback
+        self.stage_callback = stage_callback # This callback will now create and show the dialog
         self.entries = {}
         self.comboboxes = {}
         fields = [
@@ -294,7 +306,7 @@ class SetupFrame(ttk.LabelFrame):
                 var = tk.StringVar(); entry = ttk.Entry(self, textvariable=var, width=40)
                 entry.grid(row=i, column=1, columnspan=2, sticky="ew", padx=5); self.entries[key] = var
         ttk.Label(self, text="STAGES:").grid(row=len(fields), column=0, sticky="w", padx=5, pady=10)
-        self.stageflow_box = ttk.Button(self, text='Select Stages', command=self.stage_callback, width=15)
+        self.stageflow_box = ttk.Button(self, text='Select Stages', command=self.stage_callback, width=15) # Button in SetupFrame
         self.stageflow_box.grid(row=len(fields), column=1, sticky="w", padx=5, pady=10)
         self._update_work_area_path()
     def _browse_dir(self, var):
@@ -309,21 +321,48 @@ class SetupFrame(ttk.LabelFrame):
         vals = {k: v.get() for k, v in self.entries.items()}
         vals.update({k: v.get() for k, v in self.comboboxes.items()}); return vals
 
-class StageSelectionFrame(ttk.LabelFrame):
-    def __init__(self, parent, **kwargs):
-        super(StageSelectionFrame, self).__init__(parent, text="Stages", **kwargs)
+class StageSelectionFrame(tk.Toplevel):
+    def __init__(self, parent, current_stages, **kwargs):
+        super(StageSelectionFrame, self).__init__(parent, **kwargs)
+        self.title("Select Stages")
+        self.transient(parent) # Make it modal
+        self.grab_set()       # Grab all events
+
+        self.confirmed = False
+        self.final_selection = []
         self.vars = {}
-        self.grid_columnconfigure([0, 1], weight=1)
+
+        # Ensure content is placed correctly in Toplevel
+        content_frame = ttk.Frame(self, padding="10")
+        content_frame.pack(expand=True, fill=tk.BOTH)
+        content_frame.grid_columnconfigure([0, 1], weight=1)
+
         for i, stage in enumerate(DEFAULT_STAGES):
-            var = tk.BooleanVar(value=True)
-            chk = ttk.Checkbutton(self, text=stage.upper(), variable=var)
+            # Initialize checkbox based on current_stages
+            var = tk.BooleanVar(value=(stage in current_stages))
+            chk = ttk.Checkbutton(content_frame, text=stage.upper(), variable=var)
+            # Grid within the content_frame
             chk.grid(row=i // 2, column=i % 2, sticky="w", padx=20, pady=5)
-            self.vars[stage] = var; chk.config(state='disabled')
-    def show(self):
-        for child in self.winfo_children(): child.config(state='normal')
-        messagebox.showinfo("Select Stages", "Choose the stages to include in the flow.", parent=self)
-    def get_selected_stages(self): return [s for s, v in self.vars.items() if v.get()]
-        
+            self.vars[stage] = var
+
+        # Add an OK and Cancel button
+        button_frame = ttk.Frame(content_frame)
+        button_frame.grid(row=(len(DEFAULT_STAGES) + 1) // 2, columnspan=2, pady=10)
+
+        ok_button = ttk.Button(button_frame, text="OK", command=self._on_ok)
+        ok_button.pack(side=tk.LEFT, padx=5)
+
+        cancel_button = ttk.Button(button_frame, text="Cancel", command=self.destroy)
+        cancel_button.pack(side=tk.LEFT, padx=5)
+
+    def _on_ok(self):
+        self.final_selection = [s for s, v in self.vars.items() if v.get()]
+        self.confirmed = True
+        self.destroy()
+
+    def get_selected_stages(self): # This can still be useful if needed before confirmation
+        return [s for s, v in self.vars.items() if v.get()]
+
 class BobProcessManager:
     """Handles all backend logic for running BOB commands."""
     def __init__(self, inputs, stages, update_queue):
