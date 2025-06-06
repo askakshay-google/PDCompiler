@@ -91,7 +91,8 @@ class PDCompilerApp(tk.Tk):
 
         self.process_thread = None
         self.bob_manager = None
-        self.log_visible = False
+        self.log_window = None # Manages the Toplevel log window instance
+        self.log_text_original_parent = None # Stores the original parent of log_text
         self.is_continuing_run = False
         self.update_queue = queue.Queue()
         self.current_selected_stages = DEFAULT_STAGES[:] # Initialize with all stages
@@ -165,6 +166,7 @@ class PDCompilerApp(tk.Tk):
         self.log_frame = ttk.Frame(main_frame)
         self.log_text = scrolledtext.ScrolledText(self.log_frame, wrap=tk.WORD, height=15, state='disabled', font=('Courier New', 9))
         self.log_text.pack(fill=tk.BOTH, expand=True)
+        self.log_text_original_parent = self.log_frame # Store original parent
         self.log_frame.pack_forget() # Initially hidden
 
     def start_run(self):
@@ -213,16 +215,50 @@ class PDCompilerApp(tk.Tk):
                 self.update_queue.put(("log", "--- STOP BUTTON PRESSED ---"))
                 self.bob_manager.stop_bob_runs()
                 self.stop_button.config(state='disabled')
-    
+
     def toggle_log(self):
-        if self.log_visible:
-            self.log_frame.pack_forget()
-            self.toggle_log_button.config(text="Show Log")
-            self.log_visible = False
-        else:
-            self.log_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+        if not self.log_window:  # "Show Log"
+            self.log_window = tk.Toplevel(self)
+            self.log_window.title("Application Log")
+            self.log_window.geometry("800x600") # Default size for the log window
+
+            # Ensure log_text is available
+            if not hasattr(self, 'log_text') or not hasattr(self, 'log_text_original_parent'):
+                messagebox.showerror("Error", "Log display components not initialized correctly.")
+                if self.log_window: # Clean up Toplevel if created
+                    self.log_window.destroy()
+                    self.log_window = None
+                return
+
+            self.log_text.pack_forget() # Detach from self.log_text_original_parent (self.log_frame)
+            self.log_text.master = self.log_window # Reparent to Toplevel
+            self.log_text.pack(fill=tk.BOTH, expand=True, padx=5, pady=5) # Pack into Toplevel
+
             self.toggle_log_button.config(text="Hide Log")
-            self.log_visible = True
+
+            # Set the action for the Toplevel window's close button ('X')
+            self.log_window.protocol("WM_DELETE_WINDOW", self._handle_log_window_close)
+
+        else:  # "Hide Log" - This branch is called if self.log_window exists, meaning button implies "Hide"
+            self._handle_log_window_close()
+
+    def _handle_log_window_close(self): # New method to handle close from 'X' or "Hide Log" button
+        if self.log_window:
+            # Ensure log_text and its original parent are available
+            if not hasattr(self, 'log_text') or not hasattr(self, 'log_text_original_parent'):
+                print("Error: log_text or log_text_original_parent not found during log close.")
+            elif self.log_text_original_parent: # Only reparent if original parent is known
+                self.log_text.pack_forget() # Detach from Toplevel
+                self.log_text.master = self.log_text_original_parent # Reparent back to original parent (self.log_frame)
+                # Re-pack into its original (hidden) frame. self.log_frame is managed by pack_forget in _setup_ui.
+                self.log_text.pack(fill=tk.BOTH, expand=True)
+            else: # Fallback if original parent is somehow None
+                 self.log_text.pack_forget()
+
+
+            self.log_window.destroy()
+            self.log_window = None
+            self.toggle_log_button.config(text="Show Log")
 
     def _periodic_queue_check(self):
         while not self.update_queue.empty():
@@ -243,14 +279,49 @@ class PDCompilerApp(tk.Tk):
 
                     email_status_message = "An email notification has been sent." # Default message
                     if self.bob_manager and hasattr(self.bob_manager, 'send_failure_email'):
-                        run_name = self.bob_manager.inputs.get('run_name', 'UnknownRun')
+                        run_name = self.bob_manager.inputs.get('run_name', 'UnknownRun') # This is the main run_name for general failure
                         email_sent_successfully = self.bob_manager.send_failure_email(data, run_name)
                         if not email_sent_successfully:
                             email_status_message = "Attempted to send email notification, but it failed."
                     else:
-                        email_status_message = "Email notification system not available." # Should not happen if bob_manager is there
+                        email_status_message = "Email notification system not available."
 
                     messagebox.showerror("Run Failed", f"Stage failed at node: {data}\n{email_status_message}\nPress 'Continue' to restart from this point.")
+
+                elif msg_type == "parallel_run_failed":
+                    # Data is expected to be a dictionary:
+                    # {"flow_name": flow_name, "original_run_name": original_run_name,
+                    #  "specific_run_name": specific_run_name, "failure_reason": failure_reason}
+
+                    flow_name = data.get("flow_name", "UnknownFlow")
+                    original_run_name = data.get("original_run_name", "UnknownOriginalRun")
+                    specific_run_name = data.get("specific_run_name", "UnknownSpecificRun")
+                    failure_reason = data.get("failure_reason", "Unknown reason")
+
+                    log_message = (f"PARALLEL RUN FAILED: Flow '{flow_name}' (Run: '{specific_run_name}') "
+                                   f"for main run '{original_run_name}'. Reason: {failure_reason}")
+                    self.log_text_append(log_message, "error_tag")
+
+                    title = "Parallel Run Failed"
+                    message = (f"Parallel flow '{flow_name}' (Full name: '{specific_run_name}') has failed.\n"
+                               f"Reason: {failure_reason}\n\n"
+                               f"Do you want to attempt to rerun this specific flow?")
+
+                    user_choice_rerun = messagebox.askyesno(title, message)
+
+                    if user_choice_rerun: # True if user clicks "Yes"
+                        self.log_text_append(f"User chose to RERUN: {specific_run_name}", "info_tag")
+                        if self.bob_manager:
+                            self.bob_manager.rerun_failed_parallel_flow(flow_name,
+                                                                        original_run_name,
+                                                                        specific_run_name)
+                        else:
+                            self.log_text_append("ERROR: BobManager not available to handle rerun request.", "error_tag")
+                            messagebox.showerror("Rerun Error", "Cannot initiate rerun: Process manager is not available.")
+                    else: # False if user clicks "No" (Ignore)
+                        self.log_text_append(f"User chose to IGNORE failure of: {specific_run_name}", "info_tag")
+                        # self.status_bar.config(text=f"Ignored failure of {specific_run_name}") # Optional status update
+
                 elif msg_type == "completed":
                     self.status_bar.config(text="Flow Completed Successfully!", background="#90EE90")
                     self.reset_controls()
@@ -467,7 +538,7 @@ class BobProcessManager:
         cmd = ['mail', '-s', subject, self.user_email]
 
         try:
-            process = subprocess.run(cmd, input=body, text=True, check=False, capture_output=True, timeout=30) # Added timeout
+            process = subprocess.run(cmd, input=body, universal_newlines=True, check=False, capture_output=True, timeout=30) # Added timeout
             if process.returncode == 0:
                 self.queue.put(("log", f"Failure notification email sent to {self.user_email} for run '{run_name_input}'."))
                 return True
@@ -747,13 +818,36 @@ class BobProcessManager:
                 time.sleep(60) # Poll interval
 
             # If loop finishes, it's a timeout
-            self.failed_node = self.failed_node or run_name + " (Timeout)"
-            self.queue.put(("log", "ERROR: Parallel flow {} timed out.".format(run_name)))
+            failure_desc = f"Parallel flow {flow_name} ({run_name}) timed out."
+            self.failed_node = self.failed_node or run_name + " (Timeout)" # Use specific run_name
+            self.queue.put(("log", f"ERROR: {failure_desc}"))
+
+            # Send email
+            self.send_failure_email(failure_desc, run_name) # run_name is specific_run_name
+
+            # Queue message for UI pop-up
+            self.queue.put(("parallel_run_failed", {"flow_name": flow_name,
+                                                   "original_run_name": self.inputs['run_name'],
+                                                   "specific_run_name": run_name,
+                                                   "failure_reason": "Timeout"}))
+
             self.parallel_run_results.put(("FAILED", flow_name))
 
         except Exception as e: # Catch exceptions from create/run or other issues
-            self.failed_node = self.failed_node or flow_name # Use flow_name if run_name wasn't set
-            self.queue.put(("log", "ERROR in parallel flow {}: {}".format(flow_name, e)))
+            # run_name is defined at the start of the try block
+            failure_desc = f"Parallel flow {flow_name} ({run_name}) failed: {str(e)}"
+            self.failed_node = self.failed_node or run_name # Use specific run_name for failed_node
+            self.queue.put(("log", f"ERROR: {failure_desc}"))
+
+            # Send email
+            self.send_failure_email(failure_desc, run_name) # run_name is specific_run_name
+
+            # Queue message for UI pop-up
+            self.queue.put(("parallel_run_failed", {"flow_name": flow_name,
+                                                   "original_run_name": self.inputs['run_name'],
+                                                   "specific_run_name": run_name,
+                                                   "failure_reason": str(e)}))
+
             self.parallel_run_results.put(("FAILED", flow_name))
 
 
@@ -934,7 +1028,148 @@ class BobProcessManager:
 
     def stop_bob_runs(self):
         self.queue.put(("status", "Stopping all active runs..."))
-        self._continue_event.set()
+        self._stop_event.set() # Crucial for stopping polling loops
+
+        if not self.active_run_names:
+            self.queue.put(("log", "No active runs to stop."))
+            self.queue.put(("reset", None)) # Reset UI if no runs were active
+            return
+
+        self.queue.put(("log", f"Attempting to stop runs: {', '.join(self.active_run_names)}"))
+        for run_name in list(self.active_run_names): # Iterate over a copy
+            full_run_path = os.path.join(self.run_dir_path, run_name)
+            stop_cmd = f"bob stop -r {full_run_path}"
+
+            self.queue.put(("log", f"Issuing stop command for {run_name}: {stop_cmd}"))
+
+            if self._exec(stop_cmd, cwd=self.work_area_path):
+                self.queue.put(("log", f"Successfully issued stop command for {run_name}."))
+            else:
+                self.queue.put(("log", f"Execution of stop command for {run_name} may have failed (check previous logs)."))
+
+        self.active_run_names.clear()
+        self.queue.put(("reset", None)) # Signal UI to reset controls
+        self.queue.put(("status", "Stop procedures initiated for all active runs. GUI is resetting."))
+
+    def rerun_failed_parallel_flow(self, failed_flow_name, original_run_name, specific_run_name):
+        self.queue.put(("log", f"--- RERUN REQUESTED for {specific_run_name} (flow type: {failed_flow_name}, original main run: {original_run_name}) ---"))
+        self.queue.put(("status", f"Initiating rerun for {specific_run_name}..."))
+
+        # This method will launch a thread to handle the actual rerun logic
+        rerun_thread = threading.Thread(target=self._execute_rerun_logic,
+                                        args=(failed_flow_name, original_run_name, specific_run_name))
+        rerun_thread.daemon = True
+        rerun_thread.start()
+
+    def _determine_base_stages(self, flow_name):
+        # Helper to get base stages for a given flow_name
+        # This map needs to be comprehensive for all parallel flows, derived from run_full_flow
+        flow_to_stages_map = {
+            # Post-SYN flows from run_full_flow
+            LEC_R2S_FLOW: 'lec',
+            VCLP_S_FLOW: 'vclp',
+            # Post-PNR flows from run_full_flow
+            PDP_PEX_FLOW: 'pdp pex',
+            'sta': 'sta',
+            'emir': 'emir',
+            'pdv': 'pdv',
+            LEC_S2P_FLOW: 'lec',
+            VCLP_P_FLOW: 'vclp',
+        }
+
+        stages = flow_to_stages_map.get(flow_name)
+        if not stages:
+            self.queue.put(("log", f"ERROR [Rerun]: Could not determine base stages for flow: {flow_name}"))
+            # Attempt fallback using FLOW_TO_BASE_STAGE if it's more general, though flow_to_stages_map should be primary
+            stages = FLOW_TO_BASE_STAGE.get(flow_name)
+            if not stages:
+                 self.queue.put(("log", f"ERROR [Rerun]: Fallback to FLOW_TO_BASE_STAGE also failed for flow: {flow_name}"))
+                 return None
+            self.queue.put(("log", f"WARN [Rerun]: Used fallback FLOW_TO_BASE_STAGE for flow: {flow_name}, got stages: {stages}"))
+        return stages
+
+    def _execute_rerun_logic(self, failed_flow_name, original_run_name, specific_run_name):
+        # This runs in a new thread
+        try:
+            self.queue.put(("log", f"[Rerun-{specific_run_name}]: Thread started."))
+            # 1. Determine base stages
+            base_stages_for_flow = self._determine_base_stages(failed_flow_name)
+            if not base_stages_for_flow:
+                self.queue.put(("status", f"Rerun failed for {specific_run_name}: Could not get base stages."))
+                self.send_failure_email(f"Rerun of parallel flow {failed_flow_name} ({specific_run_name}) failed: Could not determine base stages.", specific_run_name)
+                return
+
+            # 2. Create var file. _create_final_var_file_for_flow uses self.inputs['run_name'].
+            # self.inputs should be correctly populated from the initial main run.
+            # self.inputs['run_name'] should correspond to original_run_name for var file context.
+            if self.inputs.get('run_name') != original_run_name:
+                 self.queue.put(("log", f"WARN [Rerun-{specific_run_name}]: self.inputs['run_name'] ('{self.inputs.get('run_name')}') does not match original_run_name ('{original_run_name}'). This might affect var file generation if it depends on the main run name rather than block/IP specifics."))
+
+            var_file = self._create_final_var_file_for_flow(failed_flow_name) # Uses self.inputs
+            if not var_file:
+                self.queue.put(("log", f"ERROR [Rerun-{specific_run_name}]: Var file creation failed for {failed_flow_name}."))
+                self.queue.put(("status", f"Rerun failed for {specific_run_name}: Var file error."))
+                self.send_failure_email(f"Rerun of parallel flow {failed_flow_name} ({specific_run_name}) failed: Var file creation error.", specific_run_name)
+                return
+
+            # 3. Full path to the run
+            full_run_path = os.path.join(self.run_dir_path, specific_run_name)
+
+            # 4. Bob create (safety check, directory should usually exist)
+            if not os.path.exists(full_run_path):
+                self.queue.put(("log", f"[Rerun-{specific_run_name}]: Run directory {full_run_path} not found. Attempting to create."))
+                create_cmd = f"bob create -r {full_run_path} -s {base_stages_for_flow} -v {var_file}"
+                if not self._exec(create_cmd, cwd=self.work_area_path):
+                    self.queue.put(("log", f"ERROR [Rerun-{specific_run_name}]: 'bob create' failed."))
+                    self.queue.put(("status", f"Rerun failed for {specific_run_name}: Create error."))
+                    self.send_failure_email(f"Rerun of parallel flow {failed_flow_name} ({specific_run_name}) failed: 'bob create' error.", specific_run_name)
+                    return
+            else:
+                self.queue.put(("log", f"[Rerun-{specific_run_name}]: Existing run directory found: {full_run_path}"))
+
+            # 5. Bob run -f
+            bob_run_cmd = f"bob run -r {full_run_path} -f" # Force rerun
+            self.queue.put(("log", f"[Rerun-{specific_run_name}]: Executing command: {bob_run_cmd}"))
+            if not self._exec(bob_run_cmd, cwd=self.work_area_path):
+                self.queue.put(("log", f"ERROR [Rerun-{specific_run_name}]: 'bob run -f' command execution failed."))
+                self.queue.put(("status", f"Rerun of {specific_run_name} execution failed."))
+                self.send_failure_email(f"Rerun of parallel flow {failed_flow_name} ({specific_run_name}) failed during 'bob run -f' execution.", specific_run_name)
+                return
+
+            # 6. Monitor completion
+            self.queue.put(("status", f"Rerunning {specific_run_name}. Monitoring completion..."))
+            start_time_rerun = time.time()
+            timeout_rerun_minutes = 300
+            timeout_rerun_seconds = timeout_rerun_minutes * 60
+
+            while time.time() - start_time_rerun < timeout_rerun_seconds:
+                # if self._stop_event.is_set(): # Decide if reruns are globally stoppable
+                #     self.queue.put(("log", f"[Rerun-{specific_run_name}]: Global stop event detected."))
+                #     self.queue.put(("status", f"Rerun of {specific_run_name} cancelled by global stop."))
+                #     return
+
+                if self._is_run_completed(specific_run_name):
+                    self.queue.put(("log", f"[Rerun-{specific_run_name}]: COMPLETED successfully after rerun."))
+                    self.queue.put(("status", f"Rerun of {specific_run_name} COMPLETED."))
+                    # Consider a success email/notification if needed
+                    # self.send_success_email(f"Rerun of parallel flow {failed_flow_name} ({specific_run_name}) completed successfully.", specific_run_name)
+                    return
+
+                self.queue.put(("status", f"Polling rerun {specific_run_name}... Elapsed: {int(time.time() - start_time_rerun)}s"))
+                time.sleep(60)
+
+            # Timeout for the rerun
+            self.queue.put(("log", f"ERROR [Rerun-{specific_run_name}]: TIMED OUT during rerun monitoring."))
+            self.queue.put(("status", f"Rerun of {specific_run_name} TIMED OUT."))
+            self.send_failure_email(f"Rerun of parallel flow {failed_flow_name} ({specific_run_name}) timed out during monitoring.", specific_run_name)
+
+        except Exception as e:
+            self.queue.put(("log", f"ERROR [Rerun-{specific_run_name}]: Unexpected error: {str(e)}"))
+            self.queue.put(("status", f"Rerun of {specific_run_name} failed unexpectedly: {str(e)}"))
+            # Ensure specific_run_name is defined or use a fallback for email if error is very early
+            email_run_name = specific_run_name if 'specific_run_name' in locals() else failed_flow_name
+            self.send_failure_email(f"Rerun of parallel flow {failed_flow_name} ({email_run_name}) failed unexpectedly: {str(e)}", email_run_name)
+
 
 if __name__ == "__main__":
     app = PDCompilerApp()
