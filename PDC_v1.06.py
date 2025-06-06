@@ -94,6 +94,7 @@ class PDCompilerApp(tk.Tk):
         self.log_visible = False
         self.is_continuing_run = False
         self.update_queue = queue.Queue()
+        self.current_selected_stages = DEFAULT_STAGES[:] # Initialize with all stages
 
         self._setup_style()
         self._setup_ui()
@@ -151,8 +152,8 @@ class PDCompilerApp(tk.Tk):
         self.setup_inputs = SetupFrame(setup_frame, self.show_stage_selection)
         self.setup_inputs.grid(row=0, column=0, sticky="ew", padx=(0, 10))
 
-        self.stage_selection = StageSelectionFrame(setup_frame)
-        self.stage_selection.grid(row=0, column=1, sticky="nsew")
+        # self.stage_selection = StageSelectionFrame(setup_frame) # Dialog now, created on demand
+        # self.stage_selection.grid(row=0, column=1, sticky="nsew")
 
         status_header = ttk.Label(main_frame, text="Current Status", style="Header.TLabel")
         status_header.pack(fill=tk.X, pady=(20, 5))
@@ -168,15 +169,29 @@ class PDCompilerApp(tk.Tk):
 
     def start_run(self):
         if self.is_continuing_run:
+            self.run_button.config(text="Run", style="Run.TButton") # Reset button text
+            self.is_continuing_run = False # Reset flag
+
             if self.bob_manager:
-                self.run_button.config(text="Run", style="Run.TButton")
-                self.is_continuing_run = False
+                # Set a flag indicating this is a continued run
+                self.bob_manager.is_continue_run_flag = True
+
+                # Re-initialize and start the process thread
+                self.process_thread = threading.Thread(target=self.bob_manager.run_full_flow)
+                self.process_thread.daemon = True
+                self.process_thread.start()
+
+                # Keep controls disabled and stop button enabled
                 self.set_controls_state('disabled')
                 self.stop_button.config(state='normal')
-            return
+            else:
+                # This case should ideally not happen if continue is triggered after a failure
+                self.log_text_append("ERROR: Continue pressed but no Bob Manager instance found.", "error_tag") # Or handle error appropriately
+                self.reset_controls()
+            return # Important: Return after handling the continue logic
 
         inputs = self.setup_inputs.get_values()
-        stages = self.stage_selection.get_selected_stages()
+        stages = self.current_selected_stages # Use the updated list of stages
 
         if not self._validate_inputs(inputs): return
         if not stages:
@@ -237,7 +252,7 @@ class PDCompilerApp(tk.Tk):
         self.after(200, self._periodic_queue_check)
 
     def set_controls_state(self, state):
-        for widget in [self.setup_inputs, self.stage_selection]:
+        for widget in [self.setup_inputs]: # self.stage_selection is no longer a persistent widget here
             for child in widget.winfo_children():
                 try: child.config(state=state)
                 except tk.TclError: pass
@@ -250,8 +265,19 @@ class PDCompilerApp(tk.Tk):
         self.stop_button.config(state='disabled')
         self.status_bar.config(background="#F0F0F0")
 
-    def _validate_inputs(self, inputs): return True 
-    def show_stage_selection(self): self.stage_selection.show()
+    def _validate_inputs(self, inputs): return True
+    def show_stage_selection(self):
+        # Create and show the dialog
+        dialog = StageSelectionFrame(self, current_stages=self.current_selected_stages)
+        self.wait_window(dialog) # Wait for the dialog to close
+
+        if hasattr(dialog, 'confirmed') and dialog.confirmed:
+            self.current_selected_stages = dialog.final_selection
+            # Optionally, update UI or log the change
+            # print("Updated selected stages:", self.current_selected_stages)
+        # else:
+            # print("Stage selection cancelled or dialog closed without confirmation.")
+
     def log_text_append(self, text, tag=None):
         self.log_text.config(state='normal')
         self.log_text.insert(tk.END, text + "\n", tag)
@@ -265,7 +291,7 @@ class PDCompilerApp(tk.Tk):
 class SetupFrame(ttk.LabelFrame):
     def __init__(self, parent, stage_callback, **kwargs):
         super(SetupFrame, self).__init__(parent, text="Configuration", **kwargs)
-        self.stage_callback = stage_callback
+        self.stage_callback = stage_callback # This callback will now create and show the dialog
         self.entries = {}
         self.comboboxes = {}
         fields = [
@@ -294,7 +320,7 @@ class SetupFrame(ttk.LabelFrame):
                 var = tk.StringVar(); entry = ttk.Entry(self, textvariable=var, width=40)
                 entry.grid(row=i, column=1, columnspan=2, sticky="ew", padx=5); self.entries[key] = var
         ttk.Label(self, text="STAGES:").grid(row=len(fields), column=0, sticky="w", padx=5, pady=10)
-        self.stageflow_box = ttk.Button(self, text='Select Stages', command=self.stage_callback, width=15)
+        self.stageflow_box = ttk.Button(self, text='Select Stages', command=self.stage_callback, width=15) # Button in SetupFrame
         self.stageflow_box.grid(row=len(fields), column=1, sticky="w", padx=5, pady=10)
         self._update_work_area_path()
     def _browse_dir(self, var):
@@ -309,21 +335,48 @@ class SetupFrame(ttk.LabelFrame):
         vals = {k: v.get() for k, v in self.entries.items()}
         vals.update({k: v.get() for k, v in self.comboboxes.items()}); return vals
 
-class StageSelectionFrame(ttk.LabelFrame):
-    def __init__(self, parent, **kwargs):
-        super(StageSelectionFrame, self).__init__(parent, text="Stages", **kwargs)
+class StageSelectionFrame(tk.Toplevel):
+    def __init__(self, parent, current_stages, **kwargs):
+        super(StageSelectionFrame, self).__init__(parent, **kwargs)
+        self.title("Select Stages")
+        self.transient(parent) # Make it modal
+        self.grab_set()       # Grab all events
+
+        self.confirmed = False
+        self.final_selection = []
         self.vars = {}
-        self.grid_columnconfigure([0, 1], weight=1)
+
+        # Ensure content is placed correctly in Toplevel
+        content_frame = ttk.Frame(self, padding="10")
+        content_frame.pack(expand=True, fill=tk.BOTH)
+        content_frame.grid_columnconfigure([0, 1], weight=1)
+
         for i, stage in enumerate(DEFAULT_STAGES):
-            var = tk.BooleanVar(value=True)
-            chk = ttk.Checkbutton(self, text=stage.upper(), variable=var)
+            # Initialize checkbox based on current_stages
+            var = tk.BooleanVar(value=(stage in current_stages))
+            chk = ttk.Checkbutton(content_frame, text=stage.upper(), variable=var)
+            # Grid within the content_frame
             chk.grid(row=i // 2, column=i % 2, sticky="w", padx=20, pady=5)
-            self.vars[stage] = var; chk.config(state='disabled')
-    def show(self):
-        for child in self.winfo_children(): child.config(state='normal')
-        messagebox.showinfo("Select Stages", "Choose the stages to include in the flow.", parent=self)
-    def get_selected_stages(self): return [s for s, v in self.vars.items() if v.get()]
-        
+            self.vars[stage] = var
+
+        # Add an OK and Cancel button
+        button_frame = ttk.Frame(content_frame)
+        button_frame.grid(row=(len(DEFAULT_STAGES) + 1) // 2, columnspan=2, pady=10)
+
+        ok_button = ttk.Button(button_frame, text="OK", command=self._on_ok)
+        ok_button.pack(side=tk.LEFT, padx=5)
+
+        cancel_button = ttk.Button(button_frame, text="Cancel", command=self.destroy)
+        cancel_button.pack(side=tk.LEFT, padx=5)
+
+    def _on_ok(self):
+        self.final_selection = [s for s, v in self.vars.items() if v.get()]
+        self.confirmed = True
+        self.destroy()
+
+    def get_selected_stages(self): # This can still be useful if needed before confirmation
+        return [s for s, v in self.vars.items() if v.get()]
+
 class BobProcessManager:
     """Handles all backend logic for running BOB commands."""
     def __init__(self, inputs, stages, update_queue):
@@ -335,6 +388,137 @@ class BobProcessManager:
         self.parallel_run_results = queue.Queue()
         self._stop_event = threading.Event()
         self._continue_event = threading.Event()
+        self.is_continue_run_flag = False # Initialize the new flag
+
+    def _execute_bob_info_command(self, command_str, cwd_path=None):
+        """
+        Executes a bob command (typically 'bob info') and returns the CompletedProcess object.
+        Does not send output to the main application queue by default.
+        Raises FileNotFoundError or subprocess.CalledProcessError on failure.
+        """
+        full_cmd = "source /etc/profile.d/modules.sh; module load tools/bob; module load tools/gchips-pd/pd-repo/{}/; {}".format(
+            self.inputs['chip'], command_str
+        )
+        try:
+            # Using a short timeout as bob info should be quick.
+            # Capture output to prevent it from going to console unless needed for debug.
+            process = subprocess.run(
+                full_cmd, shell=True, executable='/bin/bash',
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                universal_newlines=True, check=True,
+                cwd=cwd_path or self.run_dir_path, timeout=60
+            )
+            return process
+        except subprocess.CalledProcessError as e:
+            # Log specific error from the command execution
+            error_message = "Bob info command failed: {}\nSTDOUT: {}\nSTDERR: {}".format(e.cmd, e.stdout, e.stderr)
+            self.queue.put(("log", error_message)) # Log to main queue for this specific error
+            raise # Re-raise to be handled by calling method
+        except FileNotFoundError as e:
+            self.queue.put(("log", "ERROR: Bob executable or environment setup not found for info command. {}".format(e)))
+            raise
+        except Exception as e: # Catch any other unexpected errors
+            self.queue.put(("log", "ERROR: Unexpected error executing bob info: {}".format(e)))
+            raise
+
+    def _get_node_status(self, run_name, node_pattern):
+        full_run_path = os.path.join(self.run_dir_path, run_name)
+        # Sanitize node_pattern for use in filename
+        sanitized_node_pattern = re.sub(r'[^a-zA-Z0-9_.-]', '_', node_pattern)
+        json_file_name = "bob_info_temp_{}_{}.json".format(run_name, sanitized_node_pattern)
+        json_file_path = os.path.join(self.run_dir_path, json_file_name)
+
+        info_cmd_str = "bob info -r {} -o {}".format(full_run_path, json_file_path)
+
+        try:
+            self._execute_bob_info_command(info_cmd_str, cwd_path=self.work_area_path)
+            if not os.path.exists(json_file_path):
+                self.queue.put(("log", "ERROR: Bob info command created no output JSON file: {}".format(json_file_path)))
+                return 'UNKNOWN'
+
+            with open(json_file_path, 'r') as f:
+                jobs_data = json.load(f)
+
+            for job in jobs_data:
+                if job.get("jobname", "") == node_pattern:
+                    return job.get("status", "UNKNOWN").upper()
+            return 'NOT_FOUND'
+        except FileNotFoundError: # Raised by _execute_bob_info_command
+             self.queue.put(("log", "ERROR (_get_node_status): bob execution environment issue for '{}'.".format(run_name)))
+             return 'UNKNOWN'
+        except subprocess.CalledProcessError: # Raised by _execute_bob_info_command
+            self.queue.put(("log", "ERROR (_get_node_status): 'bob info' failed for run '{}', node '{}'.".format(run_name, node_pattern)))
+            return 'UNKNOWN' # Error already logged by _execute_bob_info_command
+        except json.JSONDecodeError:
+            self.queue.put(("log", "ERROR: Could not decode JSON from '{}' for node status.".format(json_file_path)))
+            return 'UNKNOWN'
+        except Exception as e:
+            self.queue.put(("log", "ERROR (_get_node_status): Unexpected error processing '{}', node '{}': {}".format(run_name, node_pattern, e)))
+            return 'UNKNOWN'
+        finally:
+            if os.path.exists(json_file_path):
+                try:
+                    os.remove(json_file_path)
+                except OSError as e:
+                    self.queue.put(("log", "WARN: Could not delete temp JSON file '{}': {}".format(json_file_path, e)))
+
+    def _is_run_completed(self, run_name):
+        full_run_path = os.path.join(self.run_dir_path, run_name)
+        # Sanitize run_name for use in filename
+        sanitized_run_name = re.sub(r'[^a-zA-Z0-9_.-]', '_', run_name)
+        json_file_name = "bob_info_temp_run_{}.json".format(sanitized_run_name)
+        json_file_path = os.path.join(self.run_dir_path, json_file_name)
+
+        info_cmd_str = "bob info -r {} -o {}".format(full_run_path, json_file_path)
+
+        fail_states = {"FAILED", "ERROR", "KILLED", "INVALID"}
+        running_states = {"RUNNING", "PENDING", "SUBMITTED", "WAITING"} # Add any other relevant non-terminal states
+
+        try:
+            self._execute_bob_info_command(info_cmd_str, cwd_path=self.work_area_path)
+            if not os.path.exists(json_file_path):
+                self.queue.put(("log", "ERROR: Bob info command created no output JSON file for run completion check: {}".format(json_file_path)))
+                return False
+
+            with open(json_file_path, 'r') as f:
+                jobs_data = json.load(f)
+
+            if not jobs_data: # No jobs reported
+                self.queue.put(("log", "WARN: No jobs found in 'bob info' output for run '{}'. Considering not completed.".format(run_name)))
+                return False
+
+            found_valid_job = False
+            for job in jobs_data:
+                status = job.get("status", "UNKNOWN").upper()
+                if status in fail_states:
+                    return False # Any failed job means the run is not successfully completed
+                if status in running_states:
+                    return False # Any running/pending job means not yet complete
+                if status == "VALID":
+                    found_valid_job = True
+
+            # If we went through all jobs, none failed, none are running,
+            # then completion depends on if we found at least one valid job.
+            return found_valid_job
+
+        except FileNotFoundError:
+             self.queue.put(("log", "ERROR (_is_run_completed): bob execution environment issue for '{}'.".format(run_name)))
+             return False
+        except subprocess.CalledProcessError: # Error already logged by _execute_bob_info_command
+            self.queue.put(("log", "ERROR (_is_run_completed): 'bob info' failed for run '{}'.".format(run_name)))
+            return False
+        except json.JSONDecodeError:
+            self.queue.put(("log", "ERROR: Could not decode JSON from '{}' for run completion check.".format(json_file_path)))
+            return False
+        except Exception as e:
+            self.queue.put(("log", "ERROR (_is_run_completed): Unexpected error processing '{}': {}".format(run_name, e)))
+            return False
+        finally:
+            if os.path.exists(json_file_path):
+                try:
+                    os.remove(json_file_path)
+                except OSError as e:
+                    self.queue.put(("log", "WARN: Could not delete temp JSON file '{}': {}".format(json_file_path, e)))
 
     def _get_user_email(self):
         try: return "{}@google.com".format(subprocess.check_output('whoami', universal_newlines=True).strip())
@@ -383,41 +567,12 @@ class BobProcessManager:
         except IOError as e:
             self.queue.put(("log", "ERROR creating var file for {}: {}".format(flow_name, e))); return None
 
-    def _wait_for_node_completion(self, run_name, node_pattern, timeout_minutes=120):
-        log_prefix = "WAIT({} in {})".format(node_pattern, run_name)
-        self.queue.put(("status", "{}: Starting...".format(log_prefix)))
-        start_time, fail_states = time.time(), {"FAILED", "INVALID", "ERROR", "KILLED"}
-        while True:
-            if self._stop_event.is_set(): return "ABORTED"
-            if (time.time() - start_time) > (timeout_minutes * 60): return "TIMEOUT"
-            
-            json_file = os.path.join(self.run_dir_path, "bob_info_{}.json".format(run_name))
-            full_run_path = os.path.join(self.run_dir_path, run_name)
-            info_cmd = "bob info -r {} -o {}".format(full_run_path, json_file)
-            try:
-                full_cmd = "source /etc/profile.d/modules.sh; module load tools/bob; module load tools/gchips-pd/pd-repo/{}/; {}".format(self.inputs['chip'], info_cmd)
-                subprocess.run(full_cmd, shell=True, executable='/bin/bash', check=True, timeout=60, cwd=self.work_area_path, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                
-                with open(json_file, 'r') as f: jobs = json.load(f)
-                
-                found = False
-                for job in jobs:
-                    if job.get("jobname", "") == node_pattern:
-                        found, status = True, job.get("status", "").upper()
-                        self.queue.put(("status", "{}: Node {} status is {}".format(log_prefix, node_pattern, status)))
-                        if status == "VALID": return "VALID"
-                        if status in fail_states: self.failed_node = "{}/{}".format(run_name, node_pattern); return "FAILED"
-                        break
-                if not found: self.queue.put(("status", "{}: Waiting for node...".format(log_prefix)))
-            except Exception as e:
-                self.queue.put(("log", "WARN: {}: Poll error: {}. Retrying...".format(log_prefix, e)))
-            finally:
-                if os.path.exists(json_file):
-                    try: os.remove(json_file)
-                    except OSError: pass
-            time.sleep(30)
+    # _wait_for_node_completion is now removed. Polling is integrated into run_full_flow.
 
     def _setup_work_area(self):
+        # This method is called at the beginning of a new run.
+        # For resuming, this should ideally be idempotent or skipped if already done.
+        # Current implementation is fine as it checks for "repo" dir.
         if os.path.isdir(os.path.join(self.work_area_path, "repo")): return True
         self.queue.put(("status", "Creating work area..."))
         cmd = "bob wa create --chip {} --process {} --ip {} --block {} --area {}".format(self.inputs['chip'], self.inputs['process'], self.inputs['ip'], self.inputs['block'], self.work_area_path)
@@ -440,98 +595,209 @@ class BobProcessManager:
     def _run_parallel_flow(self, flow_name, base_stages):
         try:
             run_name = "{}_{}".format(self.inputs['run_name'], flow_name.upper())
-            self.active_run_names.append(run_name)
+             # Ensure this parallel run is tracked if it's going to be started
+            if run_name not in self.active_run_names:
+                self.active_run_names.append(run_name) # Add here before any exec calls for this run_name
+
             self.queue.put(("status", "Configuring parallel flow: {}".format(flow_name)))
             var_file = self._create_final_var_file_for_flow(flow_name)
-            if not var_file: raise Exception("Var file creation failed")
+            if not var_file: raise Exception("Var file creation failed for {}".format(flow_name))
             
             full_run_path = os.path.join(self.run_dir_path, run_name)
-            if not self._exec("bob create -r {} -s {} -v {}".format(full_run_path, base_stages, var_file)): raise Exception("Create failed")
-            if not self._exec("bob run -r {}".format(full_run_path)): raise Exception("Run failed")
-            if self._wait_for_run_completion(run_name) != "VALID": raise Exception("Flow did not complete")
-            self.parallel_run_results.put(("SUCCESS", flow_name))
-        except Exception as e:
-            self.failed_node = flow_name
+            if not os.path.exists(full_run_path):
+                if not self._exec("bob create -r {} -s {} -v {}".format(full_run_path, base_stages, var_file)):
+                    raise Exception("Create failed for {}".format(flow_name))
+            else:
+                self.queue.put(("log", "Bob create skipped for existing run directory: {}".format(full_run_path)))
+
+            if not self._exec("bob run -r {}".format(full_run_path)): # This is generally idempotent
+                raise Exception("Run failed for {}".format(flow_name))
+
+            # Polling for parallel flow completion
+            self.queue.put(("status", "Waiting for {} completion...".format(run_name)))
+            start_time_parallel = time.time()
+            timeout_parallel = 300 * 60 # Example 5hr timeout for parallel flows, adjust as needed
+            while time.time() - start_time_parallel < timeout_parallel:
+                if self._stop_event.is_set():
+                    self.queue.put(("log", "Stop event for parallel flow {}.".format(run_name)))
+                    # Mark as failed due to stop, so it's not considered successful if stop occurs
+                    self.failed_node = self.failed_node or run_name + " (Stopped)"
+                    self.parallel_run_results.put(("FAILED", flow_name))
+                    return # Exit this thread
+
+                if self._is_run_completed(run_name):
+                    self.queue.put(("log", "Parallel flow {} completed successfully.".format(run_name)))
+                    self.parallel_run_results.put(("SUCCESS", flow_name))
+                    return # Exit this thread
+
+                # Check if the run failed explicitly (not just not completed)
+                # This requires checking individual job statuses if _is_run_completed only returns True on all VALID
+                # For simplicity, we'll rely on timeout or _is_run_completed finding a FAILED state.
+                # A more granular check could use _get_node_status on critical nodes if they exist for parallel runs.
+                self.queue.put(("status", "Polling {}... Elapsed: {}s".format(run_name, int(time.time() - start_time_parallel))))
+                time.sleep(60) # Poll interval
+
+            # If loop finishes, it's a timeout
+            self.failed_node = self.failed_node or run_name + " (Timeout)"
+            self.queue.put(("log", "ERROR: Parallel flow {} timed out.".format(run_name)))
+            self.parallel_run_results.put(("FAILED", flow_name))
+
+        except Exception as e: # Catch exceptions from create/run or other issues
+            self.failed_node = self.failed_node or flow_name # Use flow_name if run_name wasn't set
             self.queue.put(("log", "ERROR in parallel flow {}: {}".format(flow_name, e)))
             self.parallel_run_results.put(("FAILED", flow_name))
 
-    def _wait_for_run_completion(self, run_name, timeout_minutes=120):
-        start_time = time.time()
-        while time.time() - start_time < (timeout_minutes * 60):
-            if self._stop_event.is_set(): return "ABORTED"
-            try:
-                full_run_path = os.path.join(self.run_dir_path, run_name)
-                info_cmd = "bob info -r {}".format(full_run_path)
-                full_cmd = "source /etc/profile.d/modules.sh; module load tools/bob; module load tools/gchips-pd/pd-repo/{}/; {}".format(self.inputs['chip'], info_cmd)
-                output = subprocess.check_output(full_cmd, shell=True, executable='/bin/bash', cwd=self.work_area_path, universal_newlines=True, stderr=subprocess.DEVNULL)
-                if "status=\"FAILED\"" in output or "status=\"ERROR\"" in output: return "FAILED"
-                if "status=\"RUNNING\"" not in output: return "VALID"
-            except Exception: pass
-            time.sleep(30)
-        return "TIMEOUT"
+
+    # def _wait_for_run_completion(self, run_name, timeout_minutes=120): # Commented out as polling is now in _run_parallel_flow
+    #     ...
 
     def run_full_flow(self):
-        if not self._setup_work_area(): self.queue.put(("failed", "Work Area Setup")); return
+        is_resuming = self.is_continue_run_flag
+        self.is_continue_run_flag = False # Reset flag
+
+        if is_resuming:
+            self.queue.put(("log", "--- PD COMPILER RESUMING FLOW ---"))
+            self.failed_node = None
+            self.active_run_names = []
+            self.parallel_run_results = queue.Queue()
+        else:
+            self.queue.put(("log", "--- PD COMPILER STARTING NEW FLOW ---"))
+            if not self._setup_work_area(): return
+
         main_var_file = self._prepare_main_var_file()
-        if not main_var_file: self.queue.put(("failed", "Var File Prep")); return
+        if not main_var_file: return
 
         main_run_name = "{}_main".format(self.inputs['run_name'])
-        self.active_run_names.append(main_run_name)
-        
         full_main_run_path = os.path.join(self.run_dir_path, main_run_name)
-        if not self._exec("bob create -r {} -s syn pnr -v {}".format(full_main_run_path, main_var_file)): self.queue.put(("failed", "Main Create")); return
-        if not self._exec("bob run -r {}".format(full_main_run_path)): self.queue.put(("failed", "Main Run")); return
 
-        if self._wait_for_node_completion(main_run_name, SYN_COMPLETION_NODE) != "VALID": 
-            if not self._stop_event.is_set(): self.queue.put(("failed", self.failed_node or "SYN")); 
-            return
+        # --- SYN Stage ---
+        self.queue.put(("status", "Processing SYN Stage..."))
+        syn_completed_successfully = False
+        if is_resuming:
+            syn_status = self._get_node_status(main_run_name, SYN_COMPLETION_NODE)
+            self.queue.put(("log", "[Resume] Initial SYN status: {}".format(syn_status)))
+            if syn_status == 'VALID':
+                syn_completed_successfully = True
         
-        threads = []
-        post_syn = {LEC_R2S_FLOW: 'lec', VCLP_S_FLOW: 'vclp'}
-        for flow, stage in post_syn.items():
-            if stage in self.selected_stages:
-                t = threading.Thread(target=self._run_parallel_flow, args=(flow, stage)); threads.append(t); t.start()
+        if not syn_completed_successfully:
+            if main_run_name not in self.active_run_names:
+                 self.active_run_names.append(main_run_name)
 
-        if self._wait_for_node_completion(main_run_name, PNR_COMPLETION_NODE) != "VALID": 
-            if not self._stop_event.is_set(): self.queue.put(("failed", self.failed_node or "PNR")); 
-            return
+            if not os.path.exists(full_main_run_path) or not is_resuming:
+                if not self._exec("bob create -r {} -s syn pnr -v {}".format(full_main_run_path, main_var_file)):
+                    self.queue.put(("failed", self.failed_node or "Main Create (SYN)")); return
+
+            if not self._exec("bob run -r {}".format(full_main_run_path)):
+                self.queue.put(("failed", self.failed_node or "Main Run (SYN)")); return
+
+            self.queue.put(("status", "Waiting for SYN completion..."))
+            start_time_syn = time.time(); timeout_syn = 300 * 60
+            while time.time() - start_time_syn < timeout_syn:
+                if self._stop_event.is_set(): self.queue.put(("log", "Stop event during SYN.")); return
+                status = self._get_node_status(main_run_name, SYN_COMPLETION_NODE)
+                if status == 'VALID': syn_completed_successfully = True; break
+                if status in {'FAILED', 'ERROR', 'KILLED', 'INVALID'}:
+                    self.failed_node = "{}/{} ({})".format(main_run_name, SYN_COMPLETION_NODE, status)
+                    self.queue.put(("failed", self.failed_node)); return
+                self.queue.put(("status", "Polling SYN... Last status: {}. Elapsed: {}s".format(status, int(time.time() - start_time_syn))))
+                time.sleep(60)
+
+            if not syn_completed_successfully:
+                self.failed_node = self.failed_node or "{}/{} (Timeout)".format(main_run_name, SYN_COMPLETION_NODE)
+                self.queue.put(("failed", self.failed_node)); return
+
+        self.queue.put(("log", "SYN stage: {}".format("COMPLETED" if syn_completed_successfully else "SKIPPED/FAILED")))
+        if not syn_completed_successfully: return
+
+        # --- Post-SYN Parallel Flows ---
+        self.queue.put(("status", "Processing Post-SYN Parallel Flows..."))
+        post_syn_flows = {LEC_R2S_FLOW: 'lec', VCLP_S_FLOW: 'vclp'}
+        active_threads_post_syn = []
+        for flow_name, base_stage_for_flow in post_syn_flows.items():
+            if base_stage_for_flow in self.selected_stages:
+                parallel_run_name = "{}_{}".format(self.inputs['run_name'], flow_name.upper())
+                if is_resuming and self._is_run_completed(parallel_run_name):
+                    self.queue.put(("log", "[Resume] Post-SYN flow {} already completed.".format(parallel_run_name)))
+                else:
+                    t = threading.Thread(target=self._run_parallel_flow, args=(flow_name, base_stage_for_flow))
+                    active_threads_post_syn.append(t); t.start()
+        for t in active_threads_post_syn: t.join()
+        if self.failed_node and any(fn.startswith(self.inputs['run_name']+"_"+key.upper()) for key in post_syn_flows.keys() for fn in [self.failed_node]): return
+
+
+        # --- PNR Stage ---
+        self.queue.put(("status", "Processing PNR Stage..."))
+        pnr_completed_successfully = False
+        if is_resuming:
+            pnr_status = self._get_node_status(main_run_name, PNR_COMPLETION_NODE)
+            self.queue.put(("log", "[Resume] Initial PNR status: {}".format(pnr_status)))
+            if pnr_status == 'VALID':
+                pnr_completed_successfully = True
+
+        if not pnr_completed_successfully:
+            if main_run_name not in self.active_run_names: self.active_run_names.append(main_run_name)
+            if not self._exec("bob run -r {}".format(full_main_run_path)):
+                 self.queue.put(("failed", self.failed_node or "Main Run (PNR)")); return
+
+            self.queue.put(("status", "Waiting for PNR completion..."))
+            start_time_pnr = time.time(); timeout_pnr = 300 * 60
+            while time.time() - start_time_pnr < timeout_pnr:
+                if self._stop_event.is_set(): self.queue.put(("log", "Stop event during PNR.")); return
+                status = self._get_node_status(main_run_name, PNR_COMPLETION_NODE)
+                if status == 'VALID': pnr_completed_successfully = True; break
+                if status in {'FAILED', 'ERROR', 'KILLED', 'INVALID'}:
+                    self.failed_node = "{}/{} ({})".format(main_run_name, PNR_COMPLETION_NODE, status)
+                    self.queue.put(("failed", self.failed_node)); return
+                self.queue.put(("status", "Polling PNR... Last status: {}. Elapsed: {}s".format(status, int(time.time() - start_time_pnr))))
+                time.sleep(60)
+
+            if not pnr_completed_successfully:
+                self.failed_node = self.failed_node or "{}/{} (Timeout)".format(main_run_name, PNR_COMPLETION_NODE)
+                self.queue.put(("failed", self.failed_node)); return
         
-        post_pnr = {
+        self.queue.put(("log", "PNR stage: {}".format("COMPLETED" if pnr_completed_successfully else "SKIPPED/FAILED")))
+        if not pnr_completed_successfully: return
+
+        # --- Post-PNR Parallel Flows ---
+        self.queue.put(("status", "Processing Post-PNR Parallel Flows..."))
+        post_pnr_flows = {
             PDP_PEX_FLOW: 'pdp pex', 'sta': 'sta', 'emir': 'emir', 'pdv': 'pdv',
             LEC_S2P_FLOW: 'lec', VCLP_P_FLOW: 'vclp',
         }
-        for flow, stages in post_pnr.items():
-            if any(s in self.selected_stages for s in FLOW_TO_BASE_STAGE.get(flow, flow).split()):
-                t = threading.Thread(target=self._run_parallel_flow, args=(flow, stages)); threads.append(t); t.start()
+        active_threads_post_pnr = []
+        for flow_name, stages_for_flow in post_pnr_flows.items():
+            if any(s in self.selected_stages for s in FLOW_TO_BASE_STAGE.get(flow_name, stages_for_flow).split()):
+                parallel_run_name = "{}_{}".format(self.inputs['run_name'], flow_name.upper())
+                if is_resuming and self._is_run_completed(parallel_run_name):
+                    self.queue.put(("log", "[Resume] Post-PNR flow {} already completed.".format(parallel_run_name)))
+                else:
+                    t = threading.Thread(target=self._run_parallel_flow, args=(flow_name, stages_for_flow))
+                    active_threads_post_pnr.append(t); t.start()
+        for t in active_threads_post_pnr: t.join()
+        if self.failed_node and any(fn.startswith(self.inputs['run_name']+"_"+key.upper()) for key in post_pnr_flows.keys() for fn in [self.failed_node]): return
         
-        for t in threads: t.join()
+        # --- Final Completion ---
+        if self._stop_event.is_set(): self.queue.put(("log", "Stop event before final completion.")); return
+        if self.failed_node: self.queue.put(("log", "Flow ended with failure at: {}.".format(self.failed_node))); return
 
-        if self._stop_event.is_set():
+        final_parallel_failures = 0
+        processed_results = []
+        while not self.parallel_run_results.empty():
+            status, flow_name = self.parallel_run_results.get_nowait()
+            processed_results.append({'name': flow_name, 'status': status}) # Store for logging/debugging if needed
+            if status == "FAILED":
+                final_parallel_failures += 1
+                if not self.failed_node:
+                    self.failed_node = "Parallel flow {} failed.".format(flow_name)
+        
+        if final_parallel_failures > 0:
+            self.queue.put(("failed", self.failed_node or "{} parallel flow(s) failed.".format(final_parallel_failures)))
             return
 
-        num_fails = 0
-        while not self.parallel_run_results.empty():
-            if self.parallel_run_results.get()[0] == "FAILED": num_fails += 1
-        
-        if num_fails > 0: self.queue.put(("failed", "{} parallel flow(s) failed.".format(num_fails)))
-        else: self.queue.put(("completed", None))
+        self.queue.put(("completed", None))
 
     def stop_bob_runs(self):
         self.queue.put(("status", "Stopping all active runs..."))
-        self._stop_event.set()
-        self._continue_event.set()
-        
-        run_names_to_stop = list(self.active_run_names)
-        for run_name in run_names_to_stop:
-            self.queue.put(("log", "Issuing stop for bob run: {}".format(run_name)))
-            full_run_path = os.path.join(self.run_dir_path, run_name)
-            self._exec("bob stop -r {}".format(full_run_path), cwd=self.work_area_path)
-        
-        self.queue.put(("log", "All stop commands issued."))
-        self.queue.put(("reset", None))
-
-    def stop(self): 
-        self._stop_event.set()
         self._continue_event.set()
 
 if __name__ == "__main__":
