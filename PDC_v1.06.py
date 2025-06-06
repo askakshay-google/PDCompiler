@@ -10,6 +10,7 @@ import atexit
 import threading
 import subprocess
 import datetime
+import shutil
 
 # For Python 3.6 compatibility, we check for tkinter's availability.
 try:
@@ -87,7 +88,6 @@ class PDCompilerApp(tk.Tk):
     def __init__(self):
         super(PDCompilerApp, self).__init__()
         self.title("PD Compiler Utility")
-        self.geometry("850x800")
 
         self.process_thread = None
         self.bob_manager = None
@@ -240,7 +240,17 @@ class PDCompilerApp(tk.Tk):
                     self.run_button.config(state='normal') # Allow continue
                     self.exit_button.config(state='normal')
                     self.stop_button.config(state='disabled')
-                    messagebox.showerror("Run Failed", "Stage failed at node: {}\nAn email has been sent.\nPress 'Continue' to restart from this point.".format(data))
+
+                    email_status_message = "An email notification has been sent." # Default message
+                    if self.bob_manager and hasattr(self.bob_manager, 'send_failure_email'):
+                        run_name = self.bob_manager.inputs.get('run_name', 'UnknownRun')
+                        email_sent_successfully = self.bob_manager.send_failure_email(data, run_name)
+                        if not email_sent_successfully:
+                            email_status_message = "Attempted to send email notification, but it failed."
+                    else:
+                        email_status_message = "Email notification system not available." # Should not happen if bob_manager is there
+
+                    messagebox.showerror("Run Failed", f"Stage failed at node: {data}\n{email_status_message}\nPress 'Continue' to restart from this point.")
                 elif msg_type == "completed":
                     self.status_bar.config(text="Flow Completed Successfully!", background="#90EE90")
                     self.reset_controls()
@@ -265,7 +275,61 @@ class PDCompilerApp(tk.Tk):
         self.stop_button.config(state='disabled')
         self.status_bar.config(background="#F0F0F0")
 
-    def _validate_inputs(self, inputs): return True
+    def _validate_inputs(self, inputs):
+        # Rule 1: Run Name is always mandatory.
+        # The key for Run Name in the inputs dictionary is 'run_name'.
+        if not inputs.get('run_name', '').strip():
+            messagebox.showerror("Input Error", "Run Name is a mandatory field.")
+            return False
+
+        # The key for Work Area Path in the inputs dictionary is 'work_area_path'.
+        work_area = inputs.get('work_area_path', '').strip()
+
+        # Check if the special condition (Work Area Path with 'run' and 'repo' folders) is met.
+        condition_met = False
+        if work_area: # work_area path must be provided for the condition to be evaluated
+            # Construct full paths for 'run' and 'repo' subdirectories
+            run_dir = os.path.join(work_area, 'run')
+            repo_dir = os.path.join(work_area, 'repo')
+            # Check if both are existing directories
+            if os.path.isdir(run_dir) and os.path.isdir(repo_dir):
+                condition_met = True
+
+        if condition_met:
+            # Rule 2: If Work Area Path is provided and has 'run' and 'repo' subdirectories,
+            # then only Run Name (already checked) and Work Area Path itself are strictly mandatory.
+            # Other fields typically marked mandatory become optional.
+            # Since 'work_area' must be non-empty for condition_met to be True, it's implicitly checked.
+            return True
+        else:
+            # Rule 2 is not met. This means either:
+            # a) Work Area Path was not provided, OR
+            # b) Work Area Path was provided but does not contain both 'run' and 'repo' subdirectories.
+            # In this scenario, fields are mandatory based on their default status in SetupFrame.
+
+            # List of fields that are mandatory by default (excluding Run Name, already checked).
+            # Keys are from the 'inputs' dictionary. Values are their display names for error messages.
+            default_mandatory_fields = {
+                'process': "PROCESS",
+                'chip': "CHIP",
+                'ip': "IP",
+                'block': "BLOCK",
+                'work_area_path': "Work Area Path", # Mandatory if condition_met is False.
+                'tool': "TOOL"
+                # Fields like 'rtl_list', 'upf', 'sdc', 'custom_var' are optional by default
+                # as per their 'False' mandatory flag in SetupFrame.
+            }
+
+            for field_key, display_name in default_mandatory_fields.items():
+                value = inputs.get(field_key, '').strip()
+                # Comboboxes might have a default "--Select Option--" value.
+                if not value or value == '--Select Option--':
+                    messagebox.showerror("Input Error", f"{display_name} is a mandatory field.")
+                    return False
+
+            # If all checks pass under this condition.
+            return True
+
     def show_stage_selection(self):
         # Create and show the dialog
         dialog = StageSelectionFrame(self, current_stages=self.current_selected_stages)
@@ -389,6 +453,41 @@ class BobProcessManager:
         self._stop_event = threading.Event()
         self._continue_event = threading.Event()
         self.is_continue_run_flag = False # Initialize the new flag
+
+    def send_failure_email(self, failed_node_info, run_name_input):
+        """Sends an email notification about the failed run."""
+        if not self.user_email:
+            self.queue.put(("log", "ERROR: User email not found, cannot send failure email."))
+            return False
+
+        subject = f"PD Compiler Run Failed: {run_name_input}"
+        body = f"The PD Compiler run '{run_name_input}' failed at node/stage: {failed_node_info}.\nPlease check the logs in the GUI or work area for more details."
+
+        # Basic mail command: echo "body" | mail -s "subject" user@example.com
+        cmd = ['mail', '-s', subject, self.user_email]
+
+        try:
+            process = subprocess.run(cmd, input=body, text=True, check=False, capture_output=True, timeout=30) # Added timeout
+            if process.returncode == 0:
+                self.queue.put(("log", f"Failure notification email sent to {self.user_email} for run '{run_name_input}'."))
+                return True
+            else:
+                error_msg = f"ERROR: Failed to send email. 'mail' command exited with code {process.returncode}."
+                if process.stderr:
+                    error_msg += f"\nSTDERR: {process.stderr.strip()}"
+                if process.stdout: # mail command might output info on stdout on error too
+                    error_msg += f"\nSTDOUT: {process.stdout.strip()}"
+                self.queue.put(("log", error_msg))
+                return False
+        except FileNotFoundError:
+            self.queue.put(("log", "ERROR: 'mail' command not found. Cannot send failure email."))
+            return False
+        except subprocess.TimeoutExpired:
+            self.queue.put(("log", "ERROR: Timeout while trying to send failure email via 'mail' command."))
+            return False
+        except Exception as e:
+            self.queue.put(("log", f"ERROR: Unexpected error sending email: {e}"))
+            return False
 
     def _execute_bob_info_command(self, command_str, cwd_path=None):
         """
@@ -592,7 +691,7 @@ class BobProcessManager:
         except IOError as e:
             self.queue.put(("log", "ERROR writing main var file: {}".format(e))); return None
 
-    def _run_parallel_flow(self, flow_name, base_stages):
+    def _run_parallel_flow(self, flow_name, base_stages, is_forced_rerun):
         try:
             run_name = "{}_{}".format(self.inputs['run_name'], flow_name.upper())
              # Ensure this parallel run is tracked if it's going to be started
@@ -604,6 +703,8 @@ class BobProcessManager:
             if not var_file: raise Exception("Var file creation failed for {}".format(flow_name))
             
             full_run_path = os.path.join(self.run_dir_path, run_name)
+
+
             if not os.path.exists(full_run_path):
                 if not self._exec("bob create -r {} -s {} -v {}".format(full_run_path, base_stages, var_file)):
                     raise Exception("Create failed for {}".format(flow_name))
