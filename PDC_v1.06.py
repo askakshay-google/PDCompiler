@@ -607,10 +607,18 @@ class BobProcessManager:
             if not os.path.exists(full_run_path):
                 if not self._exec("bob create -r {} -s {} -v {}".format(full_run_path, base_stages, var_file)):
                     raise Exception("Create failed for {}".format(flow_name))
-            else:
-                self.queue.put(("log", "Bob create skipped for existing run directory: {}".format(full_run_path)))
+            # else: # Commenting out the skip message as it might be confusing if run is re-triggered.
+                # self.queue.put(("log", "Bob create skipped for existing run directory: {}".format(full_run_path)))
 
-            if not self._exec("bob run -r {}".format(full_run_path)): # This is generally idempotent
+            # Determine if this parallel flow needs a forced re-run
+            bob_run_cmd_parallel = "bob run -r {}".format(full_run_path)
+            # The is_forced_rerun parameter is passed to this function
+            # This parameter is determined in run_full_flow based on is_resuming and if the parallel flow was previously completed.
+            if is_forced_rerun: # is_forced_rerun is a new parameter for this method
+                bob_run_cmd_parallel += " -f"
+                self.queue.put(("log", "Adding -f to parallel flow {} bob run cmd: {}".format(flow_name, bob_run_cmd_parallel)))
+
+            if not self._exec(bob_run_cmd_parallel):
                 raise Exception("Run failed for {}".format(flow_name))
 
             # Polling for parallel flow completion
@@ -673,21 +681,27 @@ class BobProcessManager:
         # --- SYN Stage ---
         self.queue.put(("status", "Processing SYN Stage..."))
         syn_completed_successfully = False
+        initial_syn_check_was_valid = False # For -f flag logic
         if is_resuming:
             syn_status = self._get_node_status(main_run_name, SYN_COMPLETION_NODE)
             self.queue.put(("log", "[Resume] Initial SYN status: {}".format(syn_status)))
             if syn_status == 'VALID':
                 syn_completed_successfully = True
+                initial_syn_check_was_valid = True
         
         if not syn_completed_successfully:
             if main_run_name not in self.active_run_names:
                  self.active_run_names.append(main_run_name)
 
-            if not os.path.exists(full_main_run_path) or not is_resuming:
+            if not os.path.exists(full_main_run_path) or not is_resuming: # If dir missing, or fresh run
                 if not self._exec("bob create -r {} -s syn pnr -v {}".format(full_main_run_path, main_var_file)):
                     self.queue.put(("failed", self.failed_node or "Main Create (SYN)")); return
 
-            if not self._exec("bob run -r {}".format(full_main_run_path)):
+            bob_run_cmd_syn = "bob run -r {}".format(full_main_run_path)
+            if is_resuming and not initial_syn_check_was_valid:
+                bob_run_cmd_syn += " -f"
+                self.queue.put(("log", "Adding -f to SYN bob run cmd: {}".format(bob_run_cmd_syn)))
+            if not self._exec(bob_run_cmd_syn):
                 self.queue.put(("failed", self.failed_node or "Main Run (SYN)")); return
 
             self.queue.put(("status", "Waiting for SYN completion..."))
@@ -716,10 +730,17 @@ class BobProcessManager:
         for flow_name, base_stage_for_flow in post_syn_flows.items():
             if base_stage_for_flow in self.selected_stages:
                 parallel_run_name = "{}_{}".format(self.inputs['run_name'], flow_name.upper())
+                flow_already_completed = False
                 if is_resuming and self._is_run_completed(parallel_run_name):
                     self.queue.put(("log", "[Resume] Post-SYN flow {} already completed.".format(parallel_run_name)))
-                else:
-                    t = threading.Thread(target=self._run_parallel_flow, args=(flow_name, base_stage_for_flow))
+                    flow_already_completed = True
+
+                if not flow_already_completed:
+                    is_current_flow_a_forced_rerun = False
+                    if is_resuming: # and not flow_already_completed (implicit from above)
+                        is_current_flow_a_forced_rerun = True # Force if resuming and not completed
+
+                    t = threading.Thread(target=self._run_parallel_flow, args=(flow_name, base_stage_for_flow, is_current_flow_a_forced_rerun))
                     active_threads_post_syn.append(t); t.start()
         for t in active_threads_post_syn: t.join()
         if self.failed_node and any(fn.startswith(self.inputs['run_name']+"_"+key.upper()) for key in post_syn_flows.keys() for fn in [self.failed_node]): return
@@ -728,15 +749,22 @@ class BobProcessManager:
         # --- PNR Stage ---
         self.queue.put(("status", "Processing PNR Stage..."))
         pnr_completed_successfully = False
-        if is_resuming:
+        initial_pnr_check_was_valid = False # For -f flag logic
+        if is_resuming: # SYN must have been valid to reach here
             pnr_status = self._get_node_status(main_run_name, PNR_COMPLETION_NODE)
             self.queue.put(("log", "[Resume] Initial PNR status: {}".format(pnr_status)))
             if pnr_status == 'VALID':
                 pnr_completed_successfully = True
+                initial_pnr_check_was_valid = True
 
         if not pnr_completed_successfully:
             if main_run_name not in self.active_run_names: self.active_run_names.append(main_run_name)
-            if not self._exec("bob run -r {}".format(full_main_run_path)):
+
+            bob_run_cmd_pnr = "bob run -r {}".format(full_main_run_path)
+            if is_resuming and not initial_pnr_check_was_valid:
+                bob_run_cmd_pnr += " -f"
+                self.queue.put(("log", "Adding -f to PNR bob run cmd: {}".format(bob_run_cmd_pnr)))
+            if not self._exec(bob_run_cmd_pnr): # Idempotent, add -f if needed for resume
                  self.queue.put(("failed", self.failed_node or "Main Run (PNR)")); return
 
             self.queue.put(("status", "Waiting for PNR completion..."))
@@ -754,7 +782,7 @@ class BobProcessManager:
             if not pnr_completed_successfully:
                 self.failed_node = self.failed_node or "{}/{} (Timeout)".format(main_run_name, PNR_COMPLETION_NODE)
                 self.queue.put(("failed", self.failed_node)); return
-        
+
         self.queue.put(("log", "PNR stage: {}".format("COMPLETED" if pnr_completed_successfully else "SKIPPED/FAILED")))
         if not pnr_completed_successfully: return
 
@@ -768,10 +796,17 @@ class BobProcessManager:
         for flow_name, stages_for_flow in post_pnr_flows.items():
             if any(s in self.selected_stages for s in FLOW_TO_BASE_STAGE.get(flow_name, stages_for_flow).split()):
                 parallel_run_name = "{}_{}".format(self.inputs['run_name'], flow_name.upper())
+                flow_already_completed = False
                 if is_resuming and self._is_run_completed(parallel_run_name):
                     self.queue.put(("log", "[Resume] Post-PNR flow {} already completed.".format(parallel_run_name)))
-                else:
-                    t = threading.Thread(target=self._run_parallel_flow, args=(flow_name, stages_for_flow))
+                    flow_already_completed = True
+
+                if not flow_already_completed:
+                    is_current_flow_a_forced_rerun = False
+                    if is_resuming: # and not flow_already_completed
+                        is_current_flow_a_forced_rerun = True # Force if resuming and not completed
+
+                    t = threading.Thread(target=self._run_parallel_flow, args=(flow_name, stages_for_flow, is_current_flow_a_forced_rerun))
                     active_threads_post_pnr.append(t); t.start()
         for t in active_threads_post_pnr: t.join()
         if self.failed_node and any(fn.startswith(self.inputs['run_name']+"_"+key.upper()) for key in post_pnr_flows.keys() for fn in [self.failed_node]): return
