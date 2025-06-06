@@ -704,16 +704,6 @@ class BobProcessManager:
             
             full_run_path = os.path.join(self.run_dir_path, run_name)
 
-            # If this is a forced re-run and the directory already exists, remove it to ensure a clean create
-            if is_forced_rerun and os.path.exists(full_run_path):
-                self.queue.put(("log", f"INFO: Deleting existing directory for forced re-run of {run_name}: {full_run_path}"))
-                try:
-                    shutil.rmtree(full_run_path)
-                    self.queue.put(("log", f"INFO: Successfully deleted directory {full_run_path}"))
-                except Exception as e:
-                    self.queue.put(("log", f"ERROR: Failed to delete directory {full_run_path}: {e}"))
-                    # If deletion fails, it's a critical issue for a forced re-run
-                    raise Exception(f"Directory deletion failed for forced re-run of {flow_name}: {e}")
 
             if not os.path.exists(full_run_path):
                 if not self._exec("bob create -r {} -s {} -v {}".format(full_run_path, base_stages, var_file)):
