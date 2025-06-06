@@ -165,6 +165,7 @@ class PDCompilerApp(tk.Tk):
         # Log frame is created but not packed until the button is pressed
         self.log_frame = ttk.Frame(main_frame)
         self.log_text = scrolledtext.ScrolledText(self.log_frame, wrap=tk.WORD, height=15, state='disabled', font=('Courier New', 9))
+        self.log_text.config(background="lightyellow") # Diagnostic background
         self.log_text.pack(fill=tk.BOTH, expand=True)
         self.log_text_original_parent = self.log_frame # Store original parent
         self.log_frame.pack_forget() # Initially hidden
@@ -233,6 +234,7 @@ class PDCompilerApp(tk.Tk):
             self.log_text.pack_forget() # Detach from self.log_text_original_parent (self.log_frame)
             self.log_text.master = self.log_window # Reparent to Toplevel
             self.log_text.pack(fill=tk.BOTH, expand=True, padx=5, pady=5) # Pack into Toplevel
+            self.log_window.update_idletasks() # Ensure UI updates for pop-up
 
             self.toggle_log_button.config(text="Hide Log")
 
@@ -252,6 +254,8 @@ class PDCompilerApp(tk.Tk):
                 self.log_text.master = self.log_text_original_parent # Reparent back to original parent (self.log_frame)
                 # Re-pack into its original (hidden) frame. self.log_frame is managed by pack_forget in _setup_ui.
                 self.log_text.pack(fill=tk.BOTH, expand=True)
+                if isinstance(self.log_text_original_parent, tk.Widget): # Check if it's a widget
+                    self.log_text_original_parent.update_idletasks() # Ensure UI updates for original parent
             else: # Fallback if original parent is somehow None
                  self.log_text.pack_forget()
 
@@ -539,15 +543,24 @@ class BobProcessManager:
 
         try:
             process = subprocess.run(cmd, input=body, universal_newlines=True, check=False, capture_output=True, timeout=30) # Added timeout
+
+            # Add detailed logging here
+            self.queue.put(("log", f"DEBUG_EMAIL: Attempting to send email with subject '{subject}' to {self.user_email} for run '{run_name_input}'."))
+            self.queue.put(("log", f"DEBUG_EMAIL: Executed command: {process.args}"))
+            self.queue.put(("log", f"DEBUG_EMAIL: Email body passed as input: '{body[:200]}{'...' if len(body) > 200 else ''}'")) # Log truncated body
+            self.queue.put(("log", f"DEBUG_EMAIL: 'mail' process return code: {process.returncode}"))
+            self.queue.put(("log", f"DEBUG_EMAIL: 'mail' process STDOUT: '{process.stdout.strip() if process.stdout else '[EMPTY]'}'"))
+            self.queue.put(("log", f"DEBUG_EMAIL: 'mail' process STDERR: '{process.stderr.strip() if process.stderr else '[EMPTY]'}'"))
+
             if process.returncode == 0:
                 self.queue.put(("log", f"Failure notification email sent to {self.user_email} for run '{run_name_input}'."))
                 return True
             else:
+                # The detailed logs above provide context, this is a summary error.
                 error_msg = f"ERROR: Failed to send email. 'mail' command exited with code {process.returncode}."
-                if process.stderr:
-                    error_msg += f"\nSTDERR: {process.stderr.strip()}"
-                if process.stdout: # mail command might output info on stdout on error too
-                    error_msg += f"\nSTDOUT: {process.stdout.strip()}"
+                # Optionally, could still include stderr/stdout in this specific error_msg if desired,
+                # but the DEBUG logs already capture them. For brevity here, let's rely on DEBUG logs.
+                # Example: if process.stderr: error_msg += f"\nSTDERR: {process.stderr.strip()}" (already in DEBUG)
                 self.queue.put(("log", error_msg))
                 return False
         except FileNotFoundError:
