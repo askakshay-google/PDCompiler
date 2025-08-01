@@ -1,0 +1,67 @@
+bbset syn.elaborate.RTLParsingVars   {}
+bbset syn.WatermarkRTLTag           {} 
+bbset syn.elaborate.InputUPFFile {}
+bbset syn.elaborate.RTLFileList {} 
+
+bbset mmmc.mode.modes {} ; # Change based on the design
+bbset mmmc.mode.<>.synSdcs {} 
+bbset mmmc.mode.<>.pnrSdcs {}
+
+bbset syn.scenarios.Scenarios        {}
+bbset pnr.scenarios.Scenarios {[bbget .syn.scenarios.Scenarios]}
+
+bbset syn.scenarios.status.Default {
+	{func.tt-NMP-85-cworst_ccworst_t         {leakage dynamic active}}
+	{func.ssgnp-NM-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UUD-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-125-rcworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-UUD-0-cworst_ccworst_t      {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-125-cworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+} 
+
+bbset pnr.scenarios.status.Default {[bbget .syn.scenarios.status.Default]}
+
+bbset syn.MacroLibraryFileInclude {}
+bbset syn.MacroLibraryFileExclude {}
+bbset pnr.MacroLibraryFileInclude [bbget .syn.MacroLibraryFileInclude]
+bbset syn.StdLibraryFileInclude {}
+bbset pnr.StdLibraryFileInclude [bbget .syn.StdLibraryFileInclude]
+
+bbset syn.EnableWaterMarkInsertion {true}
+bbset syn.WatermarkRTLTag  {}
+
+bbset fc.ExtraLibMapping {}
+
+
+bbset mmmc.mode.modes { }
+bbns mmmc {
+ bbns mode {
+        bbset modes " "    
+        bbns <> {
+            bbset pnrSdcs {}
+            bbset staSdc {}
+        }
+         } 
+ 
+bbns vdomain {
+        bbset vdomains ""
+        bbset gdomains ""
+        
+        
+        bbns < > {
+            bbset rail " "
+        }
+
+  }   
+  
+  bbns scenarios {
+        bbset constraints {
+           {apply "< >"      { } { }}
+           {create "*.*"}
+        }
+}
+}
+
+

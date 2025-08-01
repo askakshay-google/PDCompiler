@@ -1,0 +1,1091 @@
+###########################################################
+bbrecipe_apply setup_fc
+bbrecipe_apply synthdft_fc
+bbset syn.Stages {libgen elaborate synth floorplan synthopt testpoint synthdft synthdftopt} 
+###########################################################
+
+####################################
+##Physical Aware synthesis is disabled
+bbset syn.EnablePhysicalSynthesis 0
+bbset syn.elaborate.InputDEFFile {} 
+#####################################
+
+#########################################
+############DONT USE LISTS###############
+#########################################
+bbconcat syn.DontUseCells { restrict(SvtCells) }
+bbconcat syn.DontUseCells { restrict(UlvtCells) }
+bbconcat syn.DontUseCells { restrict(UlvtllCells) }
+bbconcat syn.DontUseCells { restrict(AllElvtCells) }
+bbconcat syn.DontUseCells { restrict(NppnCells) }
+bbconcat syn.DontUseCells { restrict(PnnpCells) }
+bbconcat syn.DontUseCells { restrict(PpnnCells) }
+bbconcat syn.DontUseCells { restrict(D14PlusCells) }
+bbconcat syn.DontUseCells { restrict(D16PlusCells) }
+bbconcat syn.DontUseCells { restrict(D18PlusCells) }
+bbconcat syn.DontUseCells { restrict(D20PlusCells) }
+bbconcat syn.DontUseCells { restrict(AllD24PlusCells) }
+bbconcat syn.DontUseCells { restrict(D32PlusCells) }
+bbconcat syn.DontUseCells { restrict(D48PlusCells) }
+bbconcat syn.DontUseCells { restrict(NoMbitEquivalentFlopCells) }
+bbconcat pnr.DontUseCells { restrict(UlvtllCells) }
+bbconcat pnr.DontUseCells { restrict(SvtCells) }
+bbconcat pnr.DontUseCells { restrict(UlvtCells) }
+bbconcat pnr.DontUseCells { restrict(AllElvtCells) }
+bbconcat pnr.DontUseCells { restrict(NppnCells) }
+bbconcat pnr.DontUseCells { restrict(PnnpCells) }
+bbconcat pnr.DontUseCells { restrict(PpnnCells) }
+bbconcat pnr.DontUseCells { restrict(D14PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D16PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D18PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D20PlusCells) }
+bbconcat pnr.DontUseCells { restrict(AllD24PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D32PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D48PlusCells) }
+bbconcat pnr.DontUseCells { restrict(NoMbitEquivalentFlopCells) }
+##########################################
+
+#########################################
+###### SCENARIOS : ACTIVE ###############
+#########################################
+#
+#
+#Shouldn't corners be given by block owners?
+
+
+bbset syn.scenarios.Scenarios        {func.tt-NMP-85-cworst_ccworst_t func.ssgnp-NM-0-cworst_ccworst_t func.ssgnp-NM-125-rcworst_ccworst_t shift.ssgnp-NM-0-cworst_ccworst_t func.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-SUD-0-cworst_ccworst_t func.ssgnp-UD-0-cworst_ccworst_t shift.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-UD-125-rcworst_ccworst_t  }
+
+bbset pnr.scenarios.Scenarios        {func.tt-NMP-85-cworst_ccworst_t func.ssgnp-NM-0-cworst_ccworst_t func.ssgnp-NM-125-rcworst_ccworst_t func.ssgnp-NM-125-rcworst_ccworst func.ssgnp-NM-m25-cworst_ccworst func.ssgnp-NM-m25-rcworst_ccworst func.ffgnp-NM-125-rcworst_ccworst func.ffgnp-NM-125-cworst_ccworst func.ffgnp-NM-m25-rcworst_ccworst func.ffgnp-NM-m25-cworst_ccworst shift.ssgnp-NM-0-cworst_ccworst_t shift.ffgnp-NM-125-rcworst_ccworst shift.ssgnp-NM-m25-cworst_ccworst shift.ffgnp-NM-125-cworst_ccworst shift.ffgnp-NM-m25-rcworst_ccworst func.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-SUD-0-cworst_ccworst_t func.ssgnp-UUD-125-cworst_ccworst func.ffgnp-NM-125-cbest_ccbest func.ffgnp-NM-125-rcbest_ccbest func.ssgnp-UUD-0-rcworst_ccworst func.ssgnp-UD-0-cworst_ccworst_t shift.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-UUD-0-rcworst_ccworst func.ssgnp-UUD-0-cworst_ccworst func.ssgnp-UD-125-rcworst_ccworst_t shift.ssgnp-NM-125-cworst_ccworst_t shift.ssgnp-UUD-0-cworst_ccworst}
+
+
+bbset syn.scenarios.status.Default {
+	{func.tt-NMP-85-cworst_ccworst_t         {leakage dynamic active}}
+	{func.ssgnp-NM-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UUD-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-125-rcworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-UUD-0-cworst_ccworst_t      {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-125-cworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+}
+ 
+bbset pnr.scenarios.status.Default {
+	{func.tt-NMP-85-cworst_ccworst_t         {leakage dynamic active}}
+	{func.ssgnp-NM-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UUD-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-125-rcworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-UUD-0-cworst_ccworst_t      {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-125-cworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+} 
+
+#########################################
+
+
+#################
+## To disable/enable 0/1 exit on link error
+bbset syn.elaborate.ExitOnLinkError {1}
+##To take GSPAN & NONGSPAN IO BUF placement & respect voltage areas - the add_buffer happens at syn/synthdftopt##
+##By default this below var was 0 and it caused LS_INST_MISSING violations##
+bbset fc.AddBufferRespectVoltageArea 1
+####When this below var is high then it brings congestion - so made it leakage
+bbset syn.TotalPowerOptimizationEffort {leakage}  {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+bbset pnr.TotalPowerOptimizationEffort {leakage}  {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+##Enabling as per : https://drive.google.com/file/d/1v7St97cGmaNbCrKoiyEkNmIMeP0BTUd-/view?usp=sharing&resourcekey=0--a-L3p12hOlZWPjy5yz1YA ##
+bbset fc.EnableMegaSwitch {1}
+bbset syn.synthopt.RecreatePathGroups {1}
+
+
+####
+bbappend sif.fc.ExecuteStagePreCallback {
+	###To disable Offset Latency Calculations on clk div clk_incheckpin###
+	if { (${::STAGE} in {synthopt synthdft synthdftopt placeopt}) } {
+		if { [sizeof_collection [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] ] } {
+		set save_mode [get_object_name [current_mode]]  
+        	foreach_in_collection e [get_mode] { 
+        	    current_mode $e
+        	    puts "Setting balance point false for clk_incheckpoint for mode [get_object_name $e]"
+        	    set_clock_balance_points -balance_points [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] -consider_for_balancing false 
+ 
+        	 }
+    		current_mode $save_mode
+		##setting dont ecgl on the clk_in & clk_incheckpins of div50 cells
+		set_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency true
+		get_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency > li		
+		}
+	}
+
+	if { $::STAGE == "clock" } {
+		if { [sizeof_collection [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] ] } {
+		##Resetting dont ecgl on the clk_in & clk_incheckpins of div50 cells post placeopt
+		set save_mode [get_object_name [current_mode]]  
+        	foreach_in_collection e [get_mode] { 
+        		current_mode $e
+			set_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency false
+			get_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency > li.ck
+			puts "Setting balance point true for clk_incheckpoint for mode [get_object_name $e]"
+        		set_clock_balance_points -balance_points [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] -consider_for_balancing true 
+		}
+		current_mode $save_mode
+		}
+	}
+	###
+
+	###For improving the MBIT %###
+	if { (${::STAGE} == "synthdftopt") } {
+	    set_app_options -name compile.flow.enable_multibit_debanking -value false ;
+	}
+	if { (${::STAGE} == "placeopt") } {
+	    set_app_options -name compile.flow.enable_multibit_debanking -value true ; ### set it to true after initial_opto 
+	}
+	###
+	
+	###For Tie cell insertion during synthdftopt in FC###
+	###https://b.corp.google.com/issues/391500220#comment3###
+	if { (${::STAGE} == "synthdftopt") } {
+		set_app_options -name opt.tie_cell.check_frontend_restrictions -value true
+	}
+	###	
+}
+####
+
+
+
+##############################################
+#############clock cell usage list############
+##############################################
+bbset pnr.clock.InverterCellList     {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {List of inverter cells}
+bbset pnr.clock.TopInverterCellList  {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf Specific Inverter Cell List}
+bbset pnr.clock.LeafInverterCellList {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf specific inverter cell list}
+bbset pnr.clock.BufferCellList       {CKBDHD5BWP130HPNPN3P48CPDULVTLL DCCKBDHD6BWP130HPNPN3P48CPDULVTLL DCCKBDHD8BWP130HPNPN3P48CPDULVTLL  DCCKBDHD10BWP130HPNPN3P48CPDULVTLL DCCKBDHD12BWP130HPNPN3P48CPDULVTLL DCCKBDHD14BWP130HPNPN3P48CPDULVTLL} {List of buffer cells}
+bbset pnr.clock.ICGCellList          {CKLNQD3BWP130HPNPN3P48CPDULVTLL CKLNQD4BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD4BWP130HPNPN3P48CPDULVTLL  CKLNQD5BWP130HPNPN3P48CPDULVTLL CKLNQD6BWP130HPNPN3P48CPDULVTLL CKLNQD8BWP130HPNPN3P48CPDULVTLL  CKLNQOPTBBD8BWP130HPNPN3P48CPDULVTLL CKLNQD10BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD10BWP130HPNPN3P48CPDULVTLL  CKLNQD12BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD12BWP130HPNPN3P48CPDULVTLL} {List of clock gating cells}
+##############################################
+
+
+#########################################
+###https://buganizer.corp.google.com/issues/394850780#comment7###
+####To Improve RTL banking####
+#########################################
+bbappend sif.fc.ExecuteStagePreCallback {
+        if { (${::STAGE} in {synth synthopt synthdftopt}) } {  
+		set_app_options -name compile.seqmap.identify_shift_registers -value false
+		set_app_options -name compile.flow.enable_incremental_multibit_banking -value true
+		set_app_options -name compile.flow.enable_multibit -value true
+		set_app_options -name compile.flow.enable_multibit_debanking -value false
+		set_app_options -name compile.flow.enable_rtl_multibit_banking -value true
+		set_app_options -name compile.flow.enable_rtl_multibit_debanking -value false
+		set_app_options -name compile.flow.enable_second_pass_multibit_banking -value true
+		set_app_options -name compile.seqmap.prefer_registers_with_multibit_equivalent -value true
+	}
+}
+
+
+bbappend sif.fc.ExecuteStagePreCallback {
+	###For improving the MBIT %###
+	if { (${::STAGE} == "synthdftopt") } {
+	   set_app_options -name multibit.banking.maximum_allowable_distance -value 75 
+	}
+	if { (${::STAGE} == "placeopt") } {
+	    set_app_options -name multibit.banking.maximum_allowable_distance -value 75 
+	}
+}
+######################################
+
+
+###To improve clock latency & skew from kishor babu secip###
+bbappend pnr.fc.ClockBuildClockPreCallback {
+        if { ${::STAGE} == "clock" } {
+    		##derive auto exception, CTS-967
+    		set_app_options -list {cts.common.auto_exception_disable_self_arc true}
+    		set_app_options -name cts.common.auto_exception_disable_parallel_arc -value true
+    		reset_app_options cts.common.auto_skew_target_clock_period_percentage
+    		set_app_options -name cts.common.enable_auto_skew_target_for_local_skew -value false
+    		set_app_options -name cts.optimize.improvement_mode_version -value EIM_20250101
+    		set_app_options -list {cts.optimize.enable_improvement_mode skew}
+    		set_app_options -name cts.compile.size_pre_existing_cell_to_cts_references -value true
+    		set_app_options -name cts.icg.latency_driven_cloning -value true
+    		set_app_options -name cts.compile.enable_cell_relocation -value all
+    		##for CTS-080 warning
+    		set_app_options -name cts.buffering.ignore_dc_generic -value true
+    		set all_other_modes [remove_from_collection [get_modes *]  [get_modes func.*cworst_ccworst_t]]
+    		set_clock_tree_options -copy_exceptions_across_modes -from_mode func.*cworst_ccworst_t -to_mode [get_object_name $all_other_modes]
+    		##set_clock_balance_points -balance_points [get_pins -hier -phys */CHAIN_lockup_latch*/E] -consider_for_balancing false
+			
+			if { [sizeof_collection [get_pins -hier -phys */clk_incheckpin*]] } {
+    		set save_mode [get_object_name [current_mode]]
+    		foreach_in_collection e [get_mode] {
+    		    current_mode $e
+    		    puts "Setting balance point false for clk_incheckpoint1 for mode [get_object_name $e]"
+    		    set_disable_timing [get_lib_timing_arcs -from [get_lib_pins -of_objects [get_pins -hier -phys */clk_incheckpin*]] -filter "sense=~*clock_tree*"]
+    		}
+    		current_mode $save_mode
+			}
+	}
+}
+###
+
+
+
+bbset syn.TotalPowerOptimizationEffort {high}                                                          {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+bbset syn.Cores                      {16}                                                             {Cores for each stage}
+bbset syn.RAM                        {128000}                                                         {RAM for each run}
+bbset syn.ExportCores                {16}                                                             {Cores for each stage}
+bbset syn.ExportRAM                  {128000}                                                         {RAM for each run}
+#Eg: set_db [current_design] .lp_clock_gating_auto_path_adjust_fixed_delay [expr ${min_period} * [expr [expr ${::syn.synth.LpCGFixedDelayPercentage} / 100.0] * 1000.0]
+bbset syn.IncrementalSDC             {5% uncertainity of each clock, also , clock latency on icg en paths}                                                               {Reading incremental sdc at each stage to control uncertainity}
+#Enabling this will increase addl cell count. Might not be needed for smaller blocks
+bbset syn.EnableSelfGating           {0}                                                              {In FC enable self gating}
+bbset syn.EnableAggresiveSelfGating  {0}                                                              {In FC enable enable aggressive self gating}
+bbset syn.PreventSelfGatingOnShiftRegs {0}                                                              {In FC to disable self gate logic insertion on shift registers based on coverage impact wrt power benefits}
+
+bbset syn.EnableMultiClockGating     {true}                                                          {Enable Multi level Clock Gating}
+bbset syn.EnableSequentialClockGating {true}                                                          {Enable Sequential Clock Gating}
+bbset syn.EnableSeqBoundaryOpt       {true}                                                          {To enable sequential boundary optimisation}
+#This is currently a genus proc, we need to implement the same in FC also
+bbset syn.EnableDynamicPincap        {false}                                                          {To enable dynamic pin cap modeling}
+bbset syn.synth.MBFFExcludeRegsWithExceptions {true}                                                           {To exclude the mbit merging on cells with exceptions}
+bbset syn.synth.MBFFIgnoreExceptions {PATH_GROUP ANNOTATION CLOCK_LATENCY LATENCY_OFFSET}             {To ignore exceptions when banking and debanking multi-bit flops}
+bbset syn.synth.MBFFIgnoreMatchSeqSyncCTRL {false}                                                          {To ignore exact match on seq control signal}
+bbset syn.synth.MBFFAllowUnusedBit   {True}                                                           {To allow unused bit during mbit merging}
+bbset syn.synth.EnableIsoLvlMerging  {1}                                                              {To enable multi-bit merging of power cells level shifters and isolators}
+bbset syn.synth.TNSOpto              {true}                                                           {Forces the tool to consider all the endpoints for the TNS optimization}
+bbset syn.synth.HardPreservesOnDFTModules {false}                                                          {To prevent complete optimisation of dft modules}
+
+#To be experimented
+bbset syn.synth.LPClockGatingMinFlops {3}                                                              {Min flops for Clock gating}
+bbset syn.synth.LPClockGatingMaxFlops {16}                                                               {Max flops for LP clock gating}
+bbset syn.synth.ClockGatingMaxFanout {16}                                                             {Clock gating max fanout}
+bbset syn.synth.ClockGatingMinBitwidth {4}                                                              {Clock gating min bit width}
+bbset syn.synth.ClockGatingNumLevels {8}                                                              {Clock gating max number of levels}
+
+bbset syn.synth.DesignPowerEffort    {high}                                                            {Design power effort}
+bbset syn.synth.LeakageToDynamicRatio {0.5}                                                            {Leakage to dynamic ratio}
+
+bbset syn.synthopt.Cores             {32}                                                             {no of cores for the run}
+bbset syn.fc.CompileAutoUngroup      {false}                                                          {FC Lec compliant optimization, auto ungroup control}
+bbset syn.fc.CompileBoundaryOptimization {true}                                                           {FC Lec compliant optimization, boundary optimization control}
+bbset syn.fc.CompileEnableOutputInversion {true}                                                           {FC Lec compliant optimization, output inversion control}
+#pdd has less leakage, didn't give much benefit to  Suni's GDMC
+#bbset syn.synth.ClockGateCellList    {CKLNQZPDD3BWP130HPNPN3P48CPDULVT CKLNQZPDD4BWP130HPNPN3P48CPDULVT CKLNQZPDD5BWP130HPNPN3P48CPDULVT CKLNQZPDD6BWP130HPNPN3P48CPDULVT  CKLNQZPDD8BWP130HPNPN3P48CPDULVT CKLNQZPDD10BWP130HPNPN3P48CPDULVT} {# No Comment}  
+bbset syn.synth.ClockGateCellList    {CKLNQZPDD3BWP130HPNPN3P48CPDULVTLL CKLNQZPDD4BWP130HPNPN3P48CPDULVTLL CKLNQZPDD5BWP130HPNPN3P48CPDULVTLL CKLNQZPDD6BWP130HPNPN3P48CPDULVTLL  CKLNQZPDD8BWP130HPNPN3P48CPDULVTLL CKLNQZPDD10BWP130HPNPN3P48CPDULVTLL} {# No Comment}  
+
+bbset syn.EnableRuntimeReduction {1} 
+bbset pnr.EnableRuntimeReduction {1}
+bbset syn.RAM                        {300000}
+bbset pnr.RAM                        {300000}
+bbset pnr.ExportRAM                  {300000}
+bbset pnr.Cores                      {32}
+bbset syn.Cores                      {32}
+bbset pnr.ExportCores                {32}
+bbset syn.ExportCores                {32}
+bbset pnr.Resources {class:c2d-highmem reservation:bm}
+bbset syn.Resources {class:c2d-highmem reservation:bm}
+bbset pnr.ExportResources {class:c2d-highmem reservation:bm}
+
+
+############# MMMC modes##############
+bbns mmmc {
+    bbns mode {
+        bbset modes "func shift"
+        bbns func {
+            bbset pnrSdcs {/google/gchips/ipreleases/lajolla_infra/sswrp_cpuacc/LAJ_A0_SSWRP_CPUACC_M3_V2_R5_D1_C3_DFT/fe_release/sswrp_cpuacc/dft_sdc/sswrp_cpuacc.mission.tcl}
+            bbset synSdcs {/google/gchips/ipreleases/lajolla_infra/sswrp_cpuacc/LAJ_A0_SSWRP_CPUACC_M3_V2_R5_D1_C3_DFT/fe_release/sswrp_cpuacc/dft_sdc/sswrp_cpuacc.mission.tcl}
+        }
+	bbns shift {
+            bbset pnrSdcs {/google/gchips/ipreleases/lajolla_infra/sswrp_cpuacc/LAJ_A0_SSWRP_CPUACC_M3_V2_R5_D1_C3_DFT/fe_release/sswrp_cpuacc/dft_sdc/sswrp_cpuacc.shift.tcl}
+            bbset synSdcs {/google/gchips/ipreleases/lajolla_infra/sswrp_cpuacc/LAJ_A0_SSWRP_CPUACC_M3_V2_R5_D1_C3_DFT/fe_release/sswrp_cpuacc/dft_sdc/sswrp_cpuacc.shift.tcl}
+        }
+        }
+}
+
+
+
+bbns mmmc {
+    bbns vdomain {
+        bbset vdomains "VVDD_SSWRP VVDD_SSU VVDD_GIC VDD_AMB VVDD_SSU_M55 VDD_PMC_CPUACC VDD_CPUACC_M VVDD_DMA VDD_PMC_CPUACC_M"
+
+	    bbns VVDD_SSWRP {
+	    	bbset rail  "VVDD_SSWRP$"
+	    }
+
+	    bbns VVDD_SSU {
+	    	bbset rail  "VVDD_SSU$"
+	    }
+
+	    bbns VVDD_GIC {
+	    	bbset rail  "VVDD_GIC$"
+	    }
+
+	    bbns VDD_AMB {
+	    	bbset rail  "VDD_AMB$"
+	    }
+
+	    bbns VVDD_SSU_M55 {
+		bbset rail  "VVDD_SSU_M55$"
+	    }	
+
+	    bbns VDD_PMC_CPUACC {
+	        bbset rail  "VDD_PMC_CPUACC$" 
+            }
+
+ 	    bbns VDD_CPUACC_M  {
+	        bbset rail  "VDD_CPUACC_M$" 
+            }
+
+ 	    bbns VDD_PMC_CPUACC_M  {
+	        bbset rail  "VDD_PMC_CPUACC_M$" 
+            }
+
+	    bbns VVDD_DMA {
+	        bbset rail  "VVDD_DMA$"
+            }    
+}
+
+    bbns scenarios {
+        bbset constraints {
+            {apply "*.ssgnp-NM-*"  {VVDD_SSWRP 0p6750} {VVDD_SSU 0p6750} {VVDD_GIC 0p6750} {VDD_AMB 0p6750}  {VVDD_SSU_M55 0p6750} {VDD_PMC_CPUACC 0p6750} {VVDD_DMA 0p6750} {VDD_CPUACC_M  0p6750} {VDD_PMC_CPUACC_M 0p6750}}
+            {apply "*.ssgnp-UD-*" {VVDD_SSWRP 0p5850} {VVDD_SSU 0p5850} {VVDD_GIC 0p5850} {VDD_AMB 0p5850}  {VVDD_SSU_M55 0p5850} {VDD_PMC_CPUACC 0p5850} {VVDD_DMA 0p5850} {VDD_CPUACC_M 0p5850} {VDD_PMC_CPUACC_M 0p5850}}
+            {apply "*.ssgnp-SUD-*" {VVDD_SSWRP 0p540} {VVDD_SSU 0p540} {VVDD_GIC 0p540} {VDD_AMB 0p540} {VVDD_SSU_M55 0p540} {VDD_PMC_CPUACC 0p540} {VVDD_DMA 0p540} {VDD_CPUACC_M 0p540} {VDD_PMC_CPUACC_M 0p540}}
+	    {apply "*.ssgnp-UUD-*" {VVDD_SSWRP 0p4750} {VVDD_SSU 0p4750} {VVDD_GIC 0p4750} {VDD_AMB 0p4750} {VVDD_SSU_M55 0p4750} {VDD_PMC_CPUACC 0p4750} {VVDD_DMA 0p4750} {VDD_CPUACC_M 0p4750} {VDD_PMC_CPUACC_M 0p4750}}
+            {apply "*.ffgnp-NM-*"  {VVDD_SSWRP 0p8250} {VVDD_SSU 0p8250} {VVDD_GIC 0p8250} {VDD_AMB 0p8250} {VVDD_SSU_M55 0p8250} {VDD_PMC_CPUACC 0p8250} {VVDD_DMA 0p8250} {VDD_CPUACC_M 0p8250} {VDD_PMC_CPUACC_M 0p8250}}
+            {apply "*.ssgnp-UUD_L1-*" {VVDD_SSWRP 0p5150} {VVDD_SSU 0p5150} {VVDD_GIC 0p5150} {VDD_AMB 0p5150} {VVDD_SSU_M55 0p5150} {VDD_PMC_CPUACC 0p5150} {VVDD_DMA 0p5150} {VDD_CPUACC_M 0p5150} {VDD_PMC_CPUACC_M 0p5150}}
+            {apply "*.sfgnp-UUD_L1-*" {VVDD_SSWRP 0p5150} {VVDD_SSU 0p5150} {VVDD_GIC 0p5150} {VDD_AMB 0p5150} {VVDD_SSU_M55 0p5150} {VDD_PMC_CPUACC 0p5150} {VVDD_DMA 0p5150} {VDD_CPUACC_M 0p5150} {VDD_PMC_CPUACC_M 0p5150}}
+            {apply "*.fsgnp-UUD_L1-*" {VVDD_SSWRP 0p5150} {VVDD_SSU 0p5150} {VVDD_GIC 0p5150} {VDD_AMB 0p5150} {VVDD_SSU_M55 0p5150} {VDD_PMC_CPUACC 0p5150} {VVDD_DMA 0p5150} {VDD_CPUACC_M 0p5150} {VDD_PMC_CPUACC_M 0p5150}}
+            {create "*.*"}
+       }
+    }
+}
+
+
+bbset scf.common_constraints_override {1}
+bbns scf {
+    bbset SCF_CODE_HOME "/google/gchips/ipreleases/lajolla_scf/scf_code/LAJ_A0_M4/LAJ_A0_M4_23_Apr_V1_2025"  -comment "SCF BE Engine Path"
+    bbset FUNC_CONSTRAINTS_HOME "/google/gchips/ipreleases/lajolla_scf/func_common_constraints/LAJ_A0_M4/LAJ_A0_M4_01_MAY_2025"   -comment "SCF Func Common Constraints Path"
+    bbset DFT_CONSTRAINTS_HOME "/google/gchips/ipreleases/lajolla_scf/dft_common_constraints/LAJ_A0_M3/LAJ_A0_M3_01_APR_2025_REV1"    -comment "DFT common constraints refer: go/laj-dft-common-cons-update"
+    bbset TECH_HOME "/google/gchips/ipreleases/lajolla_scf/tech_common_constraints/LAJ_A0_M3/LAJ_A0_M3_16_APR_2025_REV4"               -comment "SCF Tech Constraints Path"
+    bbset SOC_CONSTRAINTS_HOME "/google/gchips/ipreleases/lajolla_scf/soc_constraints/LAJ_A0_M3/LAJ_A0_M3_20250424"    -comment "SOC Constraints Path"
+}
+
+
+############### scenarios ################
+bbset syn.scenarios.Scenarios {func.ssgnp-NM-0-cworst_ccworst_t func.ssgnp-NM-125-rcworst_ccworst_t func.ssgnp-UD-0-cworst_ccworst_t func.ssgnp-UD-125-rcworst_ccworst_t func.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-UUD-125-rcworst_ccworst_t shift.ssgnp-NM-0-cworst_ccworst_t shift.ssgnp-UD-125-rcworst_ccworst_t func.tt-NMP-85-cworst_ccworst_t func.ffgnp-NM-125-rcworst_ccworst func.ffgnp-NM-m25-cbest_ccbest func.ssgnp-UUD-0-rcworst_ccworst shift.ffgnp-NM-125-rcworst_ccworst shift.ssgnp-NM-m25-cworst_ccworst shift.ssgnp-UUD-0-cworst_ccworst func.ssgnp-SUD-0-cworst_ccworst_t func.ssgnp-UD-0-cworst_ccworst}
+
+bbset syn.scenarios.status.Default   {
+	{func.tt-NMP-85-cworst_ccworst_t {leakage dynamic active max_trans max_cap min_cap}}
+	{func.ssgnp-NM-0-cworst_ccworst_t {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-NM-125-rcworst_ccworst_t {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-0-cworst_ccworst_t {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-125-rcworst_ccworst_t {setup active max_trans max_cap min_cap}} 
+	{func.ssgnp-UUD-0-cworst_ccworst_t {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UUD-125-rcworst_ccworst_t {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-0-cworst_ccworst_t {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-UD-125-rcworst_ccworst_t {setup active max_trans max_cap min_cap}}
+	{func.ffgnp-NM-125-rcworst_ccworst {hold active max_trans max_cap}}
+	{func.ffgnp-NM-m25-cbest_ccbest  {hold active max_trans max_cap }}
+	{func.ssgnp-UUD-0-cworst_ccworst {hold active max_trans max_cap}}
+	{func.ssgnp-UD-0-cworst_ccworst {hold active max_trans max_cap}}
+	{shift.ffgnp-NM-125-rcworst_ccworst {hold active}}
+	{shift.ssgnp-NM-m25-cworst_ccworst {hold active}}
+	{shift.ssgnp-UUD-0-cworst_ccworst {hold active}} 
+        {func.ssgnp-SUD-0-cworst_ccworst_t {setup active max_trans max_cap min_cap}} 
+}
+
+
+bbns syn {             
+ bbns scenarios {
+             bbns status {
+		     bbset Synth {
+				      {func.ssgnp-UD-0-cworst_ccworst_t {setup active max_trans max_cap min_cap}}
+				      {func.tt-NMP-85-cworst_ccworst_t          {active leakage dynamic max_trans max_cap min_cap}}
+                                      {func.ssgnp-UD-0-cworst_ccworst   {hold active max_trans max_cap min_cap}}
+				      {shift.ssgnp-NM-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+		     }
+		     bbset Floorplan {
+        			      {func.ssgnp-NM-0-cworst_ccworst_t {setup active max_trans max_cap }}
+				      {func.ffgnp-NM-m25-cbest_ccbest {hold active}}
+		     }
+		     bbset Synthopt {
+				      {func.ssgnp-UD-0-cworst_ccworst_t {setup active max_trans max_cap min_cap}}
+				      {func.tt-NMP-85-cworst_ccworst_t          {active leakage dynamic max_trans max_cap min_cap}}
+                                      {func.ssgnp-UD-0-cworst_ccworst   {hold active max_trans max_cap min_cap}}
+				      {shift.ssgnp-NM-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+		     }
+		     bbset Synthdft {
+				      {func.ssgnp-UD-0-cworst_ccworst_t {setup active max_trans max_cap min_cap}}
+				      {func.tt-NMP-85-cworst_ccworst_t          {active leakage dynamic max_trans max_cap min_cap}}
+				      {shift.ssgnp-NM-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+
+		     }
+		     bbset Synthdftopt {
+                                      {func.ssgnp-NM-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+				      {func.tt-NMP-85-cworst_ccworst_t         {active leakage dynamic max_trans max_cap min_cap}}
+				      {func.ffgnp-NM-125-rcworst_ccworst       {hold active max_trans max_cap min_cap} }
+				      {shift.ssgnp-NM-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+				      {func.ssgnp-UD-0-cworst_ccworst_t {setup active max_trans max_cap min_cap}}
+				      {func.ssgnp-UUD-125-rcworst_ccworst_t    {setup active max_trans max_cap min_cap}}
+				      {shift.ssgnp-UUD-0-cworst_ccworst        {setup active max_trans max_cap min_cap}}
+				      {func.ssgnp-UUD-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+		     }
+}
+}
+}
+
+########################################## 
+#    Synthesis
+##########################################
+bbset syn.SaifActivityFile "{/google/gchips/workspace/redondo-asia/tpe/user/vaderan/MARCH_LAJ_M3V3_Release/M3V3_Release_PV_M55_8thapril/sswrp_cpuacc/rundir/run_gc/sswrp_cpuacc_uncore_base_test_sswrp_cpuacc_test_maxpower_vseq_m55_maxpwr_cpu_vcs_1656100046_2/out/waves.fsdb sswrp_cpuacc_tb/dut}"
+bbset syn.InputSAIFScenario "func.tt-NMP-85-cworst_ccworst_t"
+bbset syn.InputActivityFile "{/google/gchips/workspace/redondo-asia/tpe/user/vaderan/MARCH_LAJ_M3V3_Release/M3V3_Release_PV_M55_8thapril/sswrp_cpuacc/rundir/run_gc/sswrp_cpuacc_uncore_base_test_sswrp_cpuacc_test_maxpower_vseq_m55_maxpwr_cpu_vcs_1656100046_2/out/waves.fsdb }"
+bbset syn.InputSAIFInstanceName "sswrp_gdmc_tb/dut"
+bbset syn.FSDBStartTime              {100675ns}                                                               {FSDB start for acticity flow}
+bbset syn.FSDBEndTime                {157118ns} 
+
+
+bbset syn.Stages {libgen elaborate synth floorplan synthopt testpoint synthdft synthdftopt}
+
+bbset syn.WatermarkRTLTag           {LAJ_A0_SSWRP_CPUACC_M3_V2_R5_D1_C3_DFT} 
+
+
+############ dont use settings #######################
+######dominant vt - clock path cells - vt############
+bbset syn.derate.vt_mismatch.dominate_vt.Value {lvt}
+bbset sta.config.derate.VtMismatch.DominateVt {lvt}
+
+bbset syn.EnablePhysicalSynthesis 0
+
+
+######### Libgen ################
+
+bbset libgen.syn.EnableExtraNDMGeneration {1}
+bbset syn.ExtraLibs.Enable {True}
+
+bbset syn.MacroLibraryFileInclude {fiducial|tpmn02p_esd|tpmn02p_lup|.*tphn02p_075od12gpio.*|ts1n02psblvta1024x128m4wzhodcp|ts1n02psblvta1024x32m4wzhodcp|ts1n02psblvta1024x32m4zhodcp|ts1n02psblvta512x128m2wzhodcp|ts1n02psblvta512x32m2wzhodcp|ts1n02psblvtb400x32m4wzhodxcp|ts1n02psbsvta128x108m1wzhodcp|ts1n02psbsvta128x26m2zhodcp|ts1n02psbsvta256x22m4zhodcp|pmc_top|.*bwph130pnpnl3p48cpd_base_gcustom_gsl_clk_div50_dp_2r.*|.*bwph130pnpnl3p48cpd_base_gcustom_gsl_clk_div_1p5.*|.*DTCD.*}
+
+bbset syn.ExtraLibs.libgen.ccs_lib  {
+/google/gchips/lib/foundry/tsmc/n2p/google/ip.raw/2025-03-27_pmc_top/pmc_top_M3/lib/pmc_top_ssgnp_0p675v_0c_cworst_CCworst_T.lib
+}
+
+bbset syn.ExtraLibs.libgen.ccs_db  {
+/google/gchips/lib/foundry/tsmc/n2p/google/ip.raw/2025-03-27_pmc_top/pmc_top_M3/lib/pmc_top_ssgnp_0p675v_0c_cworst_CCworst_T.db
+}
+
+bbset syn.ExtraLibs.libgen.lef {
+/google/gchips/lib/foundry/tsmc/n2p/google/ip.raw/2025-03-27_pmc_top/pmc_top_M3/lef/pmc_top.lef
+}
+
+bbset pnr.ExtraLibs.libgen.lef {[bbget .syn.ExtraLibs.libgen.lef]}
+bbset pnr.ExtraLibs.libgen.ccs_lib {[bbget .syn.ExtraLibs.libgen.ccs_lib]}
+bbset pnr.ExtraLibs.libgen.ccs_db {[bbget .syn.ExtraLibs.libgen.ccs_db]}
+
+######### Elaborate ###############
+bbset syn.WatermarkRTLTag           {LAJ_A0_SSWRP_CPUACC_M3_V2_R5_D1_C3_DFT} 
+
+bbset .info.BLOCK "sswrp_cpuacc"
+bbset SSWRP_CPUACC_RELEASE_PROJECT_TOP "/google/gchips/ipreleases/lajolla_infra/sswrp_cpuacc/LAJ_A0_SSWRP_CPUACC_M3_V2_R5_D1_C3_DFT/fe_release/"
+bbset Release_area "/google/gchips/ipreleases/lajolla_infra/sswrp_cpuacc/LAJ_A0_SSWRP_CPUACC_M3_V2_R5_D1_C3_DFT/fe_release/"
+bbset SSWRP_CPUACC_RELEASE_PROJECT_TOP "[bbget .Release_area]"
+bbset syn.elaborate.RTLParsingVars ""
+bbset syn.elaborate.RTLSearchPath "[bbget .Release_area]/[bbget .info.BLOCK]/dft_rtl/"
+bbset syn.elaborate.RTLFileList "[bbget .Release_area]/[bbget .info.BLOCK]/dft_rtl/synth/sswrp_cpuacc.vf"
+bbset syn.elaborate.InputUPFFile "[bbget .Release_area]/[bbget .info.BLOCK]/dft_upf/sswrp_cpuacc/sswrp_cpuacc.upf"
+bbset syn.elaborate.InputDEFFile "/google/gchips/workspace/redondo-asia/tpe/user/aruntyagi/LAJOLLA/my_fp_trails/0625_def/fp3.def"
+
+bbset syn.EnablePhysicalSynthesis {0}
+
+#bbset syn.elaborate.SkipSDCErrorChecks {1}
+
+##to preserve the registers pointed in the following bug: https://b.corp.google.com/issues/277538021
+bbappend syn.fc.ElaborateReadRTLPreCallback {
+ 	set_app_options -name hdlin.systemverilog_default_automatic_tfs -value true
+        set_app_options -name hdlin.naming.upf_compatible -value true
+	set_app_options -name hdlin.elaborate.keep_signal_name  -value user
+}
+
+bbset syn.fc.ElaborateSetupPostCallback { 
+        set_app_options -name hdlin.naming.upf_compatible -value true
+        set_app_options -name hdlin.naming.structs_records -value %s.%s
+        set_app_options -name hdlin.naming.vhdl_preserve_case -value true
+        set_app_options -name hdlin.naming.hierarchical -value true
+}
+
+###
+##This is kept to know the value of the following app option during elaborate flow
+bbappend sif.fc.ExecuteStagePostCallback {
+	set vv [get_app_option_value -name hdlin.elaborate.keep_signal_name ]
+	puts "#USER QUERY: value of hdlin.elaborate.keep_signal_name is $vv"
+}
+
+bbappend syn.elaborate.RtlModulesToPreserve { *csu_top*}
+bbappend syn.synth.DFTPreserveModules   { *csu_top*}
+
+bbset syn.fc.CompileAutoUngroup      {false}    
+bbset syn.fc.CompileBoundaryOptimization {true}    
+
+bbappend syn.fc.ElaborateSetupScenariosPostCallback {
+    # check_timing report
+    foreach scenario [get_object_name [all_scenarios]] {
+        redirect -compress rpts/check_timing.${scenario}.rpt.gz { check_timing -scenarios $scenario -all }
+    }
+}
+
+
+######### Synth ###############
+bbset sif.fc.ExecuteStagePostCallback {
+ if { ${STAGE} == "synth"} {
+		report_multibit -nosplit > rm_synth.rpt
+		  create_power_domain PD_GSPAN_CPUACC -available_supplies "SS_VDD_AMB SS_VDD_CPUACC_M" -update
+    		  set_design_attributes -elements {.} -attribute {shared_voltage_area "{PD_SSWRP_AON PD_GSPAN_CPUACC}"}  
+                  set_voltage_area  DEFAULT_VA  -add_power_domains {PD_SSWRP_AON PD_GSPAN_CPUACC}
+ }
+}
+
+bbset syn.synth.EnableHighMemFix  {1}
+
+bbappend syn.fc.SynthPreCallback {
+set_attribute [get_modules *dftss_cpuacc_aon_dyn_dft_mux*] dont_touch true
+}
+
+bbappend syn.fc.SynthOptLogicOptoPreCallback {
+set_attribute [get_modules *dftss_cpuacc_aon_dyn_dft_mux*] dont_touch true
+}
+
+bbappend syn.synth.DFTPreserveHierModulesNoOpto { *dftss_cpuacc_aon_dyn_dft_mux* }
+
+
+######### SynthOpt ###############
+bbset syn.synthopt.RecreatePathGroups {1}
+
+bbset pnr.floorplan.PowerSwitchHammerChainCount {4}
+bbset pnr.psw.HammerChainOrAckNet {u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/gic_pg_pdom_power_down_or_all_ack u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/gpdma_pg_pdom_power_down_or_all_ack u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/ssu_m55_pg_pdom_power_down_or_all_ack u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/ssu_pg_pdom_power_down_or_all_ack u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/sswrp_pg_pdom_power_down_or_all_ack}
+
+bbappend sif.fc.OpenDesignPostProcessCallback {
+if {${::STAGE} in {synthopt}} {
+puts "sourcing hammer_end_logic.tcl file "
+source -e -v "/google/gchips/workspace/redondo-asia/tpe/user/knandakishore/projects/lajolla/scripts/hammer_end_logic.tcl"
+}
+}
+
+
+bbset pnr.floorplan.EnableDiscreteChannelHammerChain {0} 
+bbset pnr.floorplan.NumDiscreteChannelHammerChains {0}     
+
+bbset syn.fc.SynthOptSetupPostCallback {
+#source -e -v "/google/gchips/workspace/redondo-asia/tpe/user/knandakishore/projects/lajolla/scripts/my_fc_app_options.tcl"
+source -e -v "/google/gchips/workspace/redondo-asia/tpe/user/aruntyagi/LAJOLLA/my_constraints/my_exceptions_jun13.tcl"
+}
+
+#bbappend syn.fc.SynthOptSetupPreProcessCallback {
+#create_keepout_margin -type hard -outer {0.0 0.080 0.0 0.080} [get_cells -hierarchical -filter "ref_name=~MB*||ref_name=~DF*||ref_name=~SDF* && is_sequential==true"]
+#}
+
+bbappend syn.fc.SynthPreCallback {
+set_constant_register_removal [get_flat_cells *dftss_cpuacc_aon_dyn_dft_mux*] false
+}
+
+bbappend syn.fc.SynthOptLogicOptoPreCallback {
+set_constant_register_removal [get_flat_cells *dftss_cpuacc_aon_dyn_dft_mux*] false
+}
+
+bbset syn.synthdft.InputTestPointFile    "../testpoint/outs/[bbget .info.BLOCK].test_point.rpt"
+
+bbappend syn.synth.SkipICGInsertionInstPatterns { *u_lpm/u_lpm*_csr* }
+
+######### Setup ###############
+bbset pnr.setup.InputDEFFile {/google/gchips/workspace/redondo-asia/tpe/user/aruntyagi/LAJOLLA/my_fp_trails/0625_def/fp3.def}
+bbset pnr.setup.InsertDTCDCells      {0}
+
+bbset pnr.innovus.SetupReadDEFPreCallback {
+source -e -v "/google/gchips/workspace/redondo-asia/tpe/user/aruntyagi/LAJOLLA/my_fp_trails/0515_def/jun13_clamp_gnc.tcl"
+}
+
+bbset pnr.innovus.SetupReadDEFPostCallback {
+source -e -v "/google/gchips/workspace/redondo-asia/tpe/user/aruntyagi/LAJOLLA/my_fp_trails/0515_def/jun13_clamp_gnc.tcl"
+}
+
+bbset pnr.innovus.SetupReadUPFPostCallback {
+mark_physical_power_domains -domains {PD_SSWRP_AON PD_DMA PD_GIC PD_SSU PD_SSU_M55 PD_SSWRP}
+}
+
+bbset pnr.innovus.SetupCreateFloorplanPreProcessCallback {
+addHaloToBlock 0.576 0.520 0.576 0.520 -allMacro
+addHaloToBlock 0.576 1.04 0.576 0.52 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_itcm/GEN_MULTI_BANK_GEN_BANKS_3__m55_tcm_ram/ram_0_2
+addHaloToBlock 0.576 1.04 0.576 0.52 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_itcm/GEN_MULTI_BANK_GEN_BANKS_3__m55_tcm_ram/ram_0_1
+}
+
+bbset pnr.innovus.FloorplanMacroHalosPostCallback {
+addHaloToBlock 0.576 0.520 0.576 0.520 -allMacro
+addHaloToBlock 0.576 1.04 0.576 0.52 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_itcm/GEN_MULTI_BANK_GEN_BANKS_3__m55_tcm_ram/ram_0_2
+addHaloToBlock 0.576 1.04 0.576 0.52 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_itcm/GEN_MULTI_BANK_GEN_BANKS_3__m55_tcm_ram/ram_0_1
+}
+
+######### Floorplan ###############
+bbset pnr.floorplan.ExtendPGStripesTillDieBoundary "1"
+bbset pnr.floorplan.EnableFullPGInM14M15 {1}
+
+bbset pnr.floorplan.InsertFiducialCell {1}
+bbset pnr.floorplan.RectilinearDesign {1}
+bbset pnr.floorplan.CoreSwitchXPitch 15.36
+bbset pnr.floorplan.CoreSwitchYPitch 4
+
+#bbset pnr.floorplan.MissingSwitchHorizontalAlignment "1"
+#bbset pnr.floorplan.MemoryPGExtraM7M9 {MVDD}                                                           
+#bbset pnr.floorplan.MemoryPGRecipe   {recipe3}   
+#bbset pnr.floorplan.MemoryPGRecipe3Insts {
+#u_sswrp_cpuacc_aux/u_sswrp_cpuacc_gic_top/u_gic700/u_gic700_domain_gic_cpuacc/u_gicd_wrap/u_its_0/u_v_cache/g_128_107_gsl_wrapper_128x108/ram_0_0
+#} 
+
+bbset pnr.floorplan.PowerDomainOverrides "PD_SSWRP_AON {MVDD VDD_CPUACC_M}"
+
+
+##PG OFFSET
+bbset pnr.floorplan.PGM15VSSOffset "4.94"
+bbset pnr.floorplan.PGM14VSSOffset "1.34"
+bbset pnr.floorplan.AlignM14M15Tracks "1"
+bbset pnr.floorplan.PGM14M15OffsetFile "/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pushdown_m3v2_04252025/offsets/pg_offset.tcl"
+##
+
+#TRACK OFFSET
+bbset pnr.floorplan.PushDownTrackOffsetLayers "M12 M13 M14 M15"
+bbset pnr.floorplan.TrackOffsetFile "/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pushdown_m3v2_04252025/offsets/track_offset.tcl"
+
+
+bbset pnr.floorplan.PowerDomainOverrides "PD_SSWRP_AON {MVDD VDD_CPUACC_M}"
+
+
+#bbset pnr.floorplan.VoltageAreas {PD_SSWRP {{308.016 511.628 458.88 547.248} {308.016 229.658 547.056 511.628}} PD_SSU_M55 {{0.912 158.028 307.488 547.248} {0.912 0.988 360.672 158.028}} PD_SSU {{361.584 146.328 665.136 158.158} {361.584 0.988 793.92 146.328}} PD_DMA {{750.624 227.708 939.12 256.828} {750.624 146.588 1003.2 227.708} {794.784 0.988 1003.2 146.588}} PD_GIC {{653.76 334.828 781.584 547.248} {653.76 307.788 812.784 334.828} {653.712 307.268 812.784 307.788} {653.712 257.348 854.448 307.268}}}
+
+bbset pnr.floorplan.VoltageAreas {PD_SSWRP {{313.584 511.628 458.16 547.248} {313.584 227.708 552.624 511.628}} PD_SSU_M55 {{0.912 226.668 312.672 547.248} {0.912 147.628 354.672 226.668} {0.912 0.988 344.688 147.628}} PD_SSU {{508.992 146.588 665.136 149.448} {345.6 146.328 665.136 146.588} {345.6 0.988 793.92 146.328}} PD_DMA {{750.624 227.708 939.12 256.828} {750.624 146.588 1003.2 227.708} {794.784 0.988 1003.2 146.588}} PD_GIC {{653.76 334.828 781.584 547.248} {653.76 307.788 812.784 334.828} {653.712 307.268 812.784 307.788} {653.712 257.868 854.448 307.268}}}
+
+
+##Set this to 1 VA Boxes are defined as disjonted list of rectangles and not disjointed rectilinear shapes
+bbset pnr.floorplan.VABoxesRectBoxList {1}
+
+##Switch to enable conversion of VA boxes to polygon. Enabled by default. Can be turned off if disjoint VAs are needed.
+#bbset pnr.floorplan.ConvertVABoxesToPolygon 0
+
+bbset pnr.innovus.FloorplanRowsAndTracksPreCallback { 
+dbset top.Fplan.isCore2Io 0
+source -e -v "/google/gchips/workspace/redondo-asia/tpe/user/aruntyagi/LAJOLLA/my_fp_trails/0625_def/fp3_pblkgs.tcl"
+}
+
+
+bbset pnr.floorplan.MemoryPGRecipe   {recipe2}                {str: Can be default, recipe1, recipe2 or recipe3}
+
+bbset pnr.floorplan.MemoryPGExtraM7M9 {MVDD}            {str: Can be MVDD or AVDD. Applicable for Recipe1,2,3}
+
+bbset pnr.floorplan.MemoryPGRecipe2Insts {u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_0__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_0__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_0__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_0__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_1__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_1__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_1__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_1__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_0__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_0__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_0__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_0__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_1__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_1__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_1__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_1__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_0__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_0__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_0__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_0__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_1__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_1__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_1__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_1__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_0__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_0__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_0__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_0__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_1__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_1__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_1__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_1__m55_tcm_ram/ram_0_3}
+
+
+######### Testpoint ###############
+
+######### Synthdft ###############
+bbappend syn.fc.SynthDftSettingPreCallback {
+set_attr [get_lib_cells */*CKLNQZPDD*CPDLVT*] dont_use false
+puts "dont_use attr on ICG :: [lsort -u [get_attr [get_lib_cells */*CKLNQZPDD*] dont_use]]"
+}
+
+
+bbset syn.synthdft.Constant1         {
+                                      cpuacc_cpm_isolation_n
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_dftss_cpuacc_aon/dftss_core_inst/ip_dft_control_inst/u_odft_ram_dftclken_cd_or/out
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_dftss_cpuacc_aon/dftss_core_inst/ip_dft_mode_gen_inst/u_odft_logic_test_mode_or/SIZEONLY_or/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_dftss_cpuacc_aon/dftss_core_inst/ip_dft_mode_gen_inst/u_odft_all_test_mode_or/SIZEONLY_or/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr00_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr11_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr22_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr33_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr44_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr55_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr66_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr77_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr88_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr99_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1010_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1111_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1212_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1313_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1414_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1515_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1616_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1717_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1818_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1919_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2020_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2121_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2222_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2323_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2424_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2525_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2626_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lpm_wrapper/u_lpm_spare_ctrl_tdr_NO_SCAN/u_odft_inrush_func_cg_te_anchor_buf/SIZEONLY_buf/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_root_clk_gate_ctrl_tdr00_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_root_clk_gate_ctrl_tdr11_NO_SCAN/TE_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lpm_wrapper/u_lpm_spare_ctrl_tdr_NO_SCAN/u_odft_inrush_ctrl_on_scan_anchor_buf/SIZEONLY_buf/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lpm_wrapper/u_lpm_spare_ctrl_tdr_NO_SCAN/u_odft_psc_latch_anchor_buf/SIZEONLY_buf/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lpm_wrapper/u_lpm_spare_ctrl_tdr_NO_SCAN/u_odft_scandump_on_scan_anchor_buf/SIZEONLY_buf/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_gmrc_sswrp_cpuacc_rx_inst/gmrc_rx_dft_override_inst/gmrc_rx_ctrl_tdr_inst_NO_SCAN/gmrc_on_scan_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_dftss_cpuacc_aon/dftss_core_inst/ip_dft_rst_mux_inst/u_func_reset_ovrd_or/SIZEONLY_or/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lpm_wrapper/ip_dft_pm_override_inst/gdft_buf_pm_test_mode_sizeonly/SIZEONLY_buf/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_dftss_cpuacc_aon/dftss_core_inst/ip_dft_control_inst/u_rstbypass_l2_inst/SIZEONLY_buf/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_dftss_cpuacc_aon/dftss_core_inst/ip_dft_control_inst/u_rstbypass_l1_inst/SIZEONLY_or/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_dftss_cpuacc_aon/dftss_core_inst/ip_dft_rst_mux_inst/ip_dft_rst_mux_gmrc_tdr_inst_NO_SCAN/ijtag_data_out_latch_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lpm_wrapper/u_lpm_spare_ctrl_tdr_NO_SCAN/u_odft_lpcm_clkstop_ovrd_anchor_buf/SIZEONLY_buf/Z
+                                      } {list: Constant 1}
+
+bbset syn.synthdft.Constant0         { idfd_sd_mode
+                                      idfd_smmu_cachedump_mode
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lpm_wrapper/ip_dft_pm_override_inst/gdft_mux_gic_pg_pdom_isolation_en_sizeonly/gpl_ip_dft_mux_4/SIZEONLY_mux2/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lpm_wrapper/ip_dft_pm_override_inst/gdft_mux_gpdma_pg_pdom_isolation_en_sizeonly/gpl_ip_dft_mux_4/SIZEONLY_mux2/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lpm_wrapper/ip_dft_pm_override_inst/gdft_mux_ssu_pg_pdom_isolation_en_sizeonly/gpl_ip_dft_mux_4/SIZEONLY_mux2/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lpm_wrapper/ip_dft_pm_override_inst/gdft_mux_sswrp_pg_pdom_isolation_en_sizeonly/gpl_ip_dft_mux_4/SIZEONLY_mux2/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_dftss_cpuacc_aon/dftss_core_inst/ip_dft_mode_gen_inst/u_odft_gspan_clk_sel_or/SIZEONLY_or/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr00_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr11_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr22_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr33_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr44_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr55_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr66_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr77_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr88_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr99_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1010_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1111_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1212_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1313_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1414_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1515_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1616_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1717_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1818_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1919_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2020_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2121_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2222_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2323_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2424_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2525_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2626_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_root_clk_gate_ctrl_tdr00_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_root_clk_gate_ctrl_tdr11_NO_SCAN/Sel_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr00_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr11_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr22_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr33_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr44_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr55_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr66_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr77_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr88_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr99_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1010_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1111_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1212_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1313_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1414_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1515_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1616_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1717_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1818_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr1919_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2020_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2121_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2222_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2323_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2424_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2525_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_cg_ctrl_tdr2626_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_root_clk_gate_ctrl_tdr00_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lcm_wrapper/u_lcm/u_lcm_core/lcm_cpuacc_core_root_clk_gate_ctrl_tdr11_NO_SCAN/TD_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/u_lpm_wrapper/ip_dft_pm_override_inst/u_lpm_cpuacc_ctrl_tdr_NO_SCAN/u_sswrp_pg_pdom_isolation_en_shift_anchor_buf/SIZEONLY_buf/Z
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_gmrc_sswrp_cpuacc_rx_inst/gmrc_rx_dft_override_inst/gmrc_rx_ctrl_tdr_inst_NO_SCAN/bisr_latch_reg_reg_0_/Q
+                                      u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_gmrc_sswrp_cpuacc_rx_inst/gmrc_rx_dft_override_inst/gmrc_rx_ctrl_tdr_inst_NO_SCAN/clock_gate_disable_reg_reg_0_/Q
+                                      } {list: Constant 0}
+
+
+#bbappend sif.fc.ApplyCommonSettingsPostCallback {
+#catch { set_attribute [filter_collection [get_lib_pins */*D0P7*DLVT*/*] "direction==out"] max_fanout 4 }
+#catch { set_attribute [filter_collection [get_lib_pins */*D1BWP*DLVT*/*] "direction==out"] max_fanout 4 }
+#catch { set_attribute [filter_collection [get_lib_pins */*D2BWP*DLVTLL/*] "direction==out"] max_fanout 8 }
+#catch { set_attribute [filter_collection [get_lib_pins */*/*] "direction==out"] max_fanout 8 }
+#catch { set_app_options -name opt.common.max_fanout -value 12 }
+#if {${::STAGE} == "synthdftopt" } {
+#source -e -v /google/gchips/workspace/redondo-asia/tpe/user/pmudgil/lajola/cpu_acc/M3_run_area/repo_3_0_0/swap_fractional_cells.tcl
+#}
+#}
+
+
+######### SynthdftOpt ###############
+
+bbappend syn.fc.SynthDFTOptSetupPostCallback {
+source -e -v "/google/gchips/workspace/redondo-asia/tpe/user/aruntyagi/LAJOLLA/my_constraints/my_exceptions_jun13.tcl"
+}
+
+
+bbset syn.synthdftopt.SplitStage {1}
+
+########################################## 
+#    PNR
+##########################################
+bbset pnr.EnableWaterMarkInsertion {true}
+bbset pnr.WatermarkRTLTag {LAJ_A0_SSWRP_CPUACC_M3_V2_R5_D1_C3_DFT}
+bbset pnr.innovus.EnableUnifiedMetrics 1
+bbset pnr.EnableFoundryProcessDerates 1
+bbset pnr.EnableFoundryProcessMemDerates 1
+bbset DkProcessInLegacy "n2p"        -comment {DK process directory name in legacy GCD}
+bbset PdkProcessInLegacy "n2p"      -comment {PDK process directory name in legacy GCD}
+bbset MdkProcessInLegacy "n2p"      -comment {PDK process directory name in legacy GCD}
+bbset DkProcessInEnclave "n2p"       -comment {DK process directory name in Enclave GCD}
+bbset PdkProcessInEnclave "n2p"     -comment {PDK process directory name in Enclave GCD}
+bbset MdkProcessInEnclave "n2p"     -comment {PDK process directory name in Enclave GCD}
+
+bbset pnr.PathGroupOverrides         {INPUT {effortLevel low}  IN2OUT {effortLevel low}
+                                      OUTPUT {effortLevel low} REG2REG {effortLevel high} REG2MEM {effortLevel high}
+                                      MEM2REG {effortLevel high} REG2ICG {effortLevel high} IN2ICG {effortLevel low}}
+
+bbset pnr.EnableWaterMarkInsertion {true}
+bbset pnr.innovus.EnableUnifiedMetrics 1
+bbset pnr.EnableFoundryProcessDerates 1
+bbset pnr.EnableFoundryProcessMemDerates 1
+
+bbset pnr.DelayCells {BUFFD2BWP130HPNPN3P48CPDLVTLL BUFFD3BWP130HPNPN3P48CPDLVTLL BUFFD3BWP130HPNNP3P48CPDLVTLL} 
+
+bbset pnr.HighEffortOptCells {LVT}
+bbset pnr.EnableTighterMaxTransitionConstraints  1
+
+bbset pnr.fc.EnableNwellPinVL {1}
+
+####################
+
+#bbset pnr.BumpDEFFiles {/google/gchips/ipreleases/malibu_security/sswrp_gpca/mbu_pushdown_m4v3_10062024/bumprdl/sswrp_gpca_bumpdef_only.def}
+bbset pnr.derate.vt_mismatch.dominate_vt.Value {lvt}
+
+###############GKC SETTINGS ############### 
+bbset EnableGKCNode {1} -comment "bool: set it to 1 to enable GKC in all PNR stages guided via ValidGKCStages"
+bbset ValidGKCStages {placeopt routeopt chipfinish}
+
+######### Libgen ################
+bbset pnr.ExtraLibs.Enable {True}
+bbset pnr.MacroLibraryFileInclude {fiducial|tpmn02p_esd|tpmn02p_lup|.*tphn02p_075od12gpio.*|ts1n02psblvta1024x128m4wzhodcp|ts1n02psblvta1024x32m4wzhodcp|ts1n02psblvta1024x32m4zhodcp|ts1n02psblvta512x128m2wzhodcp|ts1n02psblvta512x32m2wzhodcp|ts1n02psblvtb400x32m4wzhodxcp|ts1n02psbsvta128x108m1wzhodcp|ts1n02psbsvta128x26m2zhodcp|ts1n02psbsvta256x22m4zhodcp|pmc_top|.*bwph130pnpnl3p48cpd_base_gcustom_gsl_clk_div50_dp_2r.*|.*bwph130pnpnl3p48cpd_base_gcustom_gsl_clk_div_1p5.*|.*DTCD.*}
+
+bbset pnr.scenarios.Scenarios	{[bbget .syn.scenarios.Scenarios]}
+bbset pnr.scenarios.status.Default	{[bbget .syn.scenarios.status.Default]}
+bbset pnr.EnableHighEffortCellOpt {true}
+
+######### PlaceOpt ###############
+bbappend pnr.fc.PlaceOptInitialOptoPreCallback {
+source -e -v /google/gchips/workspace/redondo-asia/tpe/user/pmudgil/lajola/cpu_acc/M2_run_area/repo_2_0_0/non_clk_cell_fix.tcl 
+}
+
+##To take GSPAN IO BUF placement & respect voltage areas
+bbset fc.AddBufferRespectVoltageArea 1
+
+bbset pnr.MaxFanout                  {16}
+bbset pnr.check.MaxFanout            {16}                                                             
+## bbset pnr.placeopt.CCDOptMaxAllowedDelay {0.050}                                                          {Early clock optimization max allowed delay}
+## bbset pnr.placeopt.CCDOptMinAllowedDelay {0.005}                                                          {Early clock optimization min allowed delay}
+
+##----------- gspan ------------
+bbset pnr.placeopt.GSPANBufferPadding {top 1 left 1 right 1}
+bbset pnr.placeopt.GSPANFlopPadding  {top 1 left 1 right 1}
+bbset pnr.EnableIOBuffer  {1}
+
+bbappend pnr.fc.PlaceOptSetupPostCallback {
+source -e -v "/google/gchips/workspace/redondo-asia/tpe/user/aruntyagi/LAJOLLA/my_constraints/my_exceptions_jun13.tcl"
+}
+
+######### Clock ###############
+bbset pnr.clock.CCDEffort            {none}
+bbset pnr.clock.EnableCCDOptimization {0}
+bbset pnr.clock.MaxFanout            {16}
+bbset pnr.clock.TargetSkew           {50ps}
+bbset pnr.clock.EnableGSPANImplementation {1}
+bbset pnr.ClockCellVthType           {ULVTLL} 
+
+bbset pnr.clock.InverterCellList     {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {List of inverter cells}
+bbset pnr.clock.TopInverterCellList  {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf Specific Inverter Cell List}
+bbset pnr.clock.LeafInverterCellList {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf specific inverter cell list}
+bbset pnr.clock.BufferCellList       {CKBDHD5BWP130HPNPN3P48CPDULVTLL DCCKBDHD6BWP130HPNPN3P48CPDULVTLL DCCKBDHD8BWP130HPNPN3P48CPDULVTLL  DCCKBDHD10BWP130HPNPN3P48CPDULVTLL DCCKBDHD12BWP130HPNPN3P48CPDULVTLL DCCKBDHD14BWP130HPNPN3P48CPDULVTLL} {List of buffer cells}
+bbset pnr.clock.ICGCellList          {CKLNQD3BWP130HPNPN3P48CPDULVTLL CKLNQD4BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD4BWP130HPNPN3P48CPDULVTLL  CKLNQD5BWP130HPNPN3P48CPDULVTLL CKLNQD6BWP130HPNPN3P48CPDULVTLL CKLNQD8BWP130HPNPN3P48CPDULVTLL  CKLNQOPTBBD8BWP130HPNPN3P48CPDULVTLL CKLNQD10BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD10BWP130HPNPN3P48CPDULVTLL  CKLNQD12BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD12BWP130HPNPN3P48CPDULVTLL} {List of clock gating cells}
+
+bbappend pnr.fc.ClockSetupPostCallback {
+ set_app_options -name cts.compile.primary_corner -value ssgnp-NM-0-cworst_ccworst_t
+}
+
+bbappend pnr.fc.ClockBuildClockPreCallback {
+###### latency improvement ############
+set_app_options -list {cts.common.auto_exception_disable_self_arc true}
+set_app_options -name cts.common.auto_exception_disable_parallel_arc -value true
+set_app_options -name cts.buffering.ignore_dc_generic -value true
+reset_app_options cts.common.auto_skew_target_clock_period_percentage
+set_app_options -name cts.common.enable_auto_skew_target_for_local_skew -value false
+set_app_options -list {cts.optimize.enable_improvement_mode skew}
+set_app_options -name cts.compile.size_pre_existing_cell_to_cts_references -value true
+set_app_options -name cts.icg.latency_driven_cloning -value true
+set_app_options -name cts.compile.enable_cell_relocation -value all
+
+set_ignored_layers -min_routing_layer M0
+
+foreach_in_collection e [get_mode] {
+ current_mode $e
+ set_clock_balance_points -balance_points [get_pins -hier -phys */CHAIN_lockup_latch*/E] -consider_for_balancing false
+}
+
+set_clock_tree_options -target_skew 0.120
+set_clock_tree_options -target_skew 0.05 -corners ssgnp-NM-0-cworst_ccworst_t -clock [get_clocks clkm_gpcm_cpuacc_p1d2_1066m_clk]
+#source /google/gchips/workspace/redondo-asia/tpe/user/pmudgil/lajola/cpu_acc/M3_run_area/cts_pull.tcl
+}
+
+
+###########Tightening Clock & Data Tran##############
+#####################################################
+bbset pnr.drv.ClockConstraintDenominatorOverrides {{* 10} {*NM* 9} {*UD* 10} {*SUD* 9} {*UUD* 10}}                    {Overrides of Denominator for clock slew calculation. eg {{*SUD* val1} {*uud* val2}}}
+bbset pnr.drv.DataConstraintDenominatorOverrides {{* 7} {*NM* 7} {*UD* 6} {*SUD* 3} {*UUD* 5}}                    {Overrides of Denominator for data slew calculation. eg {{*SUD* val1} {*uud* val2}}}
+bbset syn.drv.ClockConstraintDenominatorOverrides {{* 10} {*NM* 10} {*UD* 10} {*SUD* 9} {*UUD* 10}}                    {# No Comment}  
+bbset syn.drv.DataConstraintDenominatorOverrides {{* 7} {*NM* 7} {*UD* 6} {*SUD* 3} {*UUD* 5}}                    {# No Comment}  
+
+
+######### ClockOpt ###############
+bbset pnr.clockopt.CCDEffort         {none}
+bbset pnr.clockopt.EnableCCDOptimization {0}
+bbset pnr.clockopt.EnableSetupFix    {1}                                                              {Enable setup fix in clockopt}
+bbset pnr.clockopt.HoldFixTargetSlack {-0.005}
+
+bbset pnr.fc.ClockOptFinalOptoPreCallback { 
+check_duplicates -remove 
+catch { remove_objects [get_shapes -hierarchical -filter undefined(net) ]} 
+catch { remove_objects [get_shapes -hierarchical -filter undefined(owner) ] } 
+set_attribute [get_shapes -of_objects [get_nets -f net_type==power||net_type==ground] -f shape_use==detail_route] shape_use stripe 
+
+############### Letency adjustment options ###################
+set_app_options -list {cts.common.auto_exception_disable_self_arc true}
+set_app_options -name cts.common.auto_exception_disable_parallel_arc -value true
+set_app_options -name cts.buffering.ignore_dc_generic -value true
+reset_app_options cts.common.auto_skew_target_clock_period_percentage
+set_app_options -name cts.common.enable_auto_skew_target_for_local_skew -value false
+set_app_options -list {cts.optimize.enable_improvement_mode skew}
+set_app_options -name cts.compile.size_pre_existing_cell_to_cts_references -value true
+set_app_options -name cts.icg.latency_driven_cloning -value true
+set_app_options -name cts.compile.enable_cell_relocation -value all
+
+foreach_in_collection e [get_mode] {
+ current_mode $e
+ set_clock_balance_points -balance_points [get_pins -hier -phys */CHAIN_lockup_latch*/E] -consider_for_balancing false
+}
+
+}
+
+###############GKC SETTINGS ############### 
+bbset EnableGKCNode {1} -comment "bool: set it to 1 to enable GKC in all PNR stages guided via ValidGKCStages"
+bbset ValidGKCStages {placeopt routeopt chipfinish}
+
+######### Route ###############
+bbset pnr.route.CCDEffort         {none}
+bbset pnr.route.EnableCCDOptimization {0}
+
+######### Various PD Common ########
+
+bbset pnr.placeopt.LeakageToDynamicRatio {1}
+bbset pnr.clock.LeakageToDynamicRatio {1}
+bbset pnr.clockopt.LeakageToDynamicRatio {1}
+bbset pnr.route.LeakageToDynamicRatio {1}
+bbset pnr.routeopt.LeakageToDynamicRatio {1}
+bbset pnr.placeopt.PowerEffort {low}
+bbset pnr.clock.PowerEffort {low}
+
+bbset pnr.clockopt.PowerEffort {low}
+bbset pnr.routeopt.PowerEffort {low}
+bbset pnr.clockopt.HoldFixTargetSlack {-0.005}
+bbset pnr.routeopt.HoldFixTargetSlack {-0.01}
+bbset pnr.routeopt.EnableAgressivePowerReclaimOpt {0}
+bbset pnr.route.EnableTrackOpt {false}
+bbset MBFFAllowUnusedBit {true}
+bbset EnableMBFFDifferentBuses {true}
+
+
+bbappend pnr.fc.PlaceOptFinalPlacePreCallback { 
+set_app_options -name compile.flow.enable_ccd -value false 
+} 
+bbappend pnr.fc.PlaceOptFinalOptoPreCallback { 
+set_app_options -name compile.flow.enable_ccd -value false 
+} 
+bbappend pnr.fc.ClockBuildClockPreCallback { 
+set_app_options -name clock_opt.flow.enable_ccd -value false 
+source -e -v "/google/gchips/workspace/redondo-asia/tpe/user/aruntyagi/LAJOLLA/scripts/clock_balancing.tcl"
+} 
+bbappend pnr.fc.ClockOptFinalOptoPreCallback { 
+set_app_options -name clock_opt.flow.enable_ccd -value false 
+} 
+bbappend pnr.fc.RouteOptFinalPreCallback { 
+set_app_options -name route_opt.flow.enable_ccd -value false 
+} 
+
+#############################POWER IMPROVEMENT APP OPTIONS#############################################
+bbset pnr.placeopt.PlaceEnableClockGateAware {true}                                                          {Enable clock gate aware placement. value ={true|false}}
+#bbset pnr.TotalPowerOptimizationEffort {ultra}                                                           {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+#bbset syn.TotalPowerOptimizationEffort {ultra}                                                           {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+
+#####timing_tcl#####
+bbappend sif.fc.ApplyExportCommonSettingsPostCallback {
+source "/google/gchips/workspace/redondo-asia/tpe/user/knandakishore/projects/lajolla/scripts/proc_path_summary.tcl"
+path_summary_FC
+source -e -v "/google/gchips/workspace/redondo-asia/tpe/user/knandakishore/projects/lajolla/scripts/exports.tcl"
+}
+
+###############################################################################################################
+########Applying 250ps uncertainty procs/fc/procs.timing.tcl - ::timing::apply_user_clock_uncertainity#########
+#####################################################
+#bbset syn.ClockUncertainityOverrides {
+#    {*NM* {setup { *ssu* 0.200} } } {*-UD-* {setup { *ssu* 0.250} } } {*UUD* {setup { *ssu* 0.340} } } {*SUD* {setup { *ssu*  0.300} } }
+#}
+#bbset pnr.placeopt.ClockUncertainityOverrides {
+#    {*NM* {setup { *ssu* 0.200} } } {*-UD-* {setup { *ssu* 0.250} } } {*UUD* {setup { *ssu* 0.340} } } {*SUD* {setup { *ssu*  0.300} } }
+#}
+##############################################################################################################
+
+
+bbset syn.Cores                      {32}                                                             {Cores for each stage}
+bbset syn.RAM                        {256000}                                                         {RAM for each run}
+bbset syn.ExportCores                {32}                                                             {# No Comment}  
+bbset syn.ExportRAM                  {320000}                                                         {# No Comment}  
+bbset syn.elaborate.Cores            {32}                                                             {Cores for each stage}
+bbset syn.elaborate.RAM              {256000}                                                         {RAM for each run}
+bbset syn.elaborate.ExportRAM        {320000}                                                         {# No Comment}  
+bbset syn.synth.Cores                {32}                                                             {Cores for each stage}
+bbset syn.synth.RAM                  {256000}                                                         {RAM for each run}
+bbset syn.synth.ExportRAM            {320000}                                                         {# No Comment}  
+bbset syn.synthopt.Cores             {32}                                                             {Cores for each stage}
+bbset syn.synthopt.RAM               {256000}                                                         {RAM for each run}
+bbset syn.synthopt.ExportRAM         {320000}                                                         {# No Comment}  
+bbset syn.synthdftopt.Cores          {32}                                                             {Cores for each stage}
+bbset syn.synthdftopt.RAM            {320000}                                                         {RAM for each run}
+bbset syn.synthdftopt.ExportRAM      {320000}                                                         {# No Comment}  
+
+bbset pnr.Cores                      {32}                                                             {Cores for each stage}
+bbset pnr.RAM                        {256000}                                                         {RAM for each run}
+bbset pnr.ExportCores                {32}                                                             {Number of cores for the export stage}
+bbset pnr.ExportRAM                  {256000}                                                         {Memory (in MB) for the export stage}
+bbset pnr.placeopt.Cores             {32}                                                             {Cores for each stage}
+bbset pnr.placeopt.RAM               {256000}                                                         {RAM for each run}
+bbset pnr.placeopt.ExportRAM         {320000}                                                         {# No Comment}  
+bbset pnr.clock.Cores                {32}                                                             {Cores for each stage}
+bbset pnr.clock.RAM                  {320000}                                                         {RAM for each run}
+bbset pnr.clock.ExportRAM            {450000}                                                         {# No Comment}  
+bbset pnr.clockopt.Cores             {32}                                                             {Cores for each stage}
+bbset pnr.clockopt.RAM               {400000}                                                         {RAM for each run}
+bbset pnr.clockopt.ExportRAM         {450000}                                                         {# No Comment}  
+bbset pnr.route.Cores                {32}                                                             {Cores for each stage}
+bbset pnr.route.RAM                  {400000}                                                         {RAM for each run}
+bbset pnr.route.ExportRAM            {450000}                                                         {# No Comment}  
+bbset pnr.routeopt.Cores             {32}                                                             {Cores for each stage}
+bbset pnr.routeopt.RAM               {450000}                                                         {RAM for each run}
+bbset pnr.routeopt.ExportRAM         {450000}                                                         {# No Comment}  
+bbset pnr.chipfinish.Cores           {32}                                                             {Cores for each stage}
+bbset pnr.chipfinish.RAM             {320000}                                                         {RAM for each run}
+bbset pnr.chipfinish.ExportRAM       {450000}                                                         {# No Comment}  
+bbset pnr.applyeco.Cores             {32}                                                             {Cores for each stage}
+bbset pnr.applyeco.RAM               {256000}                                                         {RAM for each run}
+bbset pnr.applyeco.ExportRAM         {320000}                                                         {# No Comment}  
+
+

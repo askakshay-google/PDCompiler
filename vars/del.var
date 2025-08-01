@@ -1,0 +1,414 @@
+bbset pnr.scenarios.Scenarios {[bbget .syn.scenarios.Scenarios]}
+bbset pnr.scenarios.status.Default {[bbget .syn.scenarios.status.Default]}
+bbset pnr.scenarios.status.Placeopt {[bbget .syn.scenarios.status.Default]}
+bbset pnr.scenarios.status.Clock {
+bbset pnr.scenarios.status.Clockopt {[bbget .pnr.scenarios.status.Clock]}
+bbset pnr.scenarios.status.Route {[bbget .pnr.scenarios.status.Clock]}
+bbset pnr.scenarios.status.Routeopt {
+bbset pnr.scenarios.status.Chipfinish {[bbget .pnr.scenarios.status.Routeopt]}
+bbset pnr.MacroLibraryFileInclude [bbget .syn.MacroLibraryFileInclude]
+bbset pnr.StdLibraryFileInclude [bbget .syn.StdLibraryFileInclude]
+bbset pnr.ExtraLibs.Enable {True}
+bbset pnr.ExtraLibs.libgen.lef [bbget .syn.ExtraLibs.libgen.lef]
+bbset pnr.floorplan.PGM15VSSOffset "1.1000"                  -comment "M15 PG VSS Offset"
+bbset pnr.floorplan.PGM14VSSOffset "0.0200"                  -comment "M14 PG VSS Offset"
+bbset pnr.floorplan.AlignM14M15Tracks "1"
+bbset pnr.floorplan.PGM14M15OffsetFile "/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pre_m4_06132025/offsets/pg_offset.tcl"
+bbset pnr.floorplan.PushDownTrackOffsetLayers "M12 M13 M14 M15"
+bbset pnr.floorplan.TrackOffsetFile "/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pre_m4_06132025/offsets/track_offset.tcl"
+bbset pnr.setup.InputDEFFile "/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pre_m4_06132025/0530_incremental_defs/sswrp_gdmc.def.gz"
+bbset pnr.setup.InsertDTCDCells      {0}
+bbset pnr.innovus.FloorplanRowsAndTracksPostCallback {
+bbset pnr.floorplan.InsertFiducialCell {1}
+bbset pnr.floorplan.VoltageAreas {PD_GDMC_M55 {{0.9120 29.0680 297.9360 261.2480} {297.9360 51.6880 349.9200 261.2480} {349.9200 68.9780 398.7840 162.9680}} PD_ISO_LATCH {{858.2965 0.9880 911.0880 94.2190} {638.0365 0.9880 858.2965 38.0270}}}
+bbset pnr.floorplan.PowerDomainOverrides "PD_SSWRP_GDMC {MVDD VDD_STBY_M} PD_GDMC_M55 {MVDD VDD_STBY_M} PD_ISO_LATCH {MVDD VDD_AOSS_AON}"
+bbset pnr.floorplan.SVDDNets         {1}
+bbset pnr.floorplan.SVDDNets {
+bbset pnr.floorplan.Type {tcl}
+bbset pnr.floorplan.TclFiles "/google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/FP_DEFS/M3/PADFRAME_FP.tcl_19Jun25"
+bbset pnr.innovus.FloorplanBoundaryRoutingBlockagesPreCallback {
+bbset pnr.floorplan.CoreSwitchXPitch {15.36}                                                          {float:CADONLY Core switch X pitch}
+bbset pnr.floorplan.CoreSwitchYPitch {4}                                                              {float:CADONLY Core switch Y pitch}
+bbset pnr.floorplan.EnableFullPGInM14M15 {1}
+bbset pnr.floorplan.MemoryPGRecipe   {recipe2}                {str: Can be default, recipe1, recipe2 or recipe3}
+bbset pnr.floorplan.MemoryPGExtraM7M9 {MVDD}            {str: Can be MVDD or AVDD. Applicable for Recipe1,2,3}
+bbset pnr.floorplan.MemoryPGRecipe2Insts { \
+bbset pnr.floorplan.ExcludeChannelSwitchesFromTrickleChain {0}
+##bbset pnr.TotalPowerOptimizationEffort {leakage}  {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+bbset pnr.clock.InverterCellList     {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {List of inverter cells}
+bbset pnr.clock.TopInverterCellList  {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf Specific Inverter Cell List}
+bbset pnr.clock.LeafInverterCellList {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf specific inverter cell list}
+bbset pnr.clock.BufferCellList       {CKBDHD5BWP130HPNPN3P48CPDULVTLL DCCKBDHD6BWP130HPNPN3P48CPDULVTLL DCCKBDHD8BWP130HPNPN3P48CPDULVTLL  DCCKBDHD10BWP130HPNPN3P48CPDULVTLL DCCKBDHD12BWP130HPNPN3P48CPDULVTLL DCCKBDHD14BWP130HPNPN3P48CPDULVTLL} {List of buffer cells}
+bbset pnr.clock.ICGCellList          {CKLNQD3BWP130HPNPN3P48CPDULVTLL CKLNQD4BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD4BWP130HPNPN3P48CPDULVTLL  CKLNQD5BWP130HPNPN3P48CPDULVTLL CKLNQD6BWP130HPNPN3P48CPDULVTLL CKLNQD8BWP130HPNPN3P48CPDULVTLL  CKLNQOPTBBD8BWP130HPNPN3P48CPDULVTLL CKLNQD10BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD10BWP130HPNPN3P48CPDULVTLL  CKLNQD12BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD12BWP130HPNPN3P48CPDULVTLL} {List of clock gating cells}
+bbset pnr.drv.ClockConstraintDenominatorOverrides {{* 7} {*NM* 10} {*UD* 10} {*SUD* 10} {*UUD* 10}}                    {Overrides of Denominator for clock slew calculation. eg {{*SUD* val1} {*uud* val2}}}
+bbset pnr.drv.DataConstraintDenominatorOverrides {{* 4} {*NM* 6} {*UD* 5} {*SUD* 4} {*UUD* 4}}                    {Overrides of Denominator for data slew calculation. eg {{*SUD* val1} {*uud* val2}}}
+#bbset pnr.placeopt.ClockUncertainityOverrides {
+bbset pnr.IOBufferExcludeNetsFile "/google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/io_buffer_exclude_ports.tcl"
+bbset pnr.floorplan.MacroPlacementHalo {0.576 0.52 0.576 0.52}                                          {str: Default placement halo spacing to apply for macros. {<left> <bottom> <right> <top>}}
+#bbset pnr.EnablePrimePower {1}
+bbset pnr.TotalPowerOptimizationEffort {high}
+            bbset pnrSdcs {/google/gchips/ipreleases/lajolla_infra1/sswrp_lsioe/LAJ_A0_SSWRP_LSIOE_M3_V3_R3_D1_C4_DFT/fe_release/sswrp_lsioe/dft_sdc/sswrp_lsioe.mission.tcl}
+            bbset pnrSdcs {/google/gchips/ipreleases/lajolla_infra1/sswrp_lsioe/LAJ_A0_SSWRP_LSIOE_M3_V3_R3_D1_C4_DFT/fe_release/sswrp_lsioe/dft_sdc/sswrp_lsioe.shift.tcl}
+bbset pnr.drv.ClockConstraintDenominatorOverrides {{* 7} {*NM* 10} {*UD* 10} {*SUD* 10} {*UUD* 10}}
+bbset pnr.drv.DataConstraintDenominatorOverrides {{* 6} {*NM* 6} {*UD* 4} {*SUD* 4} {*UUD* 6}}
+bbset pnr.SwapNonClkCellsToClkCells {1}
+bbset pnr.chipfinish.SwapNonClkCellsToClkCells {0}
+bbset pnr.setup.InputDEFFile "/google/gchips/workspace/redondo-asia/tpe/user/mramayanapu/projects/lajolla/sswrp_lsioe/fp_trails/laj_pre_m4_06132025/0624_incremental_defs/sswrp_lsioe.def.gz"
+bbset pnr.innovus.SetupCreateFloorplanPostProcessCallback {
+bbset pnr.floorplan.InputDatabase "[bbget info.BOB_RUN_DIR]/syn/setup/outs/[bbget info.BLOCK].enc.dat"
+bbset pnr.floorplan.InsertFiducialCell {1}
+bbset pnr.setup.InsertDTCDCells      {0}
+bbset pnr.floorplan.EnableDenseTapRegions {1}
+bbset pnr.tcic.FixFloorplan {false}
+bbset pnr.floorplan.EndCapTapPG "1"
+bbset pnr.floorplan.EnableExtraM1ViaNearFiducial {true}
+bbset pnr.innovus.FloorplanRowsAndTracksPreCallback { 
+bbset pnr.floorplan.SVDDNets         {1}
+bbset pnr.floorplan.SVDDNets {
+bbset pnr.floorplan.VoltageAreas {PD_LSIO_E {76.944 1471.418 257.184 1856.738} PD_LSIOE_GSPAN {{179.808 1250.704 257.184 1315.548} {157.68 1237.964 257.184 1250.704}}}
+bbset pnr.floorplan.TrackOffsetFile {/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pre_m4_06132025/0609_incremental_defs/offsets/track_offset.tcl}
+bbset pnr.floorplan.PGM14M15OffsetFile {/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pre_m4_06132025/0624_incremental_defs/offsets/pg_offset.tcl}
+bbset pnr.floorplan.PGM15VSSOffset "0.8600" 
+bbset pnr.floorplan.PGM14VSSOffset "0.9400"
+bbset pnr.floorplan.AlignM14M15Tracks {1}
+bbset pnr.floorplan.EnableFullPGInM14M15 {1}
+bbset pnr.floorplan.PushDownTrackOffsetLayers {M12 M13 M14 M15}
+bbset pnr.floorplan.CustomIPM15Extension "50"
+bbset pnr.floorplan.CustomIPM14Extension "50"
+bbset pnr.floorplan.CoreSwitchXPitch {15.36}                                                          
+bbset pnr.floorplan.CoreSwitchYPitch {4}
+bbset pnr.innovus.PowerDomainBoundaryPostCallback {
+bbset pnr.innovus.FloorplanSetupPostCallback { 
+bbset pnr.floorplan.PowerSwitchHammerChainCount {4}
+bbset pnr.psw.HammerChainOrAckNet {u_sswrp_lsioe_aux/u_sswrp_lsioe_aon/u_lpcm_lsio_e_wrapper/lsio_e_top_pdom_power_down_or_all_ack}
+bbset pnr.floorplan.StrengthenTrickleSwitchPG  {true}
+bbset pnr.floorplan.StrengthenTrickleSwitchList {HDR78XSINTCWGOOGD1BWP130HPNPN3P48CPDSVT_474_693_148 CSW_EXTRApsoI_PD_GPU_MERCER_5_HDR78XSINTCWGOOGD1BWP130HPNPN3P48CPDSVT_474_691_147 CSW_EXTRApsoI_PD_GPU_MERCER_5_HDR78XSINTCWGOOGD1BWP130HPNPN3P48CPDSVT_474_689_146 CSW_EXTRApsoI_PD_GPU_MERCER_5_HDR78XSINTCWGOOGD1BWP130HPNPN3P48CPDSVT_474_687_145 CSW_EXTRApsoI_PD_GPU_MERCER_5_HDR78XSINTCWGOOGD1BWP130HPNPN3P48CPDSVT_474_685_144}
+bbset pnr.IOBufferExcludeNetsFile "[bbget info.BOB_RUN_DIR]/syn/synthopt/io_buffering_exclude.tcl"
+bbset pnr.EnableWaterMarkInsertion {true}
+bbset pnr.WatermarkRTLTag {LAJ_A0_SSWRP_LSIOE_M3_V3_R3_D1_C4_DFT}
+bbset pnr.EnableHighEffortCellOpt {true}
+bbset pnr.placeopt.RecreatePathGroups {1}
+bbset pnr.EnableGKCNode {1}
+bbset pnr.ValidGKCStages {placeopt routeopt chipfinish}
+bbset pnr.scenarios.Scenarios	{[bbget .syn.scenarios.Scenarios]}
+bbset pnr.scenarios.status.Default	{[bbget .syn.scenarios.status.Default]}
+bbset pnr.ExtraLibs.Enable           {True}
+bbset pnr.ExtraLibs.libgen.lef {
+bbset pnr.ExtraLibs.libgen.ccs_db  {
+bbset pnr.ExtraLibs.libgen.ccs_lib  {
+bbset pnr.MacroLibraryFileInclude {fiducial|.*tphn02p_075od12gpio.*|.*tpmn02p_esd.*|.*tpmn02p_lup.*|.*PLLTS2INTQ.*|.*bwph130pnpnl3p48cpd_base_gcustom_gsl_clk_div50_dp_2r.*|.*bwph130pnpnl3p48cpd_base_gcustom_gsl_clk_div_1p5.*|.*DTCD.*}
+bbset pnr.PathGroupOverrides         {INPUT {effortLevel low}  IN2OUT {effortLevel low}
+bbset pnr.MaxFanout                  {10}
+bbset pnr.check.MaxFanout            {10}                                                             
+bbset pnr.placeopt.GSPANBufferPadding {top 1 left 1 right 1}
+bbset pnr.placeopt.GSPANFlopPadding  {top 1 left 1 right 1}
+bbset pnr.fc.PlaceOptSetupPostCallback {
+bbset pnr.DelayCells {BUFFD2BWP130HPNPN3P48CPDLVTLL BUFFD3BWP130HPNPN3P48CPDLVTLL BUFFD3BWP130HPNNP3P48CPDLVTLL}
+bbset pnr.clock.InverterCellList     { CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL DCCKNDHD6BWP130HPNPN3P48CPDULVTLL DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {List of inverter cells}
+bbset pnr.clock.TopInverterCellList  { CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL DCCKNDHD6BWP130HPNPN3P48CPDULVTLL DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL  } {Leaf Specific Inverter Cell List}
+bbset pnr.clock.LeafInverterCellList { CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL DCCKNDHD6BWP130HPNPN3P48CPDULVTLL DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL } {Leaf specific inverter cell list}
+bbset pnr.clock.BufferCellList       { CKBDHD5BWP130HPNPN3P48CPDULVTLL CKBDHD6BWP130HPNPN3P48CPDULVTLL CKBDHD8BWP130HPNPN3P48CPDULVTLL DCCKBDHD10BWP130HPNPN3P48CPDULVTLL DCCKBDHD12BWP130HPNPN3P48CPDULVTLL } {List of buffer cells}
+bbset pnr.clock.ICGCellList          { CKLNQD4BWP130HPNPN3P48CPDULVTLL CKLNQD5BWP130HPNPN3P48CPDULVTLL CKLNQD6BWP130HPNPN3P48CPDULVTLL  CKLNQD8BWP130HPNPN3P48CPDULVTLL} {List of clock gating cells}
+bbset pnr.clock.MaxFanout            {16}
+bbset pnr.clock.TargetSkew           {50ps}
+bbset pnr.clock.EnableGSPANImplementation {1}
+bbset pnr.clockopt.EnableSetupFix    {0}                                                              {Enable setup fix in clockopt}
+bbset pnr.clockopt.HoldFixTargetSlack {-0.005}
+bbset pnr.clockopt.FixSequentialCells {0} 
+bbset pnr.clockopt.FixClockRoutes {0}
+bbset pnr.fc.ClockOptSecondaryPGPostCallback {
+bbset pnr.routeopt.EnableHoldFix     {1}
+bbset pnr.routeopt.EnableIncrHoldFix {1}
+bbset pnr.routeopt.HoldFixTargetSlack {-0.01}
+            bbset pnrSdcs {/google/gchips/ipreleases/lajolla_infra1/sswrp_lsios/LAJ_A0_SSWRP_LSIOS_M3_V3_R3_D1_C5_DFT/fe_release/sswrp_lsios/dft_sdc/sswrp_lsios.mission.tcl}
+            bbset pnrSdcs {/google/gchips/ipreleases/lajolla_infra1/sswrp_lsios/LAJ_A0_SSWRP_LSIOS_M3_V3_R3_D1_C5_DFT/fe_release/sswrp_lsios/dft_sdc/sswrp_lsios.shift.tcl}
+bbset pnr.SwapNonClkCellsToClkCells {1}
+bbset pnr.drv.ClockConstraintDenominatorOverrides {{* 7} {*NM* 10} {*UD* 10} {*SUD* 10} {*UUD* 10}}
+bbset pnr.drv.DataConstraintDenominatorOverrides {{* 6} {*NM* 6} {*UD* 4} {*SUD* 4} {*UUD* 6}}
+bbset pnr.setup.InputDEFFile {/google/gchips/workspace/redondo-asia/tpe/user/knandakishore/projects/lajolla/sswrp_lsios/fp_trails/laj_fp_trails/laj_m3v2_04152025_fp8/fp8_itr2.def}
+bbset pnr.innovus.SetupCreateFloorplanPostProcessCallback {
+bbset pnr.setup.CustomMacros {            
+bbset pnr.floorplan.InputDatabase "[bbget info.BOB_RUN_DIR]/syn/setup/outs/[bbget info.BLOCK].enc.dat"
+bbset pnr.floorplan.InsertFiducialCell {1}
+bbset pnr.setup.InsertDTCDCells      {0}
+bbset pnr.floorplan.EnableDenseTapRegions {1}
+bbset pnr.tcic.FixFloorplan {false}
+bbset pnr.innovus.FloorplanRowsAndTracksPreCallback { 
+bbset pnr.floorplan.PGM15VSSOffset "8.252" 
+bbset pnr.floorplan.PGM14VSSOffset "0.9"
+bbset pnr.floorplan.AlignM14M15Tracks "1"
+bbset pnr.floorplan.PushDownTrackOffsetLayers "M12 M13 M14 M15"
+bbset pnr.floorplan.CustomIPM15Extension "30"
+bbset pnr.floorplan.CustomIPM14Extension "30"
+bbset pnr.floorplan.TrackOffsetFile {/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pushdown_m3v2_04252025/offsets/track_offset.tcl}
+bbset pnr.floorplan.PGM14M15OffsetFile {/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pushdown_m3v2_04252025/offsets/pg_offset.tcl}
+bbset pnr.innovus.PowerDomainBoundaryPostCallback {
+bbset pnr.innovus.FloorplanSetupPostCallback { 
+bbset pnr.floorplan.VoltageAreas {PD_LSIO_S {{0.912 257.998 115.085 371.098} {0.912 109.668 179.664 257.998}} PD_PLL_S {0.912 441.558 149.0935 586.872}}
+bbset pnr.floorplan.EndCapTapPG "1"
+bbset pnr.floorplan.EnableExtraM1ViaNearFiducial {true}
+bbset pnr.floorplan.EnableFullPGInM14M15 {1}
+bbset pnr.floorplan.CoreSwitchXPitch {15.36}
+bbset pnr.floorplan.CoreSwitchYPitch {4} 
+bbset pnr.floorplan.PowerSwitchHammerChainCount {4}
+bbset pnr.psw.HammerChainOrAckNet {u_sswrp_lsios_aux/u_sswrp_lsios_aon/u_lpcm_lsio_s_wrapper/lsio_s_top_pdom_power_down_or_all_ack}
+bbset pnr.floorplan.StrengthenTrickleSwitchPG  {true}
+bbset pnr.floorplan.StrengthenTrickleSwitchList {u_sswrp_lsios_aux/u_sswrp_lsios_pg/CSWpsoI_PD_LSIO_S_1_HDR78XSINTCWGOOGD1BWP130HPNPN3P48CPDSVT_2_204_20 u_sswrp_lsios_aux/u_sswrp_lsios_pg/CSW_EXTRApsoI_PD_LSIO_S_2_HDR78XSINTCWGOOGD1BWP130HPNPN3P48CPDSVT_73_136_8 u_sswrp_lsios_aux/u_sswrp_lsios_pg/CSWpsoI_PD_LSIO_S_1_HDR78XSINTCWGOOGD1BWP130HPNPN3P48CPDSVT_2_141_0 u_sswrp_lsios_aux/u_sswrp_lsios_pg/CSWpsoI_PD_LSIO_S_1_HDR78XSINTCWGOOGD1BWP130HPNPN3P48CPDSVT_2_235_30}
+bbset pnr.EnableWaterMarkInsertion {true}
+bbset pnr.WatermarkRTLTag {LAJ_A0_SSWRP_LSIOS_M3_V3_R3_D1_C5_DFT}
+bbset pnr.scenarios.Scenarios	{[bbget .syn.scenarios.Scenarios]}
+bbset pnr.scenarios.status.Default	{[bbget .syn.scenarios.status.Default]}
+bbset pnr.ExtraLibs.Enable           {True}
+bbset pnr.MacroLibraryFileInclude {fiducial|.*tphn02p_075od12gpio.*|.*tpmn02p_esd.*|.*tpmn02p_lup.*|.*PLLTS2INTQ.*|.*bwph130pnpnl3p48cpd_base_gcustom_gsl_clk_div50_dp_2r.*|.*bwph130pnpnl3p48cpd_base_gcustom_gsl_clk_div_1p5.*|.*DTCD.*}
+bbset pnr.ExtraLibs.libgen.lef {
+bbset pnr.ExtraLibs.libgen.ccs_db  {
+bbset pnr.ExtraLibs.libgen.ccs_lib  {
+bbset pnr.EnableGKCNode {1}
+bbset pnr.ValidGKCStages {placeopt routeopt chipfinish}
+bbset pnr.PathGroupOverrides      {INPUT {effortLevel low}  IN2OUT {effortLevel low}
+bbset pnr.MaxFanout                  {10}
+bbset pnr.check.MaxFanout            {10}                                                             
+bbset pnr.placeopt.GSPANBufferPadding {top 1 left 1 right 1}
+bbset pnr.placeopt.GSPANFlopPadding  {top 1 left 1 right 1}
+bbset pnr.placeopt.RecreatePathGroups {1}
+bbset pnr.fc.PlaceOptSetupPostCallback {
+bbset pnr.DelayCells {BUFFD2BWP130HPNPN3P48CPDLVTLL BUFFD3BWP130HPNPN3P48CPDLVTLL BUFFD3BWP130HPNNP3P48CPDLVTLL} 
+bbset pnr.clock.InverterCellList     { CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL DCCKNDHD6BWP130HPNPN3P48CPDULVTLL DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {List of inverter cells}
+bbset pnr.clock.TopInverterCellList  { CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL DCCKNDHD6BWP130HPNPN3P48CPDULVTLL DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL  } {Leaf Specific Inverter Cell List}
+bbset pnr.clock.LeafInverterCellList { CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL DCCKNDHD6BWP130HPNPN3P48CPDULVTLL DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL } {Leaf specific inverter cell list}
+bbset pnr.clock.BufferCellList       { CKBDHD5BWP130HPNPN3P48CPDULVTLL CKBDHD6BWP130HPNPN3P48CPDULVTLL CKBDHD8BWP130HPNPN3P48CPDULVTLL DCCKBDHD10BWP130HPNPN3P48CPDULVTLL DCCKBDHD12BWP130HPNPN3P48CPDULVTLL} {List of buffer cells}
+bbset pnr.clock.ICGCellList          { CKLNQD4BWP130HPNPN3P48CPDULVTLL CKLNQD5BWP130HPNPN3P48CPDULVTLL CKLNQD6BWP130HPNPN3P48CPDULVTLL  CKLNQD8BWP130HPNPN3P48CPDULVTLL} {List of clock gating cells}
+bbset pnr.clock.MaxFanout            {16}
+bbset pnr.clock.TargetSkew           {50ps}
+bbset pnr.clock.EnableGSPANImplementation {1}
+bbset pnr.clockopt.EnableSetupFix    {0}                                                              {Enable setup fix in clockopt}
+bbset pnr.clockopt.HoldFixTargetSlack {-0.005}
+bbset pnr.clockopt.FixSequentialCells {0} 
+bbset pnr.clockopt.FixClockRoutes {0}
+bbset pnr.fc.ClockOptSecondaryPGPostCallback {
+bbset pnr.routeopt.EnableHoldFix     {1}
+bbset pnr.routeopt.EnableIncrHoldFix {1}
+bbset pnr.routeopt.HoldFixTargetSlack {-0.01}
+#bbset pnr.Stages {chipfinish}
+bbset pnr.GspanInputClockPatterns    {*_ss_*}
+bbset pnr.placeopt.GSPANPortPatterns {*_ss_*}
+bbset pnr.floorplan.EnableDiscreteChannelHammerChain {0}
+bbset pnr.floorplan.NumDiscreteChannelHammerChains {0}
+bbset pnr.ExtraLibs.libgen.lef {[bbget .syn.ExtraLibs.libgen.lef]}
+bbset pnr.setup.InputDEFFile     {/google/gchips/workspace/redondo-asia/tpe/user/shaileesurya/LAJ/Repo_3.2/run/sswrp_fabstby.def.gz}
+bbset pnr.setup.InputNetlist         {[bbget .info.BOB_RUN_DIR]/syn/synth/outs/sswrp_fabstby.final.v.gz}
+bbset pnr.floorplan.InputDatabase    {[bbget .info.BOB_RUN_DIR]/syn/setup/outs/sswrp_fabstby.enc.dat}
+bbset pnr.setup.EnableASCIIFlow      {1}   
+bbset pnr.MacroLibraryFileInclude [bbget .syn.MacroLibraryFileInclude]
+            bbset pnrSdcs {/google/gchips/ipreleases/lajolla_fabrics/sswrp_fabstby/LAJ_A0_SSWRP_FABSTBY_M3_V2_R3_D1_RTLDFT/fe_release/sswrp_fabstby/sdc/sswrp_fabstby.mission.tcl}
+          bbset pnrSdcs {/google/gchips/ipreleases/lajolla_fabrics/sswrp_fabstby/LAJ_A0_SSWRP_FABSTBY_M3_V2_R3_D1_RTLDFT/fe_release/sswrp_fabstby/sdc/sswrp_fabstby.mission.tcl}
+          bbset pnrSdcs {/google/gchips/ipreleases/lajolla_fabrics/sswrp_fabstby/LAJ_A0_SSWRP_FABSTBY_M3_V2_R3_D1_RTLDFT/fe_release/sswrp_fabstby/sdc/sswrp_fabstby.mission.tcl}
+          bbset pnrSdcs {/google/gchips/ipreleases/lajolla_fabrics/sswrp_fabstby/LAJ_A0_SSWRP_FABSTBY_M3_V2_R3_D1_RTLDFT/fe_release/sswrp_fabstby/sdc/sswrp_fabstby.mission.tcl}
+          bbset pnrSdcs {/google/gchips/ipreleases/lajolla_fabrics/sswrp_fabstby/LAJ_A0_SSWRP_FABSTBY_M3_V2_R3_D1_RTLDFT/fe_release/sswrp_fabstby/sdc/sswrp_fabstby.shift.tcl}
+bbset pnr.scenarios.Scenarios {[bbget .syn.scenarios.Scenarios]}
+bbset pnr.scenarios.status.Default {[bbget .syn.scenarios.status.Default]}
+bbset pnr.setup.DTCDCell   {N02_DTCD_ALL_M13_250331 }
+bbset pnr.tcic.MaxDTCDLayer          {13}
+bbset pnr.setup.DTCDSpec {[bbget .info.REPO_TOP]/process/n2p/pnr/dtcd.spec}
+bbset pnr.setup.InputScanDEFFile {}
+#bbset pnr.innovus.SetupCreateFloorplanPreCallback {
+bbset pnr.setup.CustomMacros {}
+bbset pnr.floorplan.CustomMacroList {PCLAMPCCOD_H_C240708}
+bbset pnr.setup.DTCDHorizontalOffset {2.16}
+##bbset pnr.floorplan.RowGenerationMode {native}
+bbset pnr.floorplan.RectilinearDesign {1}
+bbset pnr.floorplan.CoreSwitchYPitch 5
+bbset pnr.floorplan.CoreSwitchXPitch 15.36
+bbset pnr.floorplan.ESDHaloFollowed  {1}
+bbset pnr.floorplan.VoltageAreas {PD_FABSTBY {{689.472 660.348} {312.384 660.348} {312.384 288.808} {224.352 288.808} {224.352 173.368} {100.032 173.368} {100.032 1.768} {405.888 1.768} {405.888 119.548} {689.472 119.548}} }
+bbset pnr.floorplan.MacroPlacementHaloOverrides {N02_DTCD_ALL_M13_250331 {2.064 2.028 2.064 2.028} PCLAMPCCOD_H_C240708 {0.624 0.624 0.624 0.624} PCLAMPCCOD_V_C240708 {0.624 0.624 0.624 0.624}}
+bbset pnr.innovus.FloorplanSetupPreCallback {
+bbset pnr.floorplan.HorizontalBoxExtraPSW "{120.617 1.85 394.981 5.491}"
+bbset pnr.floorplan.AvoidPinPromotionCells ""
+#bbset pnr.floorplan.EnableFiducialPostPSW 1
+bbset pnr.innovus.SetupReadUPFPostCallback {
+bbset pnr.placeopt.EnableScanReorder {1}
+bbset pnr.tcic.FixFloorplan          {false}
+bbset pnr.floorplan.MemoryPGRecipe2Insts {sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_pg/u_dp_noc/i_FABSTBYTop/i_fabstby_xba0/acelSXPort_4/acelsMngr_0/acels2if_0/axis2iLink_S/axis2iLinkRdCh_I/str_n_fwrd_backcompatible_axisRdDscrCtl_I/gen_rdrspen_sig_frbuff_mem_x/do_pvmem_swap_gen_non_byteen_mem_mem_nben/gen_iXbar0_ap4_mem_2_w67_d272_0/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_pg/u_dp_noc/i_FABSTBYTop/i_fabstby_xba0/acelSXPort_4/acelsMngr_0/acels2if_0/axis2iLink_S/axis2iLinkRdCh_I/str_n_fwrd_backcompatible_axisRdDscrCtl_I/gen_rdrspen_sig_frbuff_mem_x/do_pvmem_swap_gen_non_byteen_mem_mem_nben/gen_iXbar0_ap4_mem_2_w67_d272_0/ram_0_1 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_pg/u_dp_noc/i_FABSTBYTop/i_fabstby_xba0/acelSXPort_7/acelsMngr_0/acels2if_0/axis2iLink_S/axis2iLinkRdCh_I/fast_mode_axisRdDscrCtl_perf_I/gen_rdrspen_sig_frbuff_mem_x/do_pvmem_swap_gen_non_byteen_mem_mem_nben/gen_iXbar0_ap7_mem_3_w131_d260_0/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_pg/u_dp_noc/i_FABSTBYTop/i_fabstby_xba0/iGXPort_5/agntCoreI/Rx_only_interface_apRxMngrI/new_ap_arch_arx_en_ixport/damq_memory_n_ctrl/unified_memory_apChBuffMem_be/gen_unified_mem_apChBuff_Mem/do_pvmem_swap_gen_byteen_mem_mem_be/gen_iXbar0_ap5_mem_1_w290_d86_0/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_pg/u_dp_noc/i_FABSTBYTop/i_fabstby_xba0/iGXPort_5/agntCoreI/Rx_only_interface_apRxMngrI/new_ap_arch_arx_en_ixport/damq_memory_n_ctrl/unified_memory_apChBuffMem_be/gen_unified_mem_apChBuff_Mem/do_pvmem_swap_gen_byteen_mem_mem_be/gen_iXbar0_ap5_mem_1_w290_d86_0/ram_1_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_pg/u_dp_noc/i_FABSTBYTop/i_fabstby_xba01/axiSXPort_2/axisMngr_0/axis2if_0/axis2iLink_S/axis2iLinkRdCh_I/str_n_fwrd_backcompatible_axisRdDscrCtl_I/gen_rdrspen_sig_frbuff_mem_x/do_pvmem_swap_gen_non_byteen_mem_mem_nben/gen_iXbar01_ap2_mem_0_w67_d280_0/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_pg/u_dp_noc/i_FABSTBYTop/i_fabstby_xba01/axiSXPort_2/axisMngr_0/axis2if_0/axis2iLink_S/axis2iLinkRdCh_I/str_n_fwrd_backcompatible_axisRdDscrCtl_I/gen_rdrspen_sig_frbuff_mem_x/do_pvmem_swap_gen_non_byteen_mem_mem_nben/gen_iXbar01_ap2_mem_0_w67_d280_0/ram_0_1 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_pg/u_dp_noc/i_FABSTBYTop/i_fabstby_xba01/iGXPort_3/agntCoreI/Rx_only_interface_apRxMngrI/new_ap_arch_arx_en_ixport/damq_memory_n_ctrl/unified_memory_apChBuffMem_be/gen_unified_mem_apChBuff_Mem/do_pvmem_swap_gen_byteen_mem_mem_be/gen_iXbar01_ap3_mem_0_w218_d64_0/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_pg/u_dp_noc/i_FABSTBYTop/i_fabstby_xba02/acelSXPort_2/acelsMngr_0/acels2if_0/axis2iLink_S/axis2iLinkRdCh_I/str_n_fwrd_backcompatible_axisRdDscrCtl_I/gen_rdrspen_sig_frbuff_mem_x/do_pvmem_swap_gen_non_byteen_mem_mem_nben/gen_iXbar02_ap2_mem_1_w67_d256_0/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_pg/u_dp_noc/i_FABSTBYTop/i_fabstby_xba02/axiSXPort_3/axisMngr_0/axis2if_0/axis2iLink_S/axis2iLinkRdCh_I/str_n_fwrd_backcompatible_axisRdDscrCtl_I/gen_rdrspen_sig_frbuff_mem_x/do_pvmem_swap_gen_non_byteen_mem_mem_nben/gen_iXbar02_ap3_mem_4_w67_d128_0/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_pg/u_dp_noc/i_FABSTBYTop/i_fabstby_xba02/axiSXPort_3/axisMngr_0/axis2if_0/axis2iLink_S/axis2iLinkRdCh_I/str_n_fwrd_backcompatible_axisRdDscrCtl_I/gen_rdrspen_sig_frbuff_mem_x/do_pvmem_swap_gen_non_byteen_mem_mem_nben/gen_iXbar02_ap3_mem_4_w67_d128_0/ram_1_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_aon/u_tcu/u_tcu/u_rwr/g_mwc_repl_i_0__g_mwc_repl_j_0__u_ram_mwc_repl/g_single_dp_ram_u_two_port_rwr/GEN_DP_20x7_u_wrapper_generic_ram/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_aon/u_tcu/u_tcu/u_rwr/g_mwc_repl_i_0__g_mwc_repl_j_1__u_ram_mwc_repl/g_single_dp_ram_u_two_port_rwr/GEN_DP_20x7_u_wrapper_generic_ram/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_aon/u_tcu/u_tcu/u_rwr/g_mwc_repl_i_0__g_mwc_repl_j_2__u_ram_mwc_repl/g_single_dp_ram_u_two_port_rwr/GEN_DP_20x7_u_wrapper_generic_ram/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_aon/u_tcu/u_tcu/u_rwr/g_mwc_repl_i_0__g_mwc_repl_j_3__u_ram_mwc_repl/g_single_dp_ram_u_two_port_rwr/GEN_DP_20x7_u_wrapper_generic_ram/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_aon/u_tcu/u_tcu/u_rwr/u_ram_wmb_scratch/g_single_dp_ram_u_two_port_rwr/GEN_DP_80x5_u_wrapper_generic_ram/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_aon/u_tcu/u_tcu/u_rwr/u_ram_wmb_lkp_status/g_single_dp_ram_u_two_port_rwr/GEN_DP_653x5_u_wrapper_generic_ram/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_aon/u_tcu/u_tcu/u_rwr/u_ram_wmb_lkp_status/g_single_dp_ram_u_two_port_rwr/GEN_DP_653x5_u_wrapper_generic_ram/ram_1_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_aon/u_tcu/u_tcu/u_rwr/u_ram_wmb_lkp_status/g_single_dp_ram_u_two_port_rwr/GEN_DP_653x5_u_wrapper_generic_ram/ram_2_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_aon/u_tcu/u_tcu/u_rwr/u_ram_wmb_lkp_status/g_single_dp_ram_u_two_port_rwr/GEN_DP_653x5_u_wrapper_generic_ram/ram_3_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_aon/u_tcu/u_tcu/u_rwr/u_ram_wmb_wlk_status/g_single_dp_ram_u_two_port_rwr/GEN_DP_674x5_u_wrapper_generic_ram/ram_0_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_aon/u_tcu/u_tcu/u_rwr/u_ram_wmb_wlk_status/g_single_dp_ram_u_two_port_rwr/GEN_DP_674x5_u_wrapper_generic_ram/ram_1_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_aon/u_tcu/u_tcu/u_rwr/u_ram_wmb_wlk_status/g_single_dp_ram_u_two_port_rwr/GEN_DP_674x5_u_wrapper_generic_ram/ram_2_0 sswrp_fabstby_ip/u_fabstby_ibr/u_fabstby_ibr_hier_aon/u_tcu/u_tcu/u_rwr/u_ram_wmb_wlk_status/g_single_dp_ram_u_two_port_rwr/GEN_DP_674x5_u_wrapper_generic_ram/ram_3_0}
+bbset pnr.floorplan.MemoryPGRecipe   {recipe2}                {str: Can be default, recipe1, recipe2 or recipe3}
+bbset pnr.floorplan.MemoryPGExtraM7M9 {MVDD}            {str: Can be MVDD or AVDD. Applicable for Recipe1,2,3}
+bbset pnr.fc.ClockSetupPreProcessCallback {
+bbset pnr.fc.PlaceOptSetupPostCallback {
+bbset pnr.fc.ClockOptSetupPostCallback {
+bbset pnr.floorplan.PGM14M15OffsetFile "/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/mbu_pushdown_m2v2_02052025/offsets/pg_offset.tcl"
+bbset pnr.floorplan.AlignM14M15Tracks "1"
+bbset pnr.floorplan.PushDownTrackOffsetLayers "M12 M13 M14 M15"
+bbset pnr.floorplan.TrackOffsetFile "/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/mbu_pushdown_m2v2_02052025/offsets/track_offset.tcl"
+#bbset pnr.floorplan.PGM15VSSOffset "1.4360"                  -comment "M15 PG VSS Offset"
+#bbset pnr.floorplan.PGM14VSSOffset "2.6240"                  -comment "M14 PG VSS Offset"
+#bbset pnr.floorplan.AlignM14M15Tracks "1"
+#bbset pnr.floorplan.PushDownTrackOffsetLayers "M12 M13 M14 M15"
+#bbset pnr.floorplan.TrackOffsetFile "/google/gchips/workspace/redondo-asia/tpe/user/sarla/MBU/mbu_pushdown_m3v1_03022024/offset/track_offset.tcl"
+bbset pnr.floorplan.InsertFiducialCell {1}
+bbset pnr.floorplan.ConvertVABoxesToPolygon 1
+bbset pnr.placeopt.EnableGSPANImplementation {1}                                                  ;##            {Enable implementation of GPSAN settings in the design}
+bbset pnr.placeopt.GSPANFlopPatterns {*gspan_receiver_transport*}                                        ;##    {Pattern of GSPAN flops on which padding is to be applied}
+#bbset pnr.placeopt.GSPANPortPatterns {*gspan*}                                                    ;##    {Pattern og GSPAN IO ports in the design}
+bbset pnr.chipfinish.InlineExports {oasis def namemap hcell_list upf lef netlist}
+bbset pnr.floorplan.GspanSwitchedBoxes ""
+bbset pnr.libgen.ThreadCount         {1}
+bbset pnr.floorplan.ESDHaloFollowed  {1}
+bbset pnr.fc.PlaceOptFinalPlacePreCallback {
+bbset pnr.fc.PlaceOptFinalOptoPreCallback {
+bbset pnr.fc.ClockBuildClockPreCallback {
+bbset pnr.fc.RouteOptFinalPreCallback {
+bbset pnr.EnablePrimePower "1"
+bbset pnr.floorplan.PowerSwitchHammerChainCount {12} ; # NOTE 1: Below code is to build 15 parallel hammer chain. You can decide number of hammer chains as per PSW latency in EMIR readout.
+bbset pnr.floorplan.PowerSwitchHammerToTrickleRatio {8}
+bbset pnr.psw.HammerChainOrAckNet {sswrp_fabstby_aux/sswrp_fabstby_aon/u_lpcm/u_lpm_wrapper/lpm_stbyfab_power_down_or_all_ack}
+bbset pnr.clock.ApplyDFTGuidelines "1"
+#bbset pnr.EnableLowPassExclusion {0}
+bbset pnr.clock.ClockUncertainityOverrides { 
+bbset pnr.clockopt.ClockUncertainityOverrides { 
+bbset pnr.route.ClockUncertainityOverrides { 
+bbset pnr.routeopt.ClockUncertainityOverrides { 
+bbset pnr.clock.InverterCellList     {CKNDHZPDD5BWP130HPNPN3P48CPDULVTLL CKNDHZPDD6BWP130HPNPN3P48CPDULVTLL  CKNDHZPDD8BWP130HPNPN3P48CPDULVTLL CKNDHZPDD10BWP130HPNPN3P48CPDULVTLL DCCKNDHZPDD12BWP130HPNPN3P48CPDULVTLL  PTINVHDCWD6BWP130HPNPN3P48CPDULVTLL PTINVHDCWD8BWP130HPNPN3P48CPDULVTLL PTINVHDCWD10BWP130HPNPN3P48CPDULVTLL PTINVHDCWD12BWP130HPNPN3P48CPDULVTLL PTINVHDIWLACFGOLD6BWP130HPNPN3P48CPDULVTLL PTINVHDIWLACFGOLD3BWP130HPNPN3P48CPDULVTLL PTINVHDCWD14BWP130HPNPN3P48CPDULVTLL CKNDHZPDD14BWP130HPNPN3P48CPDULVTLL} {List of inverter cells}
+bbset pnr.clock.TopInverterCellList  { CKNDHZPDD5BWP130HPNPN3P48CPDULVTLL CKNDHZPDD6BWP130HPNPN3P48CPDULVTLL  CKNDHZPDD8BWP130HPNPN3P48CPDULVTLL CKNDHZPDD10BWP130HPNPN3P48CPDULVTLL DCCKNDHZPDD12BWP130HPNPN3P48CPDULVTLL PTINVHDCWD6BWP130HPNPN3P48CPDULVTLL PTINVHDCWD8BWP130HPNPN3P48CPDULVTLL PTINVHDCWD10BWP130HPNPN3P48CPDULVTLL PTINVHDCWD12BWP130HPNPN3P48CPDULVTLL PTINVHDCWD14BWP130HPNPN3P48CPDULVTLL PTINVHDIWLACFGOLD6BWP130HPNPN3P48CPDULVTLL PTINVHDIWLACFGOLD3BWP130HPNPN3P48CPDULVTLL CKNDHZPDD14BWP130HPNPN3P48CPDULVTLL} {Leaf Specific Inverter Cell List}
+bbset pnr.clock.LeafInverterCellList {CKNDHZPDD5BWP130HPNPN3P48CPDULVTLL CKNDHZPDD6BWP130HPNPN3P48CPDULVTLL  CKNDHZPDD8BWP130HPNPN3P48CPDULVTLL CKNDHZPDD10BWP130HPNPN3P48CPDULVTLL DCCKNDHZPDD12BWP130HPNPN3P48CPDULVTLL PTINVHDCWD6BWP130HPNPN3P48CPDULVTLL PTINVHDCWD8BWP130HPNPN3P48CPDULVTLL PTINVHDCWD10BWP130HPNPN3P48CPDULVTLL PTINVHDCWD12BWP130HPNPN3P48CPDULVTLL PTINVHDCWD14BWP130HPNPN3P48CPDULVTLL PTINVHDIWLACFGOLD6BWP130HPNPN3P48CPDULVTLL PTINVHDIWLACFGOLD3BWP130HPNPN3P48CPDULVTLL CKNDHZPDD14BWP130HPNPN3P48CPDULVTLL} {Leaf specific inverter cell list}
+bbset pnr.clock.BufferCellList       {CKBDHZPDD5BWP130HPNPN3P48CPDULVTLL CKBDHZPDD6BWP130HPNPN3P48CPDULVTLL  CKBDHZPDD8BWP130HPNPN3P48CPDULVTLL CKBDHZPDD10BWP130HPNPN3P48CPDULVTLL DCCKBDHZPDD12BWP130HPNPN3P48CPDULVTLL PTBUFFHDCWD6BWP130HPNPN3P48CPDULVTLL PTBUFFHDCWD8BWP130HPNPN3P48CPDULVTLL PTBUFFHDCWD10BWP130HPNPN3P48CPDULVTLL PTBUFFHDCWD12BWP130HPNPN3P48CPDULVTLL PTBUFFHDCWD14BWP130HPNPN3P48CPDULVTLL PTBUFFHDIWLACFGOLD6BWP130HPNPN3P48CPDULVTLL PTBUFFHDIWLACFGOLD3BWP130HPNPN3P48CPDULVTLL CKBDHZPDD14BWP130HPNPN3P48CPDULVTLL} {List of buffer cells}
+bbset pnr.clock.ICGCellList          {CKLNQZPDD5BWP130HPNPN3P48CPDULVTLL CKLNQZPDD6BWP130HPNPN3P48CPDULVTLL CKLNQZPDD8BWP130HPNPN3P48CPDULVTLL  CKLNQOPTBBZPDD8BWP130HPNPN3P48CPDULVTLL CKLNQZPDD10BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBZPDD10BWP130HPNPN3P48CPDULVTLL  CKLNQZPDD12BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBZPDD12BWP130HPNPN3P48CPDULVTLL CKLNQZPDD14BWP130HPNPN3P48CPDULVTLL} {List of clock gating cells}
+bbset pnr.placeopt.GSPANSoftBlkgDepth {8}
+bbset pnr.EnableRuntimeReduction {1}
+bbset pnr.RAM                        {300000}
+bbset pnr.ExportRAM                  {300000}
+bbset pnr.Cores                      {32}
+bbset pnr.ExportCores                {32}
+bbset pnr.Resources {class:c2d-highmem reservation:bm}
+bbset pnr.ExportResources {class:c2d-highmem reservation:bm}
+            bbset pnrSdcs {/google/gchips/ipreleases/lajolla_infra/sswrp_cpuacc/LAJ_A0_SSWRP_CPUACC_M3_V2_R5_D1_C3_DFT/fe_release/sswrp_cpuacc/dft_sdc/sswrp_cpuacc.mission.tcl}
+            bbset pnrSdcs {/google/gchips/ipreleases/lajolla_infra/sswrp_cpuacc/LAJ_A0_SSWRP_CPUACC_M3_V2_R5_D1_C3_DFT/fe_release/sswrp_cpuacc/dft_sdc/sswrp_cpuacc.shift.tcl}
+bbset pnr.ExtraLibs.libgen.lef {[bbget .syn.ExtraLibs.libgen.lef]}
+bbset pnr.ExtraLibs.libgen.ccs_lib {[bbget .syn.ExtraLibs.libgen.ccs_lib]}
+bbset pnr.ExtraLibs.libgen.ccs_db {[bbget .syn.ExtraLibs.libgen.ccs_db]}
+bbset pnr.floorplan.PowerSwitchHammerChainCount {4}
+bbset pnr.psw.HammerChainOrAckNet {u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/gic_pg_pdom_power_down_or_all_ack u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/gpdma_pg_pdom_power_down_or_all_ack u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/ssu_m55_pg_pdom_power_down_or_all_ack u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/ssu_pg_pdom_power_down_or_all_ack u_sswrp_cpuacc_aux/u_sswrp_cpuacc_aon/u_cpuacc_lpcm_inst/sswrp_pg_pdom_power_down_or_all_ack}
+bbset pnr.floorplan.EnableDiscreteChannelHammerChain {0} 
+bbset pnr.floorplan.NumDiscreteChannelHammerChains {0}     
+bbset pnr.setup.InputDEFFile {/google/gchips/workspace/redondo-asia/tpe/user/aruntyagi/LAJOLLA/my_fp_trails/0625_def/fp3.def}
+bbset pnr.setup.InsertDTCDCells      {0}
+bbset pnr.innovus.SetupReadDEFPreCallback {
+bbset pnr.innovus.SetupReadDEFPostCallback {
+bbset pnr.innovus.SetupReadUPFPostCallback {
+bbset pnr.innovus.SetupCreateFloorplanPreProcessCallback {
+bbset pnr.innovus.FloorplanMacroHalosPostCallback {
+bbset pnr.floorplan.ExtendPGStripesTillDieBoundary "1"
+bbset pnr.floorplan.EnableFullPGInM14M15 {1}
+bbset pnr.floorplan.InsertFiducialCell {1}
+bbset pnr.floorplan.RectilinearDesign {1}
+bbset pnr.floorplan.CoreSwitchXPitch 15.36
+bbset pnr.floorplan.CoreSwitchYPitch 4
+#bbset pnr.floorplan.MissingSwitchHorizontalAlignment "1"
+#bbset pnr.floorplan.MemoryPGExtraM7M9 {MVDD}                                                           
+#bbset pnr.floorplan.MemoryPGRecipe   {recipe3}   
+#bbset pnr.floorplan.MemoryPGRecipe3Insts {
+bbset pnr.floorplan.PowerDomainOverrides "PD_SSWRP_AON {MVDD VDD_CPUACC_M}"
+bbset pnr.floorplan.PGM15VSSOffset "4.94"
+bbset pnr.floorplan.PGM14VSSOffset "1.34"
+bbset pnr.floorplan.AlignM14M15Tracks "1"
+bbset pnr.floorplan.PGM14M15OffsetFile "/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pushdown_m3v2_04252025/offsets/pg_offset.tcl"
+bbset pnr.floorplan.PushDownTrackOffsetLayers "M12 M13 M14 M15"
+bbset pnr.floorplan.TrackOffsetFile "/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pushdown_m3v2_04252025/offsets/track_offset.tcl"
+bbset pnr.floorplan.PowerDomainOverrides "PD_SSWRP_AON {MVDD VDD_CPUACC_M}"
+#bbset pnr.floorplan.VoltageAreas {PD_SSWRP {{308.016 511.628 458.88 547.248} {308.016 229.658 547.056 511.628}} PD_SSU_M55 {{0.912 158.028 307.488 547.248} {0.912 0.988 360.672 158.028}} PD_SSU {{361.584 146.328 665.136 158.158} {361.584 0.988 793.92 146.328}} PD_DMA {{750.624 227.708 939.12 256.828} {750.624 146.588 1003.2 227.708} {794.784 0.988 1003.2 146.588}} PD_GIC {{653.76 334.828 781.584 547.248} {653.76 307.788 812.784 334.828} {653.712 307.268 812.784 307.788} {653.712 257.348 854.448 307.268}}}
+bbset pnr.floorplan.VoltageAreas {PD_SSWRP {{313.584 511.628 458.16 547.248} {313.584 227.708 552.624 511.628}} PD_SSU_M55 {{0.912 226.668 312.672 547.248} {0.912 147.628 354.672 226.668} {0.912 0.988 344.688 147.628}} PD_SSU {{508.992 146.588 665.136 149.448} {345.6 146.328 665.136 146.588} {345.6 0.988 793.92 146.328}} PD_DMA {{750.624 227.708 939.12 256.828} {750.624 146.588 1003.2 227.708} {794.784 0.988 1003.2 146.588}} PD_GIC {{653.76 334.828 781.584 547.248} {653.76 307.788 812.784 334.828} {653.712 307.268 812.784 307.788} {653.712 257.868 854.448 307.268}}}
+bbset pnr.floorplan.VABoxesRectBoxList {1}
+#bbset pnr.floorplan.ConvertVABoxesToPolygon 0
+bbset pnr.innovus.FloorplanRowsAndTracksPreCallback { 
+bbset pnr.floorplan.MemoryPGRecipe   {recipe2}                {str: Can be default, recipe1, recipe2 or recipe3}
+bbset pnr.floorplan.MemoryPGExtraM7M9 {MVDD}            {str: Can be MVDD or AVDD. Applicable for Recipe1,2,3}
+bbset pnr.floorplan.MemoryPGRecipe2Insts {u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_0__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_0__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_0__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_0__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_1__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_1__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_1__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm0/GEN_BANKS_1__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_0__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_0__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_0__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_0__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_1__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_1__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_1__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm1/GEN_BANKS_1__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_0__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_0__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_0__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_0__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_1__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_1__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_1__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm2/GEN_BANKS_1__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_0__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_0__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_0__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_0__m55_tcm_ram/ram_0_3 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_1__m55_tcm_ram/ram_0_0 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_1__m55_tcm_ram/ram_0_1 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_1__m55_tcm_ram/ram_0_2 u_sswrp_cpuacc_aux/u_sswrp_cpuacc_ssu_top/u_ssu_cep_top/cep_m55/cep_m55_dtcm3/GEN_BANKS_1__m55_tcm_ram/ram_0_3}
+bbset pnr.EnableWaterMarkInsertion {true}
+bbset pnr.WatermarkRTLTag {LAJ_A0_SSWRP_CPUACC_M3_V2_R5_D1_C3_DFT}
+bbset pnr.innovus.EnableUnifiedMetrics 1
+bbset pnr.EnableFoundryProcessDerates 1
+bbset pnr.EnableFoundryProcessMemDerates 1
+bbset pnr.PathGroupOverrides         {INPUT {effortLevel low}  IN2OUT {effortLevel low}
+bbset pnr.EnableWaterMarkInsertion {true}
+bbset pnr.innovus.EnableUnifiedMetrics 1
+bbset pnr.EnableFoundryProcessDerates 1
+bbset pnr.EnableFoundryProcessMemDerates 1
+bbset pnr.DelayCells {BUFFD2BWP130HPNPN3P48CPDLVTLL BUFFD3BWP130HPNPN3P48CPDLVTLL BUFFD3BWP130HPNNP3P48CPDLVTLL} 
+bbset pnr.HighEffortOptCells {LVT}
+bbset pnr.EnableTighterMaxTransitionConstraints  1
+bbset pnr.fc.EnableNwellPinVL {1}
+#bbset pnr.BumpDEFFiles {/google/gchips/ipreleases/malibu_security/sswrp_gpca/mbu_pushdown_m4v3_10062024/bumprdl/sswrp_gpca_bumpdef_only.def}
+bbset pnr.derate.vt_mismatch.dominate_vt.Value {lvt}
+bbset pnr.ExtraLibs.Enable {True}
+bbset pnr.MacroLibraryFileInclude {fiducial|tpmn02p_esd|tpmn02p_lup|.*tphn02p_075od12gpio.*|ts1n02psblvta1024x128m4wzhodcp|ts1n02psblvta1024x32m4wzhodcp|ts1n02psblvta1024x32m4zhodcp|ts1n02psblvta512x128m2wzhodcp|ts1n02psblvta512x32m2wzhodcp|ts1n02psblvtb400x32m4wzhodxcp|ts1n02psbsvta128x108m1wzhodcp|ts1n02psbsvta128x26m2zhodcp|ts1n02psbsvta256x22m4zhodcp|pmc_top|.*bwph130pnpnl3p48cpd_base_gcustom_gsl_clk_div50_dp_2r.*|.*bwph130pnpnl3p48cpd_base_gcustom_gsl_clk_div_1p5.*|.*DTCD.*}
+bbset pnr.scenarios.Scenarios	{[bbget .syn.scenarios.Scenarios]}
+bbset pnr.scenarios.status.Default	{[bbget .syn.scenarios.status.Default]}
+bbset pnr.EnableHighEffortCellOpt {true}
+bbset pnr.MaxFanout                  {16}
+bbset pnr.check.MaxFanout            {16}                                                             
+## bbset pnr.placeopt.CCDOptMaxAllowedDelay {0.050}                                                          {Early clock optimization max allowed delay}
+## bbset pnr.placeopt.CCDOptMinAllowedDelay {0.005}                                                          {Early clock optimization min allowed delay}
+bbset pnr.placeopt.GSPANBufferPadding {top 1 left 1 right 1}
+bbset pnr.placeopt.GSPANFlopPadding  {top 1 left 1 right 1}
+bbset pnr.EnableIOBuffer  {1}
+bbset pnr.clock.CCDEffort            {none}
+bbset pnr.clock.EnableCCDOptimization {0}
+bbset pnr.clock.MaxFanout            {16}
+bbset pnr.clock.TargetSkew           {50ps}
+bbset pnr.clock.EnableGSPANImplementation {1}
+bbset pnr.ClockCellVthType           {ULVTLL} 
+bbset pnr.clock.InverterCellList     {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {List of inverter cells}
+bbset pnr.clock.TopInverterCellList  {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf Specific Inverter Cell List}
+bbset pnr.clock.LeafInverterCellList {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf specific inverter cell list}
+bbset pnr.clock.BufferCellList       {CKBDHD5BWP130HPNPN3P48CPDULVTLL DCCKBDHD6BWP130HPNPN3P48CPDULVTLL DCCKBDHD8BWP130HPNPN3P48CPDULVTLL  DCCKBDHD10BWP130HPNPN3P48CPDULVTLL DCCKBDHD12BWP130HPNPN3P48CPDULVTLL DCCKBDHD14BWP130HPNPN3P48CPDULVTLL} {List of buffer cells}
+bbset pnr.clock.ICGCellList          {CKLNQD3BWP130HPNPN3P48CPDULVTLL CKLNQD4BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD4BWP130HPNPN3P48CPDULVTLL  CKLNQD5BWP130HPNPN3P48CPDULVTLL CKLNQD6BWP130HPNPN3P48CPDULVTLL CKLNQD8BWP130HPNPN3P48CPDULVTLL  CKLNQOPTBBD8BWP130HPNPN3P48CPDULVTLL CKLNQD10BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD10BWP130HPNPN3P48CPDULVTLL  CKLNQD12BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD12BWP130HPNPN3P48CPDULVTLL} {List of clock gating cells}
+bbset pnr.drv.ClockConstraintDenominatorOverrides {{* 10} {*NM* 9} {*UD* 10} {*SUD* 9} {*UUD* 10}}                    {Overrides of Denominator for clock slew calculation. eg {{*SUD* val1} {*uud* val2}}}
+bbset pnr.drv.DataConstraintDenominatorOverrides {{* 7} {*NM* 7} {*UD* 6} {*SUD* 3} {*UUD* 5}}                    {Overrides of Denominator for data slew calculation. eg {{*SUD* val1} {*uud* val2}}}
+bbset pnr.clockopt.CCDEffort         {none}
+bbset pnr.clockopt.EnableCCDOptimization {0}
+bbset pnr.clockopt.EnableSetupFix    {1}                                                              {Enable setup fix in clockopt}
+bbset pnr.clockopt.HoldFixTargetSlack {-0.005}
+bbset pnr.fc.ClockOptFinalOptoPreCallback { 
+bbset pnr.route.CCDEffort         {none}
+bbset pnr.route.EnableCCDOptimization {0}
+bbset pnr.placeopt.LeakageToDynamicRatio {1}
+bbset pnr.clock.LeakageToDynamicRatio {1}
+bbset pnr.clockopt.LeakageToDynamicRatio {1}
+bbset pnr.route.LeakageToDynamicRatio {1}
+bbset pnr.routeopt.LeakageToDynamicRatio {1}
+bbset pnr.placeopt.PowerEffort {low}
+bbset pnr.clock.PowerEffort {low}
+bbset pnr.clockopt.PowerEffort {low}
+bbset pnr.routeopt.PowerEffort {low}
+bbset pnr.clockopt.HoldFixTargetSlack {-0.005}
+bbset pnr.routeopt.HoldFixTargetSlack {-0.01}
+bbset pnr.routeopt.EnableAgressivePowerReclaimOpt {0}
+bbset pnr.route.EnableTrackOpt {false}
+#bbset pnr.SwapNonClkCellsToClkCells {1}
+bbset pnr.placeopt.PlaceEnableClockGateAware {true}                                                          {Enable clock gate aware placement. value ={true|false}}
+#bbset pnr.TotalPowerOptimizationEffort {ultra}                                                           {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+#bbset pnr.placeopt.ClockUncertainityOverrides {
+bbset pnr.Cores                      {32}                                                             {Cores for each stage}
+bbset pnr.RAM                        {256000}                                                         {RAM for each run}
+bbset pnr.ExportCores                {32}                                                             {Number of cores for the export stage}
+bbset pnr.ExportRAM                  {256000}                                                         {Memory (in MB) for the export stage}
+bbset pnr.placeopt.Cores             {32}                                                             {Cores for each stage}
+bbset pnr.placeopt.RAM               {256000}                                                         {RAM for each run}
+bbset pnr.placeopt.ExportRAM         {320000}                                                         {# No Comment}  
+bbset pnr.clock.Cores                {32}                                                             {Cores for each stage}
+bbset pnr.clock.RAM                  {320000}                                                         {RAM for each run}
+bbset pnr.clock.ExportRAM            {450000}                                                         {# No Comment}  
+bbset pnr.clockopt.Cores             {32}                                                             {Cores for each stage}
+bbset pnr.clockopt.RAM               {400000}                                                         {RAM for each run}
+bbset pnr.clockopt.ExportRAM         {450000}                                                         {# No Comment}  
+bbset pnr.route.Cores                {32}                                                             {Cores for each stage}
+bbset pnr.route.RAM                  {400000}                                                         {RAM for each run}
+bbset pnr.route.ExportRAM            {450000}                                                         {# No Comment}  
+bbset pnr.routeopt.Cores             {32}                                                             {Cores for each stage}
+bbset pnr.routeopt.RAM               {450000}                                                         {RAM for each run}
+bbset pnr.routeopt.ExportRAM         {450000}                                                         {# No Comment}  
+bbset pnr.chipfinish.Cores           {32}                                                             {Cores for each stage}
+bbset pnr.chipfinish.RAM             {320000}                                                         {RAM for each run}
+bbset pnr.chipfinish.ExportRAM       {450000}                                                         {# No Comment}  
+bbset pnr.applyeco.Cores             {32}                                                             {Cores for each stage}
+bbset pnr.applyeco.RAM               {256000}                                                         {RAM for each run}
+bbset pnr.applyeco.ExportRAM         {320000}                                                         {# No Comment}  

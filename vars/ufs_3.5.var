@@ -1,0 +1,710 @@
+###########################################################
+bbrecipe_apply setup_fc
+bbrecipe_apply synthdft_fc
+bbset syn.Stages {libgen elaborate synth floorplan synthopt testpoint synthdft synthdftopt} 
+###########################################################
+
+####################################
+##Physical Aware synthesis is disabled
+bbset syn.EnablePhysicalSynthesis 0
+bbset syn.elaborate.InputDEFFile {} 
+#####################################
+
+#########################################
+############DONT USE LISTS###############
+#########################################
+bbconcat syn.DontUseCells { restrict(SvtCells) }
+bbconcat syn.DontUseCells { restrict(UlvtCells) }
+bbconcat syn.DontUseCells { restrict(UlvtllCells) }
+bbconcat syn.DontUseCells { restrict(AllElvtCells) }
+bbconcat syn.DontUseCells { restrict(NppnCells) }
+bbconcat syn.DontUseCells { restrict(PnnpCells) }
+bbconcat syn.DontUseCells { restrict(PpnnCells) }
+bbconcat syn.DontUseCells { restrict(D14PlusCells) }
+bbconcat syn.DontUseCells { restrict(D16PlusCells) }
+bbconcat syn.DontUseCells { restrict(D18PlusCells) }
+bbconcat syn.DontUseCells { restrict(D20PlusCells) }
+bbconcat syn.DontUseCells { restrict(AllD24PlusCells) }
+bbconcat syn.DontUseCells { restrict(D32PlusCells) }
+bbconcat syn.DontUseCells { restrict(D48PlusCells) }
+bbconcat syn.DontUseCells { restrict(NoMbitEquivalentFlopCells) }
+bbconcat pnr.DontUseCells { restrict(UlvtllCells) }
+bbconcat pnr.DontUseCells { restrict(SvtCells) }
+bbconcat pnr.DontUseCells { restrict(UlvtCells) }
+bbconcat pnr.DontUseCells { restrict(AllElvtCells) }
+bbconcat pnr.DontUseCells { restrict(NppnCells) }
+bbconcat pnr.DontUseCells { restrict(PnnpCells) }
+bbconcat pnr.DontUseCells { restrict(PpnnCells) }
+bbconcat pnr.DontUseCells { restrict(D14PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D16PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D18PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D20PlusCells) }
+bbconcat pnr.DontUseCells { restrict(AllD24PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D32PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D48PlusCells) }
+bbconcat pnr.DontUseCells { restrict(NoMbitEquivalentFlopCells) }
+##########################################
+
+#########################################
+###### SCENARIOS : ACTIVE ###############
+#########################################
+#
+#
+#Shouldn't corners be given by block owners?
+
+
+bbset syn.scenarios.Scenarios        {func.tt-NMP-85-cworst_ccworst_t func.ssgnp-NM-0-cworst_ccworst_t func.ssgnp-NM-125-rcworst_ccworst_t shift.ssgnp-NM-0-cworst_ccworst_t func.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-SUD-0-cworst_ccworst_t func.ssgnp-UD-0-cworst_ccworst_t shift.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-UD-125-rcworst_ccworst_t  }
+
+bbset pnr.scenarios.Scenarios        {func.tt-NMP-85-cworst_ccworst_t func.ssgnp-NM-0-cworst_ccworst_t func.ssgnp-NM-125-rcworst_ccworst_t func.ssgnp-NM-125-rcworst_ccworst func.ssgnp-NM-m25-cworst_ccworst func.ssgnp-NM-m25-rcworst_ccworst func.ffgnp-NM-125-rcworst_ccworst func.ffgnp-NM-125-cworst_ccworst func.ffgnp-NM-m25-rcworst_ccworst func.ffgnp-NM-m25-cworst_ccworst shift.ssgnp-NM-0-cworst_ccworst_t shift.ffgnp-NM-125-rcworst_ccworst shift.ssgnp-NM-m25-cworst_ccworst shift.ffgnp-NM-125-cworst_ccworst shift.ffgnp-NM-m25-rcworst_ccworst func.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-SUD-0-cworst_ccworst_t func.ssgnp-UUD-125-cworst_ccworst func.ffgnp-NM-125-cbest_ccbest func.ffgnp-NM-125-rcbest_ccbest func.ssgnp-UUD-0-rcworst_ccworst func.ssgnp-UD-0-cworst_ccworst_t shift.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-UUD-0-rcworst_ccworst func.ssgnp-UUD-0-cworst_ccworst func.ssgnp-UD-125-rcworst_ccworst_t shift.ssgnp-NM-125-cworst_ccworst_t shift.ssgnp-UUD-0-cworst_ccworst}
+
+
+bbset syn.scenarios.status.Default {
+	{func.tt-NMP-85-cworst_ccworst_t         {leakage dynamic active}}
+	{func.ssgnp-NM-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UUD-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-125-rcworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-UUD-0-cworst_ccworst_t      {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-125-cworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+}
+ 
+bbset pnr.scenarios.status.Default {
+	{func.tt-NMP-85-cworst_ccworst_t         {leakage dynamic active}}
+	{func.ssgnp-NM-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UUD-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-125-rcworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-UUD-0-cworst_ccworst_t      {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-125-cworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+} 
+
+#########################################
+
+
+#################
+## To disable/enable 0/1 exit on link error
+bbset syn.elaborate.ExitOnLinkError {1}
+##To take GSPAN & NONGSPAN IO BUF placement & respect voltage areas - the add_buffer happens at syn/synthdftopt##
+##By default this below var was 0 and it caused LS_INST_MISSING violations##
+bbset fc.AddBufferRespectVoltageArea 1
+####When this below var is high then it brings congestion - so made it leakage
+bbset syn.TotalPowerOptimizationEffort {leakage}  {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+bbset pnr.TotalPowerOptimizationEffort {leakage}  {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+##Enabling as per : https://drive.google.com/file/d/1v7St97cGmaNbCrKoiyEkNmIMeP0BTUd-/view?usp=sharing&resourcekey=0--a-L3p12hOlZWPjy5yz1YA ##
+bbset fc.EnableMegaSwitch {1}
+bbset syn.synthopt.RecreatePathGroups {1}
+
+
+####
+bbappend sif.fc.ExecuteStagePreCallback {
+	###To disable Offset Latency Calculations on clk div clk_incheckpin###
+	if { (${::STAGE} in {synthopt synthdft synthdftopt placeopt}) } {
+		if { [sizeof_collection [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] ] } {
+		set save_mode [get_object_name [current_mode]]  
+        	foreach_in_collection e [get_mode] { 
+        	    current_mode $e
+        	    puts "Setting balance point false for clk_incheckpoint for mode [get_object_name $e]"
+        	    set_clock_balance_points -balance_points [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] -consider_for_balancing false 
+ 
+        	 }
+    		current_mode $save_mode
+		##setting dont ecgl on the clk_in & clk_incheckpins of div50 cells
+		set_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency true
+		get_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency > li		
+		}
+	}
+
+	if { $::STAGE == "clock" } {
+		if { [sizeof_collection [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] ] } {
+		##Resetting dont ecgl on the clk_in & clk_incheckpins of div50 cells post placeopt
+		set save_mode [get_object_name [current_mode]]  
+        	foreach_in_collection e [get_mode] { 
+        		current_mode $e
+			set_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency false
+			get_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency > li.ck
+			puts "Setting balance point true for clk_incheckpoint for mode [get_object_name $e]"
+        		set_clock_balance_points -balance_points [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] -consider_for_balancing true 
+		}
+		current_mode $save_mode
+		}
+	}
+	###
+
+	###For improving the MBIT %###
+	if { (${::STAGE} == "synthdftopt") } {
+	    set_app_options -name compile.flow.enable_multibit_debanking -value false ;
+	}
+	if { (${::STAGE} == "placeopt") } {
+	    set_app_options -name compile.flow.enable_multibit_debanking -value true ; ### set it to true after initial_opto 
+	}
+	###
+	
+	###For Tie cell insertion during synthdftopt in FC###
+	###https://b.corp.google.com/issues/391500220#comment3###
+	if { (${::STAGE} == "synthdftopt") } {
+		set_app_options -name opt.tie_cell.check_frontend_restrictions -value true
+	}
+	###	
+}
+####
+
+
+
+##############################################
+#############clock cell usage list############
+##############################################
+bbset pnr.clock.InverterCellList     {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {List of inverter cells}
+bbset pnr.clock.TopInverterCellList  {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf Specific Inverter Cell List}
+bbset pnr.clock.LeafInverterCellList {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf specific inverter cell list}
+bbset pnr.clock.BufferCellList       {CKBDHD5BWP130HPNPN3P48CPDULVTLL DCCKBDHD6BWP130HPNPN3P48CPDULVTLL DCCKBDHD8BWP130HPNPN3P48CPDULVTLL  DCCKBDHD10BWP130HPNPN3P48CPDULVTLL DCCKBDHD12BWP130HPNPN3P48CPDULVTLL DCCKBDHD14BWP130HPNPN3P48CPDULVTLL} {List of buffer cells}
+bbset pnr.clock.ICGCellList          {CKLNQD3BWP130HPNPN3P48CPDULVTLL CKLNQD4BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD4BWP130HPNPN3P48CPDULVTLL  CKLNQD5BWP130HPNPN3P48CPDULVTLL CKLNQD6BWP130HPNPN3P48CPDULVTLL CKLNQD8BWP130HPNPN3P48CPDULVTLL  CKLNQOPTBBD8BWP130HPNPN3P48CPDULVTLL CKLNQD10BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD10BWP130HPNPN3P48CPDULVTLL  CKLNQD12BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD12BWP130HPNPN3P48CPDULVTLL} {List of clock gating cells}
+##############################################
+
+
+#########################################
+###https://buganizer.corp.google.com/issues/394850780#comment7###
+####To Improve RTL banking####
+#########################################
+bbappend sif.fc.ExecuteStagePreCallback {
+        if { (${::STAGE} in {synth synthopt synthdftopt}) } {  
+		set_app_options -name compile.seqmap.identify_shift_registers -value false
+		set_app_options -name compile.flow.enable_incremental_multibit_banking -value true
+		set_app_options -name compile.flow.enable_multibit -value true
+		set_app_options -name compile.flow.enable_multibit_debanking -value false
+		set_app_options -name compile.flow.enable_rtl_multibit_banking -value true
+		set_app_options -name compile.flow.enable_rtl_multibit_debanking -value false
+		set_app_options -name compile.flow.enable_second_pass_multibit_banking -value true
+		set_app_options -name compile.seqmap.prefer_registers_with_multibit_equivalent -value true
+	}
+}
+
+
+bbappend sif.fc.ExecuteStagePreCallback {
+	###For improving the MBIT %###
+	if { (${::STAGE} == "synthdftopt") } {
+	   set_app_options -name multibit.banking.maximum_allowable_distance -value 75 
+	}
+	if { (${::STAGE} == "placeopt") } {
+	    set_app_options -name multibit.banking.maximum_allowable_distance -value 75 
+	}
+}
+######################################
+
+
+###To improve clock latency & skew from kishor babu secip###
+bbappend pnr.fc.ClockBuildClockPreCallback {
+        if { ${::STAGE} == "clock" } {
+    		##derive auto exception, CTS-967
+    		set_app_options -list {cts.common.auto_exception_disable_self_arc true}
+    		set_app_options -name cts.common.auto_exception_disable_parallel_arc -value true
+    		reset_app_options cts.common.auto_skew_target_clock_period_percentage
+    		set_app_options -name cts.common.enable_auto_skew_target_for_local_skew -value false
+    		set_app_options -name cts.optimize.improvement_mode_version -value EIM_20250101
+    		set_app_options -list {cts.optimize.enable_improvement_mode skew}
+    		set_app_options -name cts.compile.size_pre_existing_cell_to_cts_references -value true
+    		set_app_options -name cts.icg.latency_driven_cloning -value true
+    		set_app_options -name cts.compile.enable_cell_relocation -value all
+    		##for CTS-080 warning
+    		set_app_options -name cts.buffering.ignore_dc_generic -value true
+    		set all_other_modes [remove_from_collection [get_modes *]  [get_modes func.*cworst_ccworst_t]]
+    		set_clock_tree_options -copy_exceptions_across_modes -from_mode func.*cworst_ccworst_t -to_mode [get_object_name $all_other_modes]
+    		##set_clock_balance_points -balance_points [get_pins -hier -phys */CHAIN_lockup_latch*/E] -consider_for_balancing false
+			
+			if { [sizeof_collection [get_pins -hier -phys */clk_incheckpin*]] } {
+    		set save_mode [get_object_name [current_mode]]
+    		foreach_in_collection e [get_mode] {
+    		    current_mode $e
+    		    puts "Setting balance point false for clk_incheckpoint1 for mode [get_object_name $e]"
+    		    set_disable_timing [get_lib_timing_arcs -from [get_lib_pins -of_objects [get_pins -hier -phys */clk_incheckpin*]] -filter "sense=~*clock_tree*"]
+    		}
+    		current_mode $save_mode
+			}
+	}
+}
+###
+
+
+
+bbset syn.TotalPowerOptimizationEffort {high}                                                          {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+bbset syn.Cores                      {16}                                                             {Cores for each stage}
+bbset syn.RAM                        {128000}                                                         {RAM for each run}
+bbset syn.ExportCores                {16}                                                             {Cores for each stage}
+bbset syn.ExportRAM                  {128000}                                                         {RAM for each run}
+#Eg: set_db [current_design] .lp_clock_gating_auto_path_adjust_fixed_delay [expr ${min_period} * [expr [expr ${::syn.synth.LpCGFixedDelayPercentage} / 100.0] * 1000.0]
+bbset syn.IncrementalSDC             {5% uncertainity of each clock, also , clock latency on icg en paths}                                                               {Reading incremental sdc at each stage to control uncertainity}
+#Enabling this will increase addl cell count. Might not be needed for smaller blocks
+bbset syn.EnableSelfGating           {0}                                                              {In FC enable self gating}
+bbset syn.EnableAggresiveSelfGating  {0}                                                              {In FC enable enable aggressive self gating}
+bbset syn.PreventSelfGatingOnShiftRegs {0}                                                              {In FC to disable self gate logic insertion on shift registers based on coverage impact wrt power benefits}
+
+bbset syn.EnableMultiClockGating     {true}                                                          {Enable Multi level Clock Gating}
+bbset syn.EnableSequentialClockGating {true}                                                          {Enable Sequential Clock Gating}
+bbset syn.EnableSeqBoundaryOpt       {true}                                                          {To enable sequential boundary optimisation}
+#This is currently a genus proc, we need to implement the same in FC also
+bbset syn.EnableDynamicPincap        {false}                                                          {To enable dynamic pin cap modeling}
+bbset syn.synth.MBFFExcludeRegsWithExceptions {true}                                                           {To exclude the mbit merging on cells with exceptions}
+bbset syn.synth.MBFFIgnoreExceptions {PATH_GROUP ANNOTATION CLOCK_LATENCY LATENCY_OFFSET}             {To ignore exceptions when banking and debanking multi-bit flops}
+bbset syn.synth.MBFFIgnoreMatchSeqSyncCTRL {false}                                                          {To ignore exact match on seq control signal}
+bbset syn.synth.MBFFAllowUnusedBit   {True}                                                           {To allow unused bit during mbit merging}
+bbset syn.synth.EnableIsoLvlMerging  {1}                                                              {To enable multi-bit merging of power cells level shifters and isolators}
+bbset syn.synth.TNSOpto              {true}                                                           {Forces the tool to consider all the endpoints for the TNS optimization}
+bbset syn.synth.HardPreservesOnDFTModules {false}                                                          {To prevent complete optimisation of dft modules}
+
+#To be experimented
+bbset syn.synth.LPClockGatingMinFlops {3}                                                              {Min flops for Clock gating}
+bbset syn.synth.LPClockGatingMaxFlops {16}                                                               {Max flops for LP clock gating}
+bbset syn.synth.ClockGatingMaxFanout {16}                                                             {Clock gating max fanout}
+bbset syn.synth.ClockGatingMinBitwidth {4}                                                              {Clock gating min bit width}
+bbset syn.synth.ClockGatingNumLevels {8}                                                              {Clock gating max number of levels}
+
+bbset syn.synth.DesignPowerEffort    {high}                                                            {Design power effort}
+bbset syn.synth.LeakageToDynamicRatio {0.5}                                                            {Leakage to dynamic ratio}
+
+bbset syn.synthopt.Cores             {32}                                                             {no of cores for the run}
+bbset syn.fc.CompileAutoUngroup      {false}                                                          {FC Lec compliant optimization, auto ungroup control}
+bbset syn.fc.CompileBoundaryOptimization {true}                                                           {FC Lec compliant optimization, boundary optimization control}
+bbset syn.fc.CompileEnableOutputInversion {true}                                                           {FC Lec compliant optimization, output inversion control}
+#pdd has less leakage, didn't give much benefit to  Suni's GDMC
+#bbset syn.synth.ClockGateCellList    {CKLNQZPDD3BWP130HPNPN3P48CPDULVT CKLNQZPDD4BWP130HPNPN3P48CPDULVT CKLNQZPDD5BWP130HPNPN3P48CPDULVT CKLNQZPDD6BWP130HPNPN3P48CPDULVT  CKLNQZPDD8BWP130HPNPN3P48CPDULVT CKLNQZPDD10BWP130HPNPN3P48CPDULVT} {# No Comment}  
+bbset syn.synth.ClockGateCellList    {CKLNQZPDD3BWP130HPNPN3P48CPDULVTLL CKLNQZPDD4BWP130HPNPN3P48CPDULVTLL CKLNQZPDD5BWP130HPNPN3P48CPDULVTLL CKLNQZPDD6BWP130HPNPN3P48CPDULVTLL  CKLNQZPDD8BWP130HPNPN3P48CPDULVTLL CKLNQZPDD10BWP130HPNPN3P48CPDULVTLL} {# No Comment}  
+
+
+################# END OF COMMON SYN VAR ######################
+bbset scf.common_constraints_override 1
+bbns scf { 
+    bbset SOC_CONSTRAINTS_HOME "/google/gchips/ipreleases/lajolla_scf/soc_constraints/LAJ_A0_M3/LAJ_A0_M3_20250424"
+    bbset FUNC_CONSTRAINTS_HOME "/google/gchips/ipreleases/lajolla_scf/func_common_constraints/LAJ_A0_M3/LAJ_A0_M3_21_APR_2025"
+    bbset SCF_CODE_HOME "/google/gchips/ipreleases/lajolla_scf/scf_code/LAJ_A0_M3/LAJ_A0_M3_05_Feb_V3_2025"
+    bbset scf.DFT_CONSTRAINTS_HOME "/google/gchips/ipreleases/lajolla_scf/dft_common_constraints/LAJ_A0_M3/LAJ_A0_M3_02_MAY_2025_REV1"
+    bbset scf.TECH_HOME "/google/gchips/ipreleases/lajolla_scf/tech_common_constraints/LAJ_A0_M3/LAJ_A0_M3_16_APR_2025_REV4"    
+}
+
+# Default vars ---> 
+############## User Input Files #############
+bbset .info.BLOCK "ufs_top"
+bbset Release_area "/google/gchips/ipreleases/lajolla_hsio/ufs_top/LAJ_A0_UFS_TOP_M3_V2_R2_D1_RTLDFT/fe_release"
+bbset SSWRP_HSIO_S_RELEASE_PROJECT_TOP "[bbget .Release_area]"
+bbset syn.elaborate.RTLParsingVars ""
+bbset syn.elaborate.RTLSearchPath "/google/gchips/ipreleases/lajolla_hsio/ufs_top/LAJ_A0_UFS_TOP_M3_V2_R2_D1_RTLDFT/fe_release/ufs_top/dft_rtl/"
+bbset syn.elaborate.RTLFileList "/google/gchips/ipreleases/lajolla_hsio/ufs_top/LAJ_A0_UFS_TOP_M3_V2_R2_D1_RTLDFT/fe_release/ufs_top/dft_rtl/synth/ufs_top.vf"
+bbset syn.elaborate.InputUPFFile "/google/gchips/ipreleases/lajolla_hsio/ufs_top/LAJ_A0_UFS_TOP_M3_V2_R2_D1_RTLDFT/fe_release/ufs_top/dft_upf/ufs_top/ufs_top.upf"
+
+
+bbset mmmc.mode.func_NM.synSdcs "/google/gchips/ipreleases/lajolla_hsio/ufs_top/LAJ_A0_UFS_TOP_M3_V2_R2_D1_RTLDFT/fe_release/ufs_top/dft_sdc/ufs_top.mission.tcl"
+bbset mmmc.mode.func_NM.pnrSdcs "/google/gchips/ipreleases/lajolla_hsio/ufs_top/LAJ_A0_UFS_TOP_M3_V2_R2_D1_RTLDFT/fe_release/ufs_top/dft_sdc/ufs_top.mission.tcl"
+bbset mmmc.mode.shift_NM.synSdcs "/google/gchips/ipreleases/lajolla_hsio/ufs_top/LAJ_A0_UFS_TOP_M3_V2_R2_D1_RTLDFT/fe_release/ufs_top/dft_sdc/ufs_top.shift.tcl"
+bbset mmmc.mode.shift_NM.pnrSdcs "/google/gchips/ipreleases/lajolla_hsio/ufs_top/LAJ_A0_UFS_TOP_M3_V2_R2_D1_RTLDFT/fe_release/ufs_top/dft_sdc/ufs_top.shift.tcl"
+bbset mmmc.mode.capture_NM.synSdcs "/google/gchips/ipreleases/lajolla_hsio/ufs_top/LAJ_A0_UFS_TOP_M3_V2_R2_D1_RTLDFT/fe_release/ufs_top/dft_sdc/ufs_top.capture.tcl"
+bbset mmmc.mode.capture_NM.pnrSdcs "/google/gchips/ipreleases/lajolla_hsio/ufs_top/LAJ_A0_UFS_TOP_M3_V2_R2_D1_RTLDFT/fe_release/ufs_top/dft_sdc/ufs_top.capture.tcl"
+
+
+#commenting for initial release -- Scheck
+#bbset syn.elaborate.InputDEFFile "/google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/MBU/SSWRP_HSIO_S/M3/M3V2_repo_3.5/run/sswrp_hsio_s_may_31_macro_pins.def" 
+bbset pnr.setup.InputDEFFile "/google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/Lajolla_ufs/block/ufs_top/Input_files/Floorplan/ufs_top_M3_macro_place_FP6.def"
+
+bbset syn.EnableWaterMarkInsertion {true}
+bbset syn.WatermarkRTLTag  {LAJ_A0_UFS_TOP_M3_V2_R2_D1_RTLDFT}
+
+
+bbset syn.MacroLibraryFileInclude  {ts1n02pmblvtb4096x32m8twzhodxcp|ts6n02psvtb64x132m1bzhocp|ts6n02psvta512x128m2sbzhocp|ts6n02psvta144x128m2sbzhocp|ts6n02psvta200x128m2sbzhocp|ts1n02pmbsvta4096x16m4qbzhocp|ts1n02psbsvta512x118m2bzhocp|ts6n02psvtb512x128m2bzhocp|ts6n02psvtb256x132m1bzhocp|ts6n02psvtb64x180m1bzhocp|ts3n02psvta16384x16m16bzo_hsios_mphy_rom|ts3n02psvta4096x16m16bzo_hsios_mphy_rom|dwc_mipi_mphy_type1_g6_pma_2tx_2rx_ns|ts6n02psvtb256x264m1bzhocp|ts6n02psvtb64x264m1bzhocp|ts1n02pmbsvta16384x16m16qbzhocp|ts3n02psvta16384x16m16bzo_p1_hsios_mphy_rom|ts3n02psvta16384x16m16bzo_p2_hsios_mphy_rom|ts6n02psvtb20x256m1bzhocp|DTCD|tphn02p_075od12gpio.*|fiducial.*}
+bbset pnr.MacroLibraryFileInclude    [bbget .syn.MacroLibraryFileInclude]
+
+
+# Flow settings related to FC
+###
+bbrecipe_apply setup_fc ; # To enable FC flow
+bbset pnr.EnableFloorplanInInnovus {1}
+#bbrecipe_apply "pnr.floorplan.EightPSW"
+bbrecipe_apply  synthdft_fc
+bbset syn.Stages {libgen elaborate synth setup floorplan synthopt testpoint synthdft synthdftopt}
+bbset syn.EnablePhysicalSynthesis "1"
+
+############## Common Settings ############
+#bbset syn.EnablePhysicalSynthesis 0
+bbns mmmc {
+    bbns vdomain {
+        bbset vdomains "AVDD075_UFS0_EMBD_VP AVDD075_UFS0_EMBD_VPDIG AVDD12_UFS0_EMBD VDD_HSIOS VDD_STBY_S"
+
+        bbns AVDD075_UFS0_EMBD_VP {
+                bbset rail  "AVDD075_UFS0_EMBD_VP"
+        }
+
+        bbns AVDD075_UFS0_EMBD_VPDIG {
+                bbset rail  "AVDD075_UFS0_EMBD_VPDIG$|VVDD_AVDD075_UFS0_EMBD_VPDIG_PG$"
+        }
+
+        bbns AVDD12_UFS0_EMBD {
+                bbset rail  "AVDD12_UFS0_EMBD"
+        }
+
+        bbns VDD_HSIOS {
+                bbset rail  "VDD_HSIOS$|VVDD_UFS0_HC$|VVDD_UFS0_PCS$|VVDD_UFS0_TOP$"
+        }
+
+        bbns VDD_STBY_S {
+                bbset rail  "VDD_STBY_S"
+        }
+    }
+
+
+    bbns scenarios {
+        bbset constraints {
+            {apply "*.ssgnp-NM-*" {AVDD075_UFS0_EMBD_VP 0p6750} {AVDD075_UFS0_EMBD_VPDIG 0p6750} {AVDD12_UFS0_EMBD 1p0800} {VDD_HSIOS 0p6750} {VDD_STBY_S 0p6750}}
+            {apply "*.ffgnp-NM-*" {AVDD075_UFS0_EMBD_VP 0p8250} {AVDD075_UFS0_EMBD_VPDIG 0p8250} {AVDD12_UFS0_EMBD 1p3200} {VDD_HSIOS 0p8250} {VDD_STBY_S 0p8250}}
+            {create "*.*"}
+       }
+    }
+}
+
+##
+# Scenario related settings
+##
+
+bbset mmmc.mode.modes {func_NM shift_NM capture_NM}
+bbset syn.scenarios.Scenarios { func_NM.ssgnp-NM-0-cworst_ccworst_t func_NM.ssgnp-NM-125-rcworst_ccworst_t func_NM.ffgnp-NM-125-rcworst_ccworst func_NM.ffgnp-NM-m25-cworst_ccworst func_NM.tt-NMP-85-cworst_ccworst_t shift_NM.ssgnp-NM-125-rcworst_ccworst_t shift_NM.ffgnp-NM-125-rcworst_ccworst capture_NM.ssgnp-NM-0-cworst_ccworst_t capture_NM.ffgnp-NM-125-rcworst_ccworst }
+
+bbset syn.scenarios.status.Default   {
+	{func_NM.ssgnp-NM-0-cworst_ccworst_t		{setup active max_trans max_cap min_cap}}
+	{func_NM.ssgnp-NM-125-rcworst_ccworst_t		{setup active max_trans max_cap min_cap}}
+	{func_NM.ffgnp-NM-125-rcworst_ccworst		{hold  	      max_trans max_cap min_cap}}
+ 	{func_NM.ffgnp-NM-m25-cworst_ccworst		{hold  	      max_trans max_cap min_cap}}
+	{func_NM.tt-NMP-85-cworst_ccworst_t		{leakage dynamic active}}
+	{shift_NM.ssgnp-NM-125-rcworst_ccworst_t	{setup active max_trans max_cap min_cap}}
+	{shift_NM.ffgnp-NM-125-rcworst_ccworst		{hold  	      max_trans max_cap min_cap}}	
+	{capture_NM.ssgnp-NM-0-cworst_ccworst_t         {setup active max_trans max_cap min_cap}}	
+	{capture_NM.ffgnp-NM-125-rcworst_ccworst	{hold  	      max_trans max_cap min_cap}}
+}
+
+bbset pnr.scenarios.Scenarios	{[bbget .syn.scenarios.Scenarios]} 
+bbset pnr.scenarios.status.Default   {
+	{func_NM.ssgnp-NM-0-cworst_ccworst_t		{setup active max_trans max_cap min_cap}}
+	{func_NM.ssgnp-NM-125-rcworst_ccworst_t		{setup active max_trans max_cap min_cap}}
+	{func_NM.ffgnp-NM-125-rcworst_ccworst		{hold  active max_trans max_cap min_cap}}
+ 	{func_NM.ffgnp-NM-m25-cworst_ccworst		{hold  active max_trans max_cap min_cap}}
+	{func_NM.tt-NMP-85-cworst_ccworst_t		{leakage dynamic active}}
+	{shift_NM.ssgnp-NM-125-rcworst_ccworst_t	{setup active max_trans max_cap min_cap}}
+	{shift_NM.ffgnp-NM-125-rcworst_ccworst		{hold  active max_trans max_cap min_cap}}
+	{capture_NM.ssgnp-NM-0-cworst_ccworst_t	        {setup active max_trans max_cap min_cap}}	
+	{capture_NM.ffgnp-NM-125-rcworst_ccworst	{hold  active max_trans max_cap min_cap}}
+}
+
+bbset pnr.scenarios.status.Floorplan   {
+         {func_NM.ssgnp-NM-0-cworst_ccworst_t        {setup hold active max_trans max_cap }}
+}
+
+bbappend syn.DontUseCells {
+      restrict(UlvtllCells)
+      restrict(UlvtCells)
+      restrict(AllElvtCells)
+} {Dont Use append for syn}
+
+
+bbappend pnr.DontUseCells {
+      restrict(UlvtllCells)
+      restrict(UlvtCells)
+      restrict(AllElvtCells)
+} 
+
+##
+# Special Libgen settings
+#
+#bbns ExtraLibs {
+#        bbset Enable {True} {# True(default)|False, Super option to enable(default)/disable ExtraLibs feature}
+#        bbns libgen {
+#            bbset ccs_db {
+#	                  /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-19/ccs_db/mem_ts6n02psvtb20x256m1bzhocp/ts6n02psvtb20x256m1bzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db
+#			}
+#         bbset lef {
+#			/google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-19/lef/mem_ts6n02psvtb20x256m1bzhocp/ts6n02psvtb20x256m1bzhocp.lef
+#		   }	
+#		}
+#	     }
+#
+bbset syn.ExtraLibs.libgen.ccs_db {/google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts1n02psbsvta512x118m2bzhocp/ts1n02psbsvta512x118m2bzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts6n02psvtb512x128m2bzhocp/ts6n02psvtb512x128m2bzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-19/ccs_db/mem_ts6n02psvtb20x256m1bzhocp/ts6n02psvtb20x256m1bzhocp_ffgnp_0p825v_125c_cbest_ccbest.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts6n02psvta512x128m2sbzhocp/ts6n02psvta512x128m2sbzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts6n02psvtb64x132m1bzhocp/ts6n02psvtb64x132m1bzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-10/ccs_db/mem_ts3n02psvta16384x16m16bzo_p2_hsios_mphy_rom/ts3n02psvta16384x16m16bzo_p2_hsios_mphy_rom_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts1n02pmblvtb4096x32m8twzhodxcp/ts1n02pmblvtb4096x32m8twzhodxcp_ssgnp_0p675v_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts1n02pmbsvta4096x16m4qbzhocp/ts1n02pmbsvta4096x16m4qbzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts6n02psvtb64x180m1bzhocp/ts6n02psvtb64x180m1bzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts6n02psvtb64x264m1bzhocp/ts6n02psvtb64x264m1bzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts6n02psvtb256x132m1bzhocp/ts6n02psvtb256x132m1bzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts3n02psvta16384x16m16bzo_hsios_mphy_rom/ts3n02psvta16384x16m16bzo_hsios_mphy_rom_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts6n02psvta200x128m2sbzhocp/ts6n02psvta200x128m2sbzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts3n02psvta4096x16m16bzo_hsios_mphy_rom/ts3n02psvta4096x16m16bzo_hsios_mphy_rom_ssgnp_0p675v_125c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts6n02psvta144x128m2sbzhocp/ts6n02psvta144x128m2sbzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts6n02psvtb256x264m1bzhocp/ts6n02psvtb256x264m1bzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/ccs_db/mem_ts1n02pmbsvta16384x16m16qbzhocp/ts1n02pmbsvta16384x16m16qbzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-10/ccs_db/mem_ts3n02psvta16384x16m16bzo_p1_hsios_mphy_rom/ts3n02psvta16384x16m16bzo_p1_hsios_mphy_rom_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mem.raw/2025-01-16_pre/ts6n02psvta256x256m1sbzhocp/ccs_db/ts6n02psvta256x256m1sbzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mem.raw/2025-01-16_pre/ts6n02psvta256x256m1sbzhocp/ccs_db/ts6n02psvta256x256m1sbzhocp_ssgnp_0p675v_125c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mem.raw/2025-01-16_pre/ts6n02psvta32x256m1sbzhocp/ccs_db/ts6n02psvta32x256m1sbzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mem.raw/2025-01-16_pre/ts6n02psvta256x256m1sbzhocp/ccs_db/ts6n02psvta256x256m1sbzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mem.raw/2025-01-16_pre/ts6n02psvta80x256m1sbzhocp/ccs_db/ts6n02psvta80x256m1sbzhocp_ssgnp_0p675v_125c_cworst_ccworst_t.db /google/gchips/lib/foundry/tsmc/n2p/tsmc/mem.raw/2025-01-16_pre/ts6n02psvtb256x256m1bzhocp/ccs_db/ts6n02psvtb256x256m1bzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db}
+
+
+bbset syn.ExtraLibs.libgen.lef {/google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts1n02psbsvta512x118m2bzhocp/ts1n02psbsvta512x118m2bzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts6n02psvtb512x128m2bzhocp/ts6n02psvtb512x128m2bzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-19/lef/mem_ts6n02psvtb20x256m1bzhocp/ts6n02psvtb20x256m1bzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts6n02psvta512x128m2sbzhocp/ts6n02psvta512x128m2sbzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts6n02psvtb64x132m1bzhocp/ts6n02psvtb64x132m1bzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-10/lef/mem_ts3n02psvta16384x16m16bzo_p2_hsios_mphy_rom/ts3n02psvta16384x16m16bzo_p2_hsios_mphy_rom.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts1n02pmblvtb4096x32m8twzhodxcp/ts1n02pmblvtb4096x32m8twzhodxcp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts1n02pmbsvta4096x16m4qbzhocp/ts1n02pmbsvta4096x16m4qbzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts6n02psvtb64x180m1bzhocp/ts6n02psvtb64x180m1bzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts6n02psvtb64x264m1bzhocp/ts6n02psvtb64x264m1bzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts6n02psvtb256x132m1bzhocp/ts6n02psvtb256x132m1bzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts3n02psvta16384x16m16bzo_hsios_mphy_rom/ts3n02psvta16384x16m16bzo_hsios_mphy_rom.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts6n02psvta200x128m2sbzhocp/ts6n02psvta200x128m2sbzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts3n02psvta4096x16m16bzo_hsios_mphy_rom/ts3n02psvta4096x16m16bzo_hsios_mphy_rom.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts6n02psvta144x128m2sbzhocp/ts6n02psvta144x128m2sbzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts6n02psvtb256x264m1bzhocp/ts6n02psvtb256x264m1bzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-03-27/lef/mem_ts1n02pmbsvta16384x16m16qbzhocp/ts1n02pmbsvta16384x16m16qbzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-10/lef/mem_ts3n02psvta16384x16m16bzo_p1_hsios_mphy_rom/ts3n02psvta16384x16m16bzo_p1_hsios_mphy_rom.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mem.raw/2025-01-16_pre/ts6n02psvta256x256m1sbzhocp/LEF/ts6n02psvta256x256m1sbzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mem.raw/2025-01-16_pre/ts6n02psvta32x256m1sbzhocp/LEF/ts6n02psvta32x256m1sbzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mem.raw/2025-01-16_pre/ts6n02psvta80x256m1sbzhocp/LEF/ts6n02psvta80x256m1sbzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mem.raw/2025-01-16_pre/ts6n02psvtb256x256m1bzhocp/LEF/ts6n02psvtb256x256m1bzhocp.lef /google/gchips/lib/foundry/tsmc/n2p/tsmc/mem.raw/2025-01-16_pre/ts6n02psvtb32x264m1bzhocp/LEF/ts6n02psvtb32x264m1bzhocp.lef}
+
+
+
+bbset pnr.ExtraLibs.libgen.ccs_db  {[bbget .syn.ExtraLibs.libgen.ccs_db]}
+bbset pnr.ExtraLibs.libgen.lef   {[bbget .syn.ExtraLibs.libgen.lef ]}
+
+bbset fc.ExtraLibMapping             {"/google/gchips/lib/3pip/lajolla/synopsys/CandleStick/dwc_mipi_mphy_type1_g6_22_tsmc2pns/5.00a_cust1_pre2/pma/timing/15M_1X_h_1Xb_v_1Xc_h_1Xd_v_1Ya_h_1Yb_v_4Y_hvhv_2Yt_hv_2Z/lib_pg/dwc_mipi_mphy_type1_g6_pma_2tx_2rx_ns_ssgnp0p675v0c_cworst_CCworst_pg.db dwc_mipi_mphy_type1_g6_pma_2tx_2rx_ns /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-10/ccs_db/mem_ts3n02psvta16384x16m16bzo_p1_hsios_mphy_rom/ts3n02psvta16384x16m16bzo_p1_hsios_mphy_rom_ssgnp_0p675v_0c_cworst_ccworst_t.db ts3n02psvta16384x16m16bzo_p1_hsios_mphy_rom /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-10/ccs_db/mem_ts3n02psvta16384x16m16bzo_p2_hsios_mphy_rom/ts3n02psvta16384x16m16bzo_p2_hsios_mphy_rom_ssgnp_0p675v_0c_cworst_ccworst_t.db ts3n02psvta16384x16m16bzo_p2_hsios_mphy_rom /google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-19/ccs_db/mem_ts6n02psvtb20x256m1bzhocp/ts6n02psvtb20x256m1bzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db ts6n02psvtb20x256m1bzhocp" }
+
+# Parthl Extra settings 
+bbns bbquery {
+  bbns dk {
+    bbappend Config {
+      {add {file "/google/gchips/lib/3pip/lajolla/synopsys/CandleStick/dwc_mipi_mphy_type1_g6_22_tsmc2pns/5.00a_cust1_pre2/pma/timing/15M_1X_h_1Xb_v_1Xc_h_1Xd_v_1Ya_h_1Yb_v_4Y_hvhv_2Yt_hv_2Z/lib_pg/dwc_mipi_mphy_type1_g6_pma_2tx_2rx_ns_ssgnp0p675v0c_cworst_CCworst_pg.db"} {library_name "dwc_mipi_mphy_type1_g6_pma_2tx_2rx_ns"}  
+			{file "/google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-10/ccs_db/mem_ts3n02psvta16384x16m16bzo_p1_hsios_mphy_rom/ts3n02psvta16384x16m16bzo_p1_hsios_mphy_rom_ssgnp_0p675v_0c_cworst_ccworst_t.db"} {library_name "ts3n02psvta16384x16m16bzo_p1_hsios_mphy_rom"}
+			{file "/google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-10/ccs_db/mem_ts3n02psvta16384x16m16bzo_p2_hsios_mphy_rom/ts3n02psvta16384x16m16bzo_p2_hsios_mphy_rom_ssgnp_0p675v_0c_cworst_ccworst_t.db"} {library_name "ts3n02psvta16384x16m16bzo_p2_hsios_mphy_rom"}
+			{file "/google/gchips/lib/foundry/tsmc/n2p/tsmc/mdk/v0.9_2025-04-19/ccs_db/mem_ts6n02psvtb20x256m1bzhocp/ts6n02psvtb20x256m1bzhocp_ssgnp_0p675v_0c_cworst_ccworst_t.db "} {library_name "ts6n02psvtb20x256m1bzhocp"}
+		}
+    }
+  }
+}
+
+
+bbset libgen.syn.EnableExtraNDMGeneration {1}  
+bbset libgen.pnr.EnableExtraNDMGeneration {1}  
+bbset syn.ExtraLibs.Enable           {True} 
+bbset pnr.ExtraLibs.Enable           {True} 
+bbappend libgen.LibraryPriority.syn.LibComplements {|ts1n02pmblvtb4096x32m8twzhodxcp|ts6n02psvtb64x132m1bzhocp|ts6n02psvta512x128m2sbzhocp|ts6n02psvta144x128m2sbzhocp|ts6n02psvta200x128m2sbzhocp|ts1n02pmbsvta4096x16m4qbzhocp|ts1n02psbsvta512x118m2bzhocp|ts6n02psvtb512x128m2bzhocp|ts6n02psvtb256x132m1bzhocp|ts6n02psvtb64x180m1bzhocp|ts3n02psvta16384x16m16bzo_hsios_mphy_rom|ts3n02psvta4096x16m16bzo_hsios_mphy_rom|dwc_mipi_mphy_type1_g6_pma_2tx_2rx_ns|ts6n02psvtb256x264m1bzhocp|ts6n02psvtb64x264m1bzhocp|ts1n02pmbsvta16384x16m16qbzhocp|ts3n02psvta16384x16m16bzo_p1_hsios_mphy_rom|ts3n02psvta16384x16m16bzo_p2_hsios_mphy_rom|ts6n02psvtb20x256m1bzhocp|ts6n02psvtb256x256m1bzhocp|ts6n02psvta256x256m1bzhocp|ts6n02psvta80x256m1sbzhocp|ts6n02psvta32x256m1sbzhocp|}  {This will allow bbquery to find libs with relaxed search criteria}
+bbappend libgen.LibraryPriority.pnr.LibComplements {|ts1n02pmblvtb4096x32m8twzhodxcp|ts6n02psvtb64x132m1bzhocp|ts6n02psvta512x128m2sbzhocp|ts6n02psvta144x128m2sbzhocp|ts6n02psvta200x128m2sbzhocp|ts1n02pmbsvta4096x16m4qbzhocp|ts1n02psbsvta512x118m2bzhocp|ts6n02psvtb512x128m2bzhocp|ts6n02psvtb256x132m1bzhocp|ts6n02psvtb64x180m1bzhocp|ts3n02psvta16384x16m16bzo_hsios_mphy_rom|ts3n02psvta4096x16m16bzo_hsios_mphy_rom|dwc_mipi_mphy_type1_g6_pma_2tx_2rx_ns|ts6n02psvtb256x264m1bzhocp|ts6n02psvtb64x264m1bzhocp|ts1n02pmbsvta16384x16m16qbzhocp|ts3n02psvta16384x16m16bzo_p1_hsios_mphy_rom|ts3n02psvta16384x16m16bzo_p2_hsios_mphy_rom|ts6n02psvtb20x256m1bzhocp|ts6n02psvtb20x256m1bzhocp|ts6n02psvtb256x256m1bzhocp|ts6n02psvta256x256m1bzhocp|ts6n02psvta80x256m1sbzhocp|ts6n02psvta32x256m1sbzhocp}  {This will allow bbquery to find libs with relaxed search criteria}
+
+#
+
+
+
+bbset fc.CreateFrameArgs             {-block_all M15}                                         {# Based on LGA-B0 learning}
+##
+#  Syn settings
+## 
+bbset pnr.export.ExtractBlockObs  {1}
+
+##
+# syn/elab 
+##
+
+#bbset syn.elaborate.InputDEFFile "/google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/Lajolla_ufs/block/ufs_top/Input_files/Floorplan/ufs_top_macro_place_FP5.def"
+bbset syn.elaborate.SkipSDCErrorChecks {1}
+bbset syn.elaborate.IgnoreSDCErrorPatterns {1}
+bbappend syn.fc.ElaborateReadRTLPreCallback {
+  set_app_options -name hdlin.elaborate.maximum_while_loop_iterations -value 8000
+  set_app_options -name compile.seqmap.identify_shift_resgisters -value false
+}
+bbset fc.SwapRTLClkCellsToDominantVT {1}
+bbappend syn.elaborate.RTLSizeOnlyPatterns {  *_hand_bcm_* }  {PARTH : As some of the constraints are applied on these cells}
+
+bbappend syn.fc.ElaborateSaveNetlistPreCallback {
+
+  #Preserve list of objects for sdc recived from design.
+  set syn.preserve_list.file "/google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/Lajolla_ufs/block/ufs_top/common_scripts/syn_sdc_preserve_May26th_M3V2R2D1RTLDFT.list"
+
+  redirect -tee preserve_obj.log {source -e -v /google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/Lajolla_ufs/block/ufs_top/common_scripts/preserve_obj.elab.tcl}
+
+}
+
+
+##
+# syn/synth
+##
+#MBFF setting
+bbset fc.ForcePSWStrategyAssociation {1}
+bbappend syn.fc.SynthPreProcessCallback {
+
+  # Special setting to apply voltages on supply_net
+  
+  # Reference : https://solvnetplus.synopsys.com/s/article/Preserving-Undriven-Nets-in-Fusion-Compiler
+  # Preserve ACK nets from optimization
+  set nt_count 0 
+  foreach my_pd [upfutils::get_switched_power_domains *] {
+    foreach sw_type {ALL PRE} {
+      set sw_rule [upfutils::get_power_domain_switch_rule $my_pd $sw_type]
+      set nt      [get_nets  [upfutils::get_power_switch_ack_port $sw_rule ] ] 
+
+        puts "PARTH - Setting Dont_touch on ACK net [get_object_name $nt] "
+        set_dont_touch  $nt true
+	set cells      [get_cells -of [get_pins -leaf -of $nt]]
+        if {[sizeof_collection $cells] > 0} {
+          foreach_in_collection cl $cells {
+            puts "PARTHL - Setting size_only on cell [get_object_name $cl]"
+            set_size_only $cl true
+	   }
+	}
+    }
+  }
+
+}
+
+bbappend syn.fc.SynthPostCallback {
+	# PARTHL --> Setting to avoid boundary optimization and flattening
+  	set_app_options -name compile.flow.autoungroup -value false
+  	set_app_options -name compile.flow.boundary_optimization -value false	
+	set_app_options -name compile.seqmap.identify_shift_registers -value false
+#to avoid the flow crash in synth stage
+#In case floating ACK net is tied , below loop will remove the connection
+  foreach my_pd [upfutils::get_switched_power_domains *] {
+    foreach sw_type {ALL PRE} {
+      set sw_rule [upfutils::get_power_domain_switch_rule $my_pd $sw_type] 
+       set_dont_touch [get_nets  [upfutils::get_power_switch_ack_port $sw_rule ] ] false
+      # ACK port is on net, converting that into pin
+      set pn [get_pins [get_object_name [get_nets  [upfutils::get_power_switch_ack_port $sw_rule ] ] ]] 
+      set nt [get_nets -quiet -of $pn -filter "name=~*Logic0*"]
+
+      # Check if Logic0 net exists
+      if {[sizeof_collection $nt] == 1} {
+        puts "PARTH : Disconnectin Logic0 net from [get_object_name $pn] "
+        disconnect_net $nt $pn
+      }
+    }
+  } 
+
+}
+
+#syn/setup settings
+bbappend pnr.innovus.SetupReadUPFPostCallback {
+mark_physical_power_domains -domains {PD_UFS0_PCS PD_UFS0_RMMI} 
+}
+
+
+bbappend syn.fc.SynthOptSetupPostCallback {
+
+  set power_switches "${::pnr.floorplan.CoreSwitchCell} \
+	${::pnr.floorplan.HorizontalChannelSwitchCell} ${::pnr.floorplan.VerticalChannelSwitchCell}"
+  foreach power_switch $power_switches  {
+    set psw_cell [get_lib_cell -quiet */*${power_switch}*]
+    if {[sizeof_collection $psw_cell] == 1 } {
+      set inpin  [get_lib_pin -quiet -of $psw_cell -filter "name=~${pnr.floorplan.PowerSwitchCtrlPin}"]
+      set outpin [get_lib_pin -quiet -of $psw_cell -filter "name=~${pnr.floorplan.PowerSwitchAckPin}"]
+      #DBG#puts "Exists --> $psw_cell"
+      if {[sizeof_collection $inpin] == 1 && [sizeof_collection $outpin] == 1} {
+      #  set_disable_timing -from ${pnr.floorplan.PowerSwitchCtrlPin} \
+	#	-to ${pnr.floorplan.PowerSwitchAckPin} [get_lib_cell $psw_cell]
+        puts "PARTHL : Disabling \'${pnr.floorplan.PowerSwitchCtrlPin}\' to \'${pnr.floorplan.PowerSwitchAckPin}\' arc for lib cell \'[get_object_name $psw_cell]\'"
+      }
+    }
+  }
+
+  if { ${::pnr.floorplan.EnableIRBlockages} } {
+    puts "PARTHL : Creating IR blocakge."
+    source -e -v /google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/Lajolla_ufs/block/ufs_top/common_scripts/HSIO_IR_Blockage.tcl
+  }
+
+}
+
+
+##
+# syn/synthDftOpt
+##
+
+
+
+##
+# Floorplan vars 
+#
+bbset pnr.floorplan.CoreSwitchXPitch "15.36"
+bbset pnr.floorplan.CoreSwitchYPitch "4"
+
+
+# pnr/placeopt settings
+##
+bbset pnr.placeopt.Exports       {netlist lec_map macro_list spef}
+bbset pnr.clockopt.Exports       {netlist lec_map macro_list spef}
+#bbset pnr.routeopt.Exports       {netlist lec_map macro_list spef}
+#
+
+############# Clock Path cell #########
+bbset pnr.clock.InverterCellList { DCCKNDHD4BWP130HPNPN3P48CPDULVTLL DCCKNDHD6BWP130HPNPN3P48CPDULVTLL DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKND10BWP143M169H3P48CPDULVTLL DCCKNDHZPDD12BWP130HPNPN3P48CPDULVTLL PTINVHDCWD3BWP130HPNPN3P48CPDULVTLL PTINVHDCWD4BWP130HPNPN3P48CPDULVTLL  PTINVHDCWD6BWP130HPNPN3P48CPDULVTLL  }
+# Leaf Specific Inverter Cell List
+bbset pnr.clock.TopInverterCellList { DCCKNDHD4BWP130HPNPN3P48CPDULVTLL DCCKNDHD6BWP130HPNPN3P48CPDULVTLL DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKND10BWP143M169H3P48CPDULVTLL DCCKNDHZPDD12BWP130HPNPN3P48CPDULVTLL PTINVHDCWD3BWP130HPNPN3P48CPDULVTLL PTINVHDCWD4BWP130HPNPN3P48CPDULVTLL  PTINVHDCWD6BWP130HPNPN3P48CPDULVTLL }
+# Leaf specific inverter cell list
+bbset pnr.clock.LeafInverterCellList { DCCKND4BWP143M169H3P48CPDULVTLL DCCKND5BWP143M169H3P48CPDULVTLL DCCKND6BWP143M169H3P48CPDULVTLL  DCCKND8BWP143M169H3P48CPDULVTLL DCCKND10BWP143M169H3P48CPDULVTLL PTINVHDCWD4BWP143M169H3P48CPDULVTLL PTINVHDIWOPT3FGOLD6BWP143M286H3P48CPDULVTLL }
+# List of buffer cells
+bbset pnr.clock.BufferCellList  {DCCKBDHD4BWP130HPNPN3P48CPDULVTLL DCCKBDHD5BWP130HPNPN3P48CPDULVTLL DCCKBDHD6BWP130HPNPN3P48CPDULVTLL DCCKBDHD8BWP130HPNPN3P48CPDULVTLL DCCKBDHD10BWP130HPNPN3P48CPDULVTLL PTBUFFHDCWD3BWP130HPNPN3P48CPDULVTLL PTBUFFHDCWD4BWP130HPNPN3P48CPDULVTLL PTBUFFHDCWD6BWP130HPNPN3P48CPDULVTLL }
+# List of clock gating cells
+bbset pnr.clock.ICGCellList  {CKLNQD4BWP130HPNPN3P48CPDULVTLL CKLNQD5BWP130HPNPN3P48CPDULVTLLL CKLNQD6BWP130HPNPN3P48CPDULVTLL CKLNQD8BWP130HPNPN3P48CPDULVTLL CKLNQD10BWP130HPNPN3P48CPDULVTLL}
+
+#bbset pnr.DelayCells                 {DELAD1BWP143M117H3P48CPDLVTLL DELAD1BWP143M117H3P48CPDLVT DELBD1BWP143M117H3P48CPDLVTLL DELBD1BWP143M117H3P48CPDLVTLL DELCD1BWP143M117H3P48CPDLVTLL DELCD1BWP143M117H3P48CPDLVTLL DELDD1BWP143M117H3P48CPDLVTLL DELDD1BWP143M117H3P48CPDLVTLL DELDD1BWP143M169H3P48CPDLVT DELDD1BWP143M169H3P48CPDLVTLL DELCD1BWP143M169H3P48CPDLVT DELCD1BWP143M169H3P48CPDLVTLL DELBD1BWP143M169H3P48CPDLVT DELBD1BWP143M169H3P48CPDLVTLL DELAD1BWP143M169H3P48CPDLVT DELAD1BWP143M169H3P48CPDLVTLL BUFFD2BWP143M169H3P48CPDLVT BUFFD2BWP143M117H3P48CPDLVT BUFFD4BWP143M169H3P48CPDLVT BUFFD4BWP143M117H3P48CPDLVT  BUFFD2BWP143M169H3P48CPDLVTLL BUFFD3BWP143M117H3P48CPDLVTLL}
+bbset pnr.clock.SwapNonClkCellsToClkCells 1 {PARTHL : Swap NonCk cells to CK cells}
+
+set pnr.SwapNonClkCellsToClkMapFile {/google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/Lajolla_ufs/block/ufs_top/common_scripts/nonck_to_ck_pattern.list}
+bbset scf.gspan_iobudget_opt_mode {1}
+
+bbset fc.PlaceOpt.EnableCCD          {0}
+bbset fc.ClockOpt.EnableCCD          {0}
+bbset fc.RouteOpt.EnableCCD          {0}
+
+
+bbset fc.SwapRTLClkCellsToDominantVT {1}
+
+
+
+# Floorplan specific -->
+
+
+#bbset pnr.innovus.FloorplanPowerSwitchesPreProcessCallback {
+#source /google/gchips/workspace/redondo-asia/tpe/user/parthl/MBU_A0/M2_Trial/20Jan_HSIO_repo_2p0p0/run/debug/Jan20_powerSwitch/power_switch_workaround.tcl
+#}
+
+bbset pnr.floorplan.RectilinearDesign {1}
+bbset pnr.setup.InsertDTCDCells {0}
+bbset pnr.floorplan.InsertFiducialCell {0}
+
+
+bbset pnr.innovus.FloorplanSetupPreCallback {
+        setFPlanMode -snapBlockGrid finfetManufacturing
+	#source -v /google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/MBU/SSWRP_HSIO_S/M2/MBU_A0_SSWRP_HSIO_S_M2_V1_R5_D1_C8_DFT/run/MBU_A0_SSWRP_HSIO_S_M2_V1_R5_D1_C8_DFT_sdc_upf_update/main/syn/floorplan/ESD_place.tcl
+	
+	#source -v /google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/MBU/SSWRP_HSIO_S/sswrp_hsio_s_files/ESD_connection.tcl
+
+}
+
+bbset pnr.innovus.FloorplanPlaceBlockPinsPostCallback {
+	checkPinAssignment
+}
+
+
+
+########################Procs modified ###################
+#bbset  pnr.innovus.FloorplanBoundaryRoutingBlockagesPreCallback {
+#
+#proc floorplan::get_boundary_routing_blockage_width { args } {
+#
+#    if { [llength ${::pnr.floorplan.BoundaryRoutingBlockageWidth}] == 2 } {
+#        lassign ${::pnr.floorplan.BoundaryRoutingBlockageWidth} vwidth hwidth
+#    } elseif { [llength ${::pnr.floorplan.BoundaryRoutingBlockageWidth}] == 1 } {
+#        set hwidth ${::pnr.floorplan.BoundaryRoutingBlockageWidth}
+#        set vwidth ${::pnr.floorplan.BoundaryRoutingBlockageWidth}
+#    } else {
+#        sif::mdebug "Using default core to left and core to bottom settings"
+#        set vwidth [dbGet top.fplan.Core2Left]
+#        set hwidth [dbGet top.fplan.Core2Top]
+#    }
+#
+#    return [list $vwidth $hwidth]
+#
+#}
+#
+#}
+
+#####synthopt settings ######################################################
+
+
+
+#################### synthdftopt settings ################################
+bbset pnr.IOBufferExcludeNetsFile    {/google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/Lajolla_ufs/block/ufs_top/Input_files/IO_Buffer_exclude_nets.tcl }
+
+############################# synthdftopt setting ends #################################################################################
+
+############################ Placeopt setting ######################################################################################
+bbset pnr.fc.PlaceOptInitialOptoPreCallback {
+foreach_in_collection pin [get_pins */NSLEEPIN -hierarchical] { 
+set_false_path -through $pin                                                    
+}
+set_disable_timing HDR39XSINTCWD1BWP130HPNPN3P48CPDSVT -from NSLEEPIN -to NSLEEPOUT
+}
+
+
+bbset pnr.fc.RouteOptInitialPreCallback {
+		set_disable_timing HDR39XSINTCWD1BWP130HPNPN3P48CPDSVT -from NSLEEPIN -to NSLEEPOUT
+		#source -v /google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/MBU/SSWRP_HSIO_S/M3/M3V2_repo_3.5/run/uncertainity.tcl
+}
+
+bbset scf.gspan_iobudget_opt_mode {1}
+
+bbappend sif.fc.OpenDesignPostProcessCallback {
+ if { ${::STAGE}=="synthopt" } { source -v /google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/Lajolla_ufs/block/ufs_top/M3/LAJ_A0_UFS_TOP_M3V2R2D1_RTLDFT/run/isolation_stratergy.tcl}
+}
+
+
+bbappend syn.fc.SynthOptSetupPreCallback {
+
+set_app_options -name mv.cells.mv_allow_buf_on_mv_boundary_nets -value false
+
+
+}
+

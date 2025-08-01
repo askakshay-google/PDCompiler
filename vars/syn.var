@@ -1,0 +1,282 @@
+###########################################################
+bbrecipe_apply setup_fc
+bbrecipe_apply synthdft_fc
+bbset syn.Stages {libgen elaborate synth floorplan synthopt testpoint synthdft synthdftopt} 
+###########################################################
+
+####################################
+##Physical Aware synthesis is disabled
+bbset syn.EnablePhysicalSynthesis 0
+bbset syn.elaborate.InputDEFFile {} 
+#####################################
+
+#########################################
+############DONT USE LISTS###############
+#########################################
+bbconcat syn.DontUseCells { restrict(SvtCells) }
+bbconcat syn.DontUseCells { restrict(UlvtCells) }
+bbconcat syn.DontUseCells { restrict(UlvtllCells) }
+bbconcat syn.DontUseCells { restrict(AllElvtCells) }
+bbconcat syn.DontUseCells { restrict(NppnCells) }
+bbconcat syn.DontUseCells { restrict(PnnpCells) }
+bbconcat syn.DontUseCells { restrict(PpnnCells) }
+bbconcat syn.DontUseCells { restrict(D14PlusCells) }
+bbconcat syn.DontUseCells { restrict(D16PlusCells) }
+bbconcat syn.DontUseCells { restrict(D18PlusCells) }
+bbconcat syn.DontUseCells { restrict(D20PlusCells) }
+bbconcat syn.DontUseCells { restrict(AllD24PlusCells) }
+bbconcat syn.DontUseCells { restrict(D32PlusCells) }
+bbconcat syn.DontUseCells { restrict(D48PlusCells) }
+bbconcat syn.DontUseCells { restrict(NoMbitEquivalentFlopCells) }
+bbconcat pnr.DontUseCells { restrict(UlvtllCells) }
+bbconcat pnr.DontUseCells { restrict(SvtCells) }
+bbconcat pnr.DontUseCells { restrict(UlvtCells) }
+bbconcat pnr.DontUseCells { restrict(AllElvtCells) }
+bbconcat pnr.DontUseCells { restrict(NppnCells) }
+bbconcat pnr.DontUseCells { restrict(PnnpCells) }
+bbconcat pnr.DontUseCells { restrict(PpnnCells) }
+bbconcat pnr.DontUseCells { restrict(D14PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D16PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D18PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D20PlusCells) }
+bbconcat pnr.DontUseCells { restrict(AllD24PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D32PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D48PlusCells) }
+bbconcat pnr.DontUseCells { restrict(NoMbitEquivalentFlopCells) }
+##########################################
+
+#########################################
+###### SCENARIOS : ACTIVE ###############
+#########################################
+#
+#
+#Shouldn't corners be given by block owners?
+
+
+bbset syn.scenarios.Scenarios        {func.tt-NMP-85-cworst_ccworst_t func.ssgnp-NM-0-cworst_ccworst_t func.ssgnp-NM-125-rcworst_ccworst_t shift.ssgnp-NM-0-cworst_ccworst_t func.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-SUD-0-cworst_ccworst_t func.ssgnp-UD-0-cworst_ccworst_t shift.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-UD-125-rcworst_ccworst_t  }
+
+bbset pnr.scenarios.Scenarios        {func.tt-NMP-85-cworst_ccworst_t func.ssgnp-NM-0-cworst_ccworst_t func.ssgnp-NM-125-rcworst_ccworst_t func.ssgnp-NM-125-rcworst_ccworst func.ssgnp-NM-m25-cworst_ccworst func.ssgnp-NM-m25-rcworst_ccworst func.ffgnp-NM-125-rcworst_ccworst func.ffgnp-NM-125-cworst_ccworst func.ffgnp-NM-m25-rcworst_ccworst func.ffgnp-NM-m25-cworst_ccworst shift.ssgnp-NM-0-cworst_ccworst_t shift.ffgnp-NM-125-rcworst_ccworst shift.ssgnp-NM-m25-cworst_ccworst shift.ffgnp-NM-125-cworst_ccworst shift.ffgnp-NM-m25-rcworst_ccworst func.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-SUD-0-cworst_ccworst_t func.ssgnp-UUD-125-cworst_ccworst func.ffgnp-NM-125-cbest_ccbest func.ffgnp-NM-125-rcbest_ccbest func.ssgnp-UUD-0-rcworst_ccworst func.ssgnp-UD-0-cworst_ccworst_t shift.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-UUD-0-rcworst_ccworst func.ssgnp-UUD-0-cworst_ccworst func.ssgnp-UD-125-rcworst_ccworst_t shift.ssgnp-NM-125-cworst_ccworst_t shift.ssgnp-UUD-0-cworst_ccworst}
+
+
+bbset syn.scenarios.status.Default {
+	{func.tt-NMP-85-cworst_ccworst_t         {leakage dynamic active}}
+	{func.ssgnp-NM-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UUD-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-125-rcworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-UUD-0-cworst_ccworst_t      {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-125-cworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+}
+ 
+bbset pnr.scenarios.status.Default {
+	{func.tt-NMP-85-cworst_ccworst_t         {leakage dynamic active}}
+	{func.ssgnp-NM-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UUD-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-125-rcworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-UUD-0-cworst_ccworst_t      {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-125-cworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+} 
+
+#########################################
+bbappend sif.fc.ApplyCommonSettingsPostCallback {
+        if { $STAGE != "elaborate" } {  	
+		##From GSPAN : https://buganizer.corp.google.com/issues/421349834#comment4 
+		set_attribute [get_cells * -hierarchical -filter "full_name =~ *gspan_sender_subsys" -nocase] ungroup false
+		set_ungroup [get_cells * -hierarchical -filter "full_name =~ *gspan_sender_subsys" -nocase] false
+		}
+}
+
+bbset pnr.placeopt.EnableGSPANOutClockSettings    {0}
+
+#################
+## To disable/enable 0/1 exit on link error
+bbset syn.elaborate.ExitOnLinkError {1}
+##To take GSPAN & NONGSPAN IO BUF placement & respect voltage areas - the add_buffer happens at syn/synthdftopt##
+##By default this below var was 0 and it caused LS_INST_MISSING violations##
+bbset fc.AddBufferRespectVoltageArea 1
+####When this below var is high then it brings congestion - so made it leakage
+bbset syn.TotalPowerOptimizationEffort {leakage}  {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+bbset pnr.TotalPowerOptimizationEffort {leakage}  {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+##Enabling as per : https://drive.google.com/file/d/1v7St97cGmaNbCrKoiyEkNmIMeP0BTUd-/view?usp=sharing&resourcekey=0--a-L3p12hOlZWPjy5yz1YA ##
+bbset fc.EnableMegaSwitch {1}
+bbset syn.synthopt.RecreatePathGroups {1}
+
+
+####
+bbappend sif.fc.ExecuteStagePreCallback {
+	###To disable Offset Latency Calculations on clk div clk_incheckpin###
+	if { (${::STAGE} in {synthopt synthdft synthdftopt placeopt}) } {
+		if { [sizeof_collection [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] ] } {
+		set save_mode [get_object_name [current_mode]]  
+        	foreach_in_collection e [get_mode] { 
+        	    current_mode $e
+        	    puts "Setting balance point false for clk_incheckpoint for mode [get_object_name $e]"
+        	    set_clock_balance_points -balance_points [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] -consider_for_balancing false 
+ 
+        	 }
+    		current_mode $save_mode
+		##setting dont ecgl on the clk_in & clk_incheckpins of div50 cells
+		set_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency true
+		get_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency > li		
+		}
+	}
+
+	if { $::STAGE == "clock" } {
+		if { [sizeof_collection [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] ] } {
+		##Resetting dont ecgl on the clk_in & clk_incheckpins of div50 cells post placeopt
+		set save_mode [get_object_name [current_mode]]  
+        	foreach_in_collection e [get_mode] { 
+        		current_mode $e
+			set_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency false
+			get_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency > li.ck
+			puts "Setting balance point true for clk_incheckpoint for mode [get_object_name $e]"
+        		set_clock_balance_points -balance_points [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] -consider_for_balancing true 
+		}
+		current_mode $save_mode
+		}
+	}
+	###
+
+	###For improving the MBIT %###
+	if { (${::STAGE} == "synthdftopt") } {
+	    set_app_options -name compile.flow.enable_multibit_debanking -value false ;
+	}
+	if { (${::STAGE} == "placeopt") } {
+	    set_app_options -name compile.flow.enable_multibit_debanking -value true ; ### set it to true after initial_opto 
+	}
+	###
+	
+	###For Tie cell insertion during synthdftopt in FC###
+	###https://b.corp.google.com/issues/391500220#comment3###
+	if { (${::STAGE} == "synthdftopt") } {
+		set_app_options -name opt.tie_cell.check_frontend_restrictions -value true
+	}
+	###	
+}
+####
+
+
+
+##############################################
+#############clock cell usage list############
+##############################################
+bbset pnr.clock.InverterCellList     {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {List of inverter cells}
+bbset pnr.clock.TopInverterCellList  {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf Specific Inverter Cell List}
+bbset pnr.clock.LeafInverterCellList {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf specific inverter cell list}
+bbset pnr.clock.BufferCellList       {CKBDHD5BWP130HPNPN3P48CPDULVTLL DCCKBDHD6BWP130HPNPN3P48CPDULVTLL DCCKBDHD8BWP130HPNPN3P48CPDULVTLL  DCCKBDHD10BWP130HPNPN3P48CPDULVTLL DCCKBDHD12BWP130HPNPN3P48CPDULVTLL DCCKBDHD14BWP130HPNPN3P48CPDULVTLL} {List of buffer cells}
+bbset pnr.clock.ICGCellList          {CKLNQD3BWP130HPNPN3P48CPDULVTLL CKLNQD4BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD4BWP130HPNPN3P48CPDULVTLL  CKLNQD5BWP130HPNPN3P48CPDULVTLL CKLNQD6BWP130HPNPN3P48CPDULVTLL CKLNQD8BWP130HPNPN3P48CPDULVTLL  CKLNQOPTBBD8BWP130HPNPN3P48CPDULVTLL CKLNQD10BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD10BWP130HPNPN3P48CPDULVTLL  CKLNQD12BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD12BWP130HPNPN3P48CPDULVTLL} {List of clock gating cells}
+##############################################
+
+
+#########################################
+###https://buganizer.corp.google.com/issues/394850780#comment7###
+####To Improve RTL banking####
+#########################################
+bbappend sif.fc.ExecuteStagePreCallback {
+        if { (${::STAGE} in {synth synthopt synthdftopt}) } {  
+		set_app_options -name compile.seqmap.identify_shift_registers -value false
+		set_app_options -name compile.flow.enable_incremental_multibit_banking -value true
+		set_app_options -name compile.flow.enable_multibit -value true
+		set_app_options -name compile.flow.enable_multibit_debanking -value false
+		set_app_options -name compile.flow.enable_rtl_multibit_banking -value true
+		set_app_options -name compile.flow.enable_rtl_multibit_debanking -value false
+		set_app_options -name compile.flow.enable_second_pass_multibit_banking -value true
+		set_app_options -name compile.seqmap.prefer_registers_with_multibit_equivalent -value true
+	}
+}
+
+
+bbappend sif.fc.ExecuteStagePreCallback {
+	###For improving the MBIT %###
+	if { (${::STAGE} == "synthdftopt") } {
+	   set_app_options -name multibit.banking.maximum_allowable_distance -value 75 
+	}
+	if { (${::STAGE} == "placeopt") } {
+	    set_app_options -name multibit.banking.maximum_allowable_distance -value 75 
+	}
+}
+######################################
+
+
+###To improve clock latency & skew from kishor babu secip###
+bbappend pnr.fc.ClockBuildClockPreCallback {
+        if { ${::STAGE} == "clock" } {
+    		##derive auto exception, CTS-967
+    		set_app_options -list {cts.common.auto_exception_disable_self_arc true}
+    		set_app_options -name cts.common.auto_exception_disable_parallel_arc -value true
+    		reset_app_options cts.common.auto_skew_target_clock_period_percentage
+    		set_app_options -name cts.common.enable_auto_skew_target_for_local_skew -value false
+    		set_app_options -name cts.optimize.improvement_mode_version -value EIM_20250101
+    		set_app_options -list {cts.optimize.enable_improvement_mode skew}
+    		set_app_options -name cts.compile.size_pre_existing_cell_to_cts_references -value true
+    		set_app_options -name cts.icg.latency_driven_cloning -value true
+    		set_app_options -name cts.compile.enable_cell_relocation -value all
+    		##for CTS-080 warning
+    		set_app_options -name cts.buffering.ignore_dc_generic -value true
+    		set all_other_modes [remove_from_collection [get_modes *]  [get_modes func.*cworst_ccworst_t]]
+    		set_clock_tree_options -copy_exceptions_across_modes -from_mode func.*cworst_ccworst_t -to_mode [get_object_name $all_other_modes]
+    		##set_clock_balance_points -balance_points [get_pins -hier -phys */CHAIN_lockup_latch*/E] -consider_for_balancing false
+			
+			if { [sizeof_collection [get_pins -hier -phys */clk_incheckpin*]] } {
+    		set save_mode [get_object_name [current_mode]]
+    		foreach_in_collection e [get_mode] {
+    		    current_mode $e
+    		    puts "Setting balance point false for clk_incheckpoint1 for mode [get_object_name $e]"
+    		    set_disable_timing [get_lib_timing_arcs -from [get_lib_pins -of_objects [get_pins -hier -phys */clk_incheckpin*]] -filter "sense=~*clock_tree*"]
+    		}
+    		current_mode $save_mode
+			}
+	}
+}
+###
+
+
+
+bbset syn.TotalPowerOptimizationEffort {high}                                                          {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+bbset syn.Cores                      {16}                                                             {Cores for each stage}
+bbset syn.RAM                        {128000}                                                         {RAM for each run}
+bbset syn.ExportCores                {16}                                                             {Cores for each stage}
+bbset syn.ExportRAM                  {128000}                                                         {RAM for each run}
+#Eg: set_db [current_design] .lp_clock_gating_auto_path_adjust_fixed_delay [expr ${min_period} * [expr [expr ${::syn.synth.LpCGFixedDelayPercentage} / 100.0] * 1000.0]
+bbset syn.IncrementalSDC             {5% uncertainity of each clock, also , clock latency on icg en paths}                                                               {Reading incremental sdc at each stage to control uncertainity}
+#Enabling this will increase addl cell count. Might not be needed for smaller blocks
+bbset syn.EnableSelfGating           {0}                                                              {In FC enable self gating}
+bbset syn.EnableAggresiveSelfGating  {0}                                                              {In FC enable enable aggressive self gating}
+bbset syn.PreventSelfGatingOnShiftRegs {0}                                                              {In FC to disable self gate logic insertion on shift registers based on coverage impact wrt power benefits}
+
+bbset syn.EnableMultiClockGating     {true}                                                          {Enable Multi level Clock Gating}
+bbset syn.EnableSequentialClockGating {true}                                                          {Enable Sequential Clock Gating}
+bbset syn.EnableSeqBoundaryOpt       {true}                                                          {To enable sequential boundary optimisation}
+#This is currently a genus proc, we need to implement the same in FC also
+bbset syn.EnableDynamicPincap        {false}                                                          {To enable dynamic pin cap modeling}
+bbset syn.synth.MBFFExcludeRegsWithExceptions {true}                                                           {To exclude the mbit merging on cells with exceptions}
+bbset syn.synth.MBFFIgnoreExceptions {PATH_GROUP ANNOTATION CLOCK_LATENCY LATENCY_OFFSET}             {To ignore exceptions when banking and debanking multi-bit flops}
+bbset syn.synth.MBFFIgnoreMatchSeqSyncCTRL {false}                                                          {To ignore exact match on seq control signal}
+bbset syn.synth.MBFFAllowUnusedBit   {True}                                                           {To allow unused bit during mbit merging}
+bbset syn.synth.EnableIsoLvlMerging  {1}                                                              {To enable multi-bit merging of power cells level shifters and isolators}
+bbset syn.synth.TNSOpto              {true}                                                           {Forces the tool to consider all the endpoints for the TNS optimization}
+bbset syn.synth.HardPreservesOnDFTModules {false}                                                          {To prevent complete optimisation of dft modules}
+
+#To be experimented
+bbset syn.synth.LPClockGatingMinFlops {3}                                                              {Min flops for Clock gating}
+bbset syn.synth.LPClockGatingMaxFlops {16}                                                               {Max flops for LP clock gating}
+bbset syn.synth.ClockGatingMaxFanout {16}                                                             {Clock gating max fanout}
+bbset syn.synth.ClockGatingMinBitwidth {4}                                                              {Clock gating min bit width}
+bbset syn.synth.ClockGatingNumLevels {8}                                                              {Clock gating max number of levels}
+
+bbset syn.synth.DesignPowerEffort    {high}                                                            {Design power effort}
+bbset syn.synth.LeakageToDynamicRatio {0.5}                                                            {Leakage to dynamic ratio}
+
+bbset syn.synthopt.Cores             {32}                                                             {no of cores for the run}
+bbset syn.fc.CompileAutoUngroup      {false}                                                          {FC Lec compliant optimization, auto ungroup control}
+bbset syn.fc.CompileBoundaryOptimization {true}                                                           {FC Lec compliant optimization, boundary optimization control}
+bbset syn.fc.CompileEnableOutputInversion {true}                                                           {FC Lec compliant optimization, output inversion control}
+#pdd has less leakage, didn't give much benefit to  Suni's GDMC
+#bbset syn.synth.ClockGateCellList    {CKLNQZPDD3BWP130HPNPN3P48CPDULVT CKLNQZPDD4BWP130HPNPN3P48CPDULVT CKLNQZPDD5BWP130HPNPN3P48CPDULVT CKLNQZPDD6BWP130HPNPN3P48CPDULVT  CKLNQZPDD8BWP130HPNPN3P48CPDULVT CKLNQZPDD10BWP130HPNPN3P48CPDULVT} {# No Comment}  
+bbset syn.synth.ClockGateCellList    {CKLNQZPDD3BWP130HPNPN3P48CPDULVTLL CKLNQZPDD4BWP130HPNPN3P48CPDULVTLL CKLNQZPDD5BWP130HPNPN3P48CPDULVTLL CKLNQZPDD6BWP130HPNPN3P48CPDULVTLL  CKLNQZPDD8BWP130HPNPN3P48CPDULVTLL CKLNQZPDD10BWP130HPNPN3P48CPDULVTLL} {# No Comment}  
+
+
+################# END OF COMMON SYN VAR ######################

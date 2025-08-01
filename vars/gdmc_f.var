@@ -1,0 +1,953 @@
+###########################################################
+bbrecipe_apply setup_fc
+bbrecipe_apply synthdft_fc
+#bbrecipe_apply "syn/synthdft"
+bbset syn.Stages {libgen elaborate synth floorplan synthopt testpoint synthdft synthdftopt} 
+###########################################################
+
+#####synthdft module to be used##
+##bbset Modules.Tool.synthdft {tools/synthdft-lajolla/4.0.0}
+
+####################################
+##Physical Aware synthesis is disabled
+bbset syn.EnablePhysicalSynthesis 0
+bbset syn.elaborate.InputDEFFile {} 
+#####################################
+
+
+#########################################
+############DONT USE LISTS###############
+#########################################
+bbns dontuse {
+   bbset MyHighHoldFlopListCells {{.*DF.*CPDLVTLL\$}}
+}
+bbconcat syn.DontUseCells { restrict(SvtCells) }
+bbconcat syn.DontUseCells { restrict(UlvtCells) }
+bbconcat syn.DontUseCells { restrict(UlvtllCells) }
+bbconcat syn.DontUseCells { restrict(AllElvtCells) }
+bbconcat syn.DontUseCells { restrict(NppnCells) }
+bbconcat syn.DontUseCells { restrict(PnnpCells) }
+bbconcat syn.DontUseCells { restrict(PpnnCells) }
+bbconcat syn.DontUseCells { restrict(D14PlusCells) }
+bbconcat syn.DontUseCells { restrict(D16PlusCells) }
+bbconcat syn.DontUseCells { restrict(D18PlusCells) }
+bbconcat syn.DontUseCells { restrict(D20PlusCells) }
+bbconcat syn.DontUseCells { restrict(AllD24PlusCells) }
+bbconcat syn.DontUseCells { restrict(D32PlusCells) }
+bbconcat syn.DontUseCells { restrict(D48PlusCells) }
+bbconcat syn.DontUseCells { restrict(MyHighHoldFlopListCells) }
+bbconcat syn.DontUseCells { restrict(NoMbitEquivalentFlopCells) }
+bbconcat pnr.DontUseCells { restrict(UlvtllCells) }
+bbconcat pnr.DontUseCells { restrict(SvtCells) }
+bbconcat pnr.DontUseCells { restrict(UlvtCells) }
+bbconcat pnr.DontUseCells { restrict(AllElvtCells) }
+bbconcat pnr.DontUseCells { restrict(NppnCells) }
+bbconcat pnr.DontUseCells { restrict(PnnpCells) }
+bbconcat pnr.DontUseCells { restrict(PpnnCells) }
+bbconcat pnr.DontUseCells { restrict(D14PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D16PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D18PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D20PlusCells) }
+bbconcat pnr.DontUseCells { restrict(AllD24PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D32PlusCells) }
+bbconcat pnr.DontUseCells { restrict(D48PlusCells) }
+bbconcat pnr.DontUseCells { restrict(MyHighHoldFlopListCells) }
+bbconcat pnr.DontUseCells { restrict(NoMbitEquivalentFlopCells) }
+##########################################
+
+
+#########################################
+###### SCENARIOS : ACTIVE ###############
+#########################################
+bbset syn.scenarios.Scenarios        {func.tt-NMP-85-cworst_ccworst_t func.ssgnp-NM-0-cworst_ccworst_t func.ssgnp-NM-125-rcworst_ccworst_t func.ssgnp-NM-125-rcworst_ccworst func.ssgnp-NM-m25-cworst_ccworst func.ssgnp-NM-m25-rcworst_ccworst func.ffgnp-NM-125-rcworst_ccworst func.ffgnp-NM-125-cworst_ccworst func.ffgnp-NM-m25-rcworst_ccworst func.ffgnp-NM-m25-cworst_ccworst shift.ssgnp-NM-0-cworst_ccworst_t shift.ffgnp-NM-125-rcworst_ccworst shift.ssgnp-NM-m25-cworst_ccworst shift.ffgnp-NM-125-cworst_ccworst shift.ffgnp-NM-m25-rcworst_ccworst func.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-SUD-0-cworst_ccworst_t func.ssgnp-UUD-125-cworst_ccworst func.ffgnp-NM-125-cbest_ccbest func.ffgnp-NM-125-rcbest_ccbest func.ssgnp-UUD-0-rcworst_ccworst func.ssgnp-UD-0-cworst_ccworst_t shift.ssgnp-UUD-0-cworst_ccworst_t func.ssgnp-UUD-0-rcworst_ccworst func.ssgnp-UUD-0-cworst_ccworst func.ssgnp-UD-125-rcworst_ccworst_t shift.ssgnp-NM-125-cworst_ccworst_t shift.ssgnp-UUD-0-cworst_ccworst}
+
+bbset pnr.scenarios.Scenarios {[bbget .syn.scenarios.Scenarios]}
+
+bbset syn.scenarios.status.Default {
+	{func.tt-NMP-85-cworst_ccworst_t         {leakage dynamic active}}
+	{func.ssgnp-NM-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UUD-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-0-cworst_ccworst_t        {setup active max_trans max_cap min_cap}}
+	{func.ssgnp-UD-125-rcworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-0-cworst_ccworst_t       {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-UUD-0-cworst_ccworst_t      {setup active max_trans max_cap min_cap}}
+	{shift.ssgnp-NM-125-cworst_ccworst_t     {setup active max_trans max_cap min_cap}}
+} 
+
+bbset pnr.scenarios.status.Default {[bbget .syn.scenarios.status.Default]}
+
+#########################################
+
+
+#################
+## To disable/enable 0/1 exit on link error
+bbset syn.elaborate.ExitOnLinkError {1}
+#################
+
+
+#bbset DkVersion                      {v1.0_2025-05-27}                                                {dk version to load}
+#bbset MdkVersion                     {v1.0_2025-05-15}                                                {mdk version to load}
+#bbset PdkVersion                     {2025-05-15}						      {pdk version to load}
+
+
+bbset syn.fc.CompileAutoUngroup      {false}                                                           {FC Lec compliant optimization, auto ungroup control}
+
+
+##To take GSPAN & NONGSPAN IO BUF placement & respect voltage areas - the add_buffer happens at syn/synthdftopt##
+##By default this below var was 0 and it caused LS_INST_MISSING violations##
+bbset fc.AddBufferRespectVoltageArea 1
+
+####When this below var is high then it brings congestion - so made it leakage
+##bbset syn.TotalPowerOptimizationEffort {leakage}  {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+##bbset pnr.TotalPowerOptimizationEffort {leakage}  {Effort for FC power optimization (standard|high|ultra|none|leakage)}
+##Enabling as per : https://drive.google.com/file/d/1v7St97cGmaNbCrKoiyEkNmIMeP0BTUd-/view?usp=sharing&resourcekey=0--a-L3p12hOlZWPjy5yz1YA ##
+bbset fc.EnableMegaSwitch {1}
+bbset syn.synthopt.RecreatePathGroups {1}
+
+
+####
+bbappend sif.fc.ExecuteStagePreCallback {
+	###To disable Offset Latency Calculations on clk div clk_incheckpin###
+	if { [sizeof_collection [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] ] } {
+	if { (${::STAGE} in {synthopt synthdft synthdftopt placeopt}) } {
+		set save_mode [get_object_name [current_mode]]  
+        	foreach_in_collection e [get_mode] { 
+        	    current_mode $e
+        	    puts "Setting balance point false for clk_incheckpoint for mode [get_object_name $e]"
+        	    set_clock_balance_points -balance_points [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] -consider_for_balancing false 
+ 
+        	 }
+    		current_mode $save_mode
+		##setting dont ecgl on the clk_in & clk_incheckpins of div50 cells
+		set_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency true
+		get_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency > li		
+	}
+	if { $::STAGE == "clock" } {
+		##Resetting dont ecgl on the clk_in & clk_incheckpins of div50 cells post placeopt
+		set save_mode [get_object_name [current_mode]]  
+        	foreach_in_collection e [get_mode] { 
+        		current_mode $e
+			set_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency false
+			get_attribute [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] dont_estimate_clock_latency > li.ck
+			puts "Setting balance point true for clk_incheckpoint for mode [get_object_name $e]"
+        		set_clock_balance_points -balance_points [get_pins -hier -phys *SIZEONLY_clk_div50_dp/clk_incheckpin*] -consider_for_balancing true 
+		}
+		current_mode $save_mode
+	}
+	}
+	###
+
+	###For improving the MBIT %###
+	if { ($STAGE == "synthdftopt") } {
+	    set_app_options -name compile.flow.enable_multibit_debanking -value false ;
+	}
+	if { ($STAGE == "placeopt") } {
+	    set_app_options -name compile.flow.enable_multibit_debanking -value true ; ### set it to true after initial_opto 
+	}
+	###
+	
+	###For Tie cell insertion during synthdftopt in FC###
+	###https://b.corp.google.com/issues/391500220#comment3###
+	if { ($STAGE == "synthdftopt") } {
+		set_app_options -name opt.tie_cell.check_frontend_restrictions -value true
+	}
+	###	
+}
+####
+
+
+
+##############################################
+#############clock cell usage list############
+##############################################
+bbset pnr.clock.InverterCellList     {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {List of inverter cells}
+bbset pnr.clock.TopInverterCellList  {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf Specific Inverter Cell List}
+bbset pnr.clock.LeafInverterCellList {CKND3BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNDHD5BWP130HPNPN3P48CPDULVTLL CKNDHD6BWP130HPNPN3P48CPDULVTLL  DCCKNDHD8BWP130HPNPN3P48CPDULVTLL DCCKNDHD10BWP130HPNPN3P48CPDULVTLL DCCKNDHD12BWP130HPNPN3P48CPDULVTLL} {Leaf specific inverter cell list}
+bbset pnr.clock.BufferCellList       {CKBDHD5BWP130HPNPN3P48CPDULVTLL DCCKBDHD6BWP130HPNPN3P48CPDULVTLL DCCKBDHD8BWP130HPNPN3P48CPDULVTLL  DCCKBDHD10BWP130HPNPN3P48CPDULVTLL DCCKBDHD12BWP130HPNPN3P48CPDULVTLL DCCKBDHD14BWP130HPNPN3P48CPDULVTLL} {List of buffer cells}
+bbset pnr.clock.ICGCellList          {CKLNQD3BWP130HPNPN3P48CPDULVTLL CKLNQD4BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD4BWP130HPNPN3P48CPDULVTLL  CKLNQD5BWP130HPNPN3P48CPDULVTLL CKLNQD6BWP130HPNPN3P48CPDULVTLL CKLNQD8BWP130HPNPN3P48CPDULVTLL  CKLNQOPTBBD8BWP130HPNPN3P48CPDULVTLL CKLNQD10BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD10BWP130HPNPN3P48CPDULVTLL  CKLNQD12BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBD12BWP130HPNPN3P48CPDULVTLL} {List of clock gating cells}
+##############################################
+
+
+#########################################
+###https://buganizer.corp.google.com/issues/394850780#comment7###
+####To Improve RTL banking####
+#########################################
+bbappend sif.fc.ExecuteStagePreCallback {
+        if { (${::STAGE} in {synth synthopt synthdftopt}) } {  
+		set_app_options -name compile.seqmap.identify_shift_registers -value false
+		set_app_options -name compile.flow.enable_incremental_multibit_banking -value true
+		set_app_options -name compile.flow.enable_multibit -value true
+		set_app_options -name compile.flow.enable_multibit_debanking -value false
+		set_app_options -name compile.flow.enable_rtl_multibit_banking -value true
+		set_app_options -name compile.flow.enable_rtl_multibit_debanking -value false
+		set_app_options -name compile.flow.enable_second_pass_multibit_banking -value true
+		set_app_options -name compile.seqmap.prefer_registers_with_multibit_equivalent -value true
+	}
+}
+
+bbappend syn.fc.SynthPreCallback {
+		set_app_options -name compile.seqmap.identify_shift_registers -value false
+		set_app_options -name compile.flow.enable_incremental_multibit_banking -value true
+		set_app_options -name compile.flow.enable_multibit -value true
+		set_app_options -name compile.flow.enable_multibit_debanking -value false
+		set_app_options -name compile.flow.enable_rtl_multibit_banking -value true
+		set_app_options -name compile.flow.enable_rtl_multibit_debanking -value false
+		set_app_options -name compile.flow.enable_second_pass_multibit_banking -value true
+		set_app_options -name compile.seqmap.prefer_registers_with_multibit_equivalent -value true
+}
+
+bbappend syn.fc.SynthOptLogicOptoPreCallback {
+		set_app_options -name compile.seqmap.identify_shift_registers -value false
+		set_app_options -name compile.flow.enable_incremental_multibit_banking -value true
+		set_app_options -name compile.flow.enable_multibit -value true
+		set_app_options -name compile.flow.enable_multibit_debanking -value false
+		set_app_options -name compile.flow.enable_rtl_multibit_banking -value true
+		set_app_options -name compile.flow.enable_rtl_multibit_debanking -value false
+		set_app_options -name compile.flow.enable_second_pass_multibit_banking -value true
+		set_app_options -name compile.seqmap.prefer_registers_with_multibit_equivalent -value true
+}
+
+bbappend sif.fc.ExecuteStagePreCallback {
+	###For improving the MBIT %###
+	if { ($STAGE == "synthdftopt") } {
+	   set_app_options -name multibit.banking.maximum_allowable_distance -value 75 
+	}
+	if { ($STAGE == "placeopt") } {
+	    set_app_options -name multibit.banking.maximum_allowable_distance -value 75 
+	}
+	###
+}
+######################################
+
+
+###To improve clock latency & skew from kishor babu secip###
+bbappend pnr.fc.ClockBuildClockPreCallback {
+        if { $STAGE == "clock" } {
+    		##derive auto exception, CTS-967
+    		set_app_options -list {cts.common.auto_exception_disable_self_arc true}
+    		set_app_options -name cts.common.auto_exception_disable_parallel_arc -value true
+    		reset_app_options cts.common.auto_skew_target_clock_period_percentage
+    		set_app_options -name cts.common.enable_auto_skew_target_for_local_skew -value false
+    		set_app_options -name cts.optimize.improvement_mode_version -value EIM_20250101
+    		set_app_options -list {cts.optimize.enable_improvement_mode skew}
+    		set_app_options -name cts.compile.size_pre_existing_cell_to_cts_references -value true
+    		set_app_options -name cts.icg.latency_driven_cloning -value true
+    		set_app_options -name cts.compile.enable_cell_relocation -value all
+    		##for CTS-080 warning
+    		set_app_options -name cts.buffering.ignore_dc_generic -value true
+    		set all_other_modes [remove_from_collection [get_modes *]  [get_modes func.*cworst_ccworst_t]]
+    		set_clock_tree_options -copy_exceptions_across_modes -from_mode func.*cworst_ccworst_t -to_mode [get_object_name $all_other_modes]
+    		##set_clock_balance_points -balance_points [get_pins -hier -phys */CHAIN_lockup_latch*/E] -consider_for_balancing false
+			
+			if { [sizeof_collection [get_pins -hier -phys */clk_incheckpin*]] } {
+    		set save_mode [get_object_name [current_mode]]
+    		foreach_in_collection e [get_mode] {
+    		    current_mode $e
+    		    puts "Setting balance point false for clk_incheckpoint1 for mode [get_object_name $e]"
+    		    set_disable_timing [get_lib_timing_arcs -from [get_lib_pins -of_objects [get_pins -hier -phys */clk_incheckpin*]] -filter "sense=~*clock_tree*"]
+    		}
+    		current_mode $save_mode
+			}
+	}
+}
+###
+
+
+
+
+####FC Tool Version override, Since the 20241020 was coming from block.synthdft.var - added on 28may2025
+##bbset Modules.Tool.fc {tools/synopsys/fc/V-2023.12-SP5-5-T-20250325}
+
+
+#########################################
+#############For - Elaborate#############
+#########################################
+bbset syn.elaborate.RTLParsingVars   {DTA_RELEASE_PROJECT_TOP /google/gchips/ipreleases/lajolla_infra/sswrp_gdmc/LAJ_A0_SSWRP_GDMC_M4_V3_R2_D1_RTLDFT/fe_release/}
+bbset syn.WatermarkRTLTag           {LAJ_A0_SSWRP_GDMC_M4_V3_R2_D1_RTLDFT} 
+bbset syn.elaborate.InputUPFFile {/google/gchips/ipreleases/lajolla_infra/sswrp_gdmc/LAJ_A0_SSWRP_GDMC_M4_V3_R2_D1_RTLDFT/fe_release/sswrp_gdmc/dft_upf/sswrp_gdmc/sswrp_gdmc.upf}
+bbset syn.elaborate.RTLFileList {/google/gchips/ipreleases/lajolla_infra/sswrp_gdmc/LAJ_A0_SSWRP_GDMC_M4_V3_R2_D1_RTLDFT/fe_release/sswrp_gdmc/dft_rtl/synth/sswrp_gdmc.vf} 
+#########################################
+
+
+##############################################
+################ MMMC SETTINGS ###############
+##############################################
+bbset mmmc.mode.modes {func shift} ; # Change based on the design
+bbset mmmc.mode.func.synSdcs {/google/gchips/ipreleases/lajolla_infra/sswrp_gdmc/LAJ_A0_SSWRP_GDMC_M4_V3_R2_D1_RTLDFT/fe_release/sswrp_gdmc/dft_sdc/sswrp_gdmc.mission.tcl} 
+bbset mmmc.mode.shift.synSdcs {/google/gchips/ipreleases/lajolla_infra/sswrp_gdmc/LAJ_A0_SSWRP_GDMC_M4_V3_R2_D1_RTLDFT/fe_release/sswrp_gdmc/dft_sdc/sswrp_gdmc.shift.tcl}
+bbset mmmc.mode.func.pnrSdcs {/google/gchips/ipreleases/lajolla_infra/sswrp_gdmc/LAJ_A0_SSWRP_GDMC_M4_V3_R2_D1_RTLDFT/fe_release/sswrp_gdmc/dft_sdc/sswrp_gdmc.mission.tcl}
+bbset mmmc.mode.shift.pnrSdcs {/google/gchips/ipreleases/lajolla_infra/sswrp_gdmc/LAJ_A0_SSWRP_GDMC_M4_V3_R2_D1_RTLDFT/fe_release/sswrp_gdmc/dft_sdc/sswrp_gdmc.shift.tcl} 
+
+bbns mmmc {
+  bbns vdomain {
+    bbset vdomains "core IO18 IO12 IO08 IO04 memory"
+    bbns memory {
+        bbset rail  "VDD_STBY_M$"    
+    }
+    bbns core {
+        bbset rail  "VDD_AOSS_AON$|VVDD_GDMC_M55$|VDD_AOSS_OD$"    
+    }
+    bbns IO18 {
+            bbset rail "AVDD18_OTP2$"
+    }
+    bbns IO12 {
+        bbset rail "VDDQ12_GDMC$|PADSS_GDMC_BK_ESD12B_cut1$|PADSS_GDMC_BK_ESD12B_cut2$|PADSS_GDMC_BK_ESD12_cut1$|PADSS_GDMC_BK_ESD12_cut2$|PADSS_GDMC_BK_ESDB_cut1$|PADSS_GDMC_BK_ESDB_cut2$"
+    }
+    bbns IO08 {
+        bbset rail "VDDQ08_GDMC$"
+    }
+    bbns IO04 {
+        bbset rail "VDDQ04_GDMC$"
+    }
+  }
+ bbns scenarios {
+        #bbset constraints {
+        #    {apply "*.ssgnp-NM-*"  {core 0p675} {IO18 1p620} {IO12 1p080} {IO08 0p715} {IO04 0p450} {memory 0p675}}
+        #    {apply "*.ffgnp-NM-*"  {core 0p825} {IO18 1p980} {IO12 1p320} {IO08 0p890} {IO04 0p450} {memory 0p825}}
+        #    {apply "*.ssgnp-UD-*"  {core 0p585} {IO18 1p620} {IO12 1p080} {IO08 0p715} {IO04 0p450} {memory 0p675}}
+        #    {apply "*.ssgnp-SUD-*" {core 0p540} {IO18 1p620} {IO12 1p080} {IO08 0p715} {IO04 0p450} {memory 0p675}}
+        #    {apply "*.ssgnp-UUD-*" {core 0p475} {IO18 1p620} {IO12 1p080} {IO08 0p715} {IO04 0p450} {memory 0p675}}
+        #    {apply "*.tt-NMP-*" {core 0p750} {IO18 1p710} {IO12 1p200} {IO08 0p800} {IO04 0p450} {memory 0p750}}
+        #    {create "*.*"}
+        #}
+        ####The libgen flow tends to take the least voltage specified in any rail. when we tried to set IO04 to 0.45 then all std cells lib ndm were generated with 0.45 NM ssgnp libs. To avoid this overriden IO04 to core rail voltage values####
+        bbset constraints {
+            {apply "*.ssgnp-NM-*"  {core 0p675} {IO18 1p620} {IO12 1p080} {IO08 0p715} {IO04 0p675} {memory 0p675}}
+            {apply "*.ffgnp-NM-*"  {core 0p825} {IO18 1p980} {IO12 1p320} {IO08 0p890} {IO04 0p825} {memory 0p825}}
+            {apply "*.ssgnp-UD-*"  {core 0p585} {IO18 1p620} {IO12 1p080} {IO08 0p715} {IO04 0p585} {memory 0p675}}
+            {apply "*.ssgnp-SUD-*" {core 0p540} {IO18 1p620} {IO12 1p080} {IO08 0p715} {IO04 0p540} {memory 0p675}}
+            {apply "*.ssgnp-UUD-*" {core 0p475} {IO18 1p620} {IO12 1p080} {IO08 0p715} {IO04 0p475} {memory 0p675}}
+            {apply "*.tt-NMP-*" {core 0p750} {IO18 1p710} {IO12 1p200} {IO08 0p800} {IO04 0p750} {memory 0p750}}
+            {create "*.*"}
+        }
+    }
+}
+###############################################
+
+
+## use to include standard cell libraries match this regexp
+bbset syn.MacroLibraryFileInclude {.*ts1n02pmbsvtb4096x128m4qwzhodxcp.*|.*ts1n02pmbsvtb4096x32m8twzhodxcp.*|.*ts1n02psbsvta256x72m2wzhodcp.*|.*ts1n02psbsvtb1024x128m4wzhodxcp.*|.*ts1n02psbsvtb128x128m4wzhodxcp.*|.*tef.*|.*h130.*gsl_clk_div.*|.*tphn02p_075od12gpio.*}
+bbset syn.MacroLibraryFileExclude {.*143.*gsl_clk_div.*}
+bbset pnr.MacroLibraryFileInclude [bbget .syn.MacroLibraryFileInclude]
+bbset syn.StdLibraryFileInclude {.*h130.*}
+bbset pnr.StdLibraryFileInclude [bbget .syn.StdLibraryFileInclude]
+
+bbset libgen.syn.EnableExtraNDMGeneration {1}
+
+bbset syn.ExtraLibs.Enable {True}
+bbset pnr.ExtraLibs.Enable {True}
+
+bbset syn.ExtraLibs.libgen.lef { \
+	/google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M11_v1d0.lef \
+	/google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M12_v1d0.lef \
+	/google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M13_v1d0.lef \
+	/google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M15_v1d0.lef \
+	/google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M9_v1d0.lef \
+	/google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_tpmn02p_lup/tpmn02p_lup_15lm.lef \
+	/google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_fiducial_h130/fiducial_h130.lef \
+	/google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_LUP_V_C240708/LUP_V_C240708.lef \
+	/google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_LUP_H_C240708/LUP_H_C240708.lef \
+}
+
+bbset pnr.ExtraLibs.libgen.lef [bbget .syn.ExtraLibs.libgen.lef]
+
+bbappend pnr.innovus.SetupCommonSettingsPostCallback {
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M11_v1d0.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M12_v1d0.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M13_v1d0.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M15_v1d0.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M9_v1d0.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_tpmn02p_lup/tpmn02p_lup_15lm.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_fiducial_h130/fiducial_h130.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_tphn02p_075od12gpio_c240708/tphn02p_075od12gpio_c240708.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_LUP_V_C240708/LUP_V_C240708.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_LUP_H_C240708/LUP_H_C240708.lef
+}
+
+bbappend  pnr.innovus.FloorplanSetupPreCallback {
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M11_v1d0.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M12_v1d0.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M13_v1d0.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M15_v1d0.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_DTCD/N02P_DTCD_M9_v1d0.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_tpmn02p_lup/tpmn02p_lup_15lm.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_fiducial_h130/fiducial_h130.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_tphn02p_075od12gpio_c240708/tphn02p_075od12gpio_c240708.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_LUP_V_C240708/LUP_V_C240708.lef
+	loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-06-17/lef/ip_LUP_H_C240708/LUP_H_C240708.lef
+}
+
+bbappend sif.fc.ApplyCommonSettingsPostCallback {
+	if { $STAGE != "elaborate" } {
+		set cur_scen [current_scenario]
+		foreach_in_collection x [get_scenarios *] { 
+                             set scnr_name [get_object_name $x]
+                             echo "Current Scenario set to ${scnr_name}"
+                             current_scenario ${scnr_name}
+                             set_false_path -through [get_pins -hierarchical */NSLEEP*]	     
+			     ######GPIO pad constraints & OTP strobe constraints untill actual constraints arrive -> ##11Jan2025 
+			     ####set_data_check is used here, as per bug : https://b.corp.google.com/issues/406406414 
+			     source -e -v /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/CONSTRAINTS_OVERRIDE/overrides_sswrp_gdmc.tcl
+        	}
+		current_scenario $cur_scen
+	}
+}
+
+
+##Until a resolution comes from : https://buganizer.corp.google.com/issues/426576556
+bbset DkVersion                      {v1.0_2025-05-27}                                                {dk version to load}
+#bbset MdkVersion                     {v1.0_2025-05-15}                                                {mdk version to load}
+#bbset PdkVersion                     {2025-05-15}						      {pdk version to load}
+
+
+#########################################################################
+########################### FLOORPLAN ###################################
+#########################################################################
+#PG OFFSET
+bbset pnr.floorplan.PGM15VSSOffset "1.1000"                  -comment "M15 PG VSS Offset"
+bbset pnr.floorplan.PGM14VSSOffset "0.0200"                  -comment "M14 PG VSS Offset"
+bbset pnr.floorplan.AlignM14M15Tracks "1"
+bbset pnr.floorplan.PGM14M15OffsetFile "/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pre_m4_06132025/offsets/pg_offset.tcl"
+##
+
+#TRACK OFFSET
+#bbconcat pnr.floorplan.TrackSpec {{layer M12 offset 0.0640} {layer M13 offset 0.0520}}
+bbset pnr.floorplan.PushDownTrackOffsetLayers "M12 M13 M14 M15"
+bbset pnr.floorplan.TrackOffsetFile "/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pre_m4_06132025/offsets/track_offset.tcl"
+##
+
+bbset pnr.setup.InputDEFFile "/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pre_m4_06132025/0530_incremental_defs/sswrp_gdmc.def.gz"
+
+bbappend pnr.innovus.SetupReadDEFPostCallback {
+	dbset top.Fplan.isCore2Io 0
+	###Floorplan of macros 
+	defIn "/google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/FP_DEFS/M3/macros06Jun25.def"
+}
+
+##USER override for DTCD creation at a custom location - Jan 2025
+bbset pnr.setup.InsertDTCDCells      {0}
+#bbappend pnr.innovus.SetupCreateFloorplanPreCallback {
+#	##Overriding the DTCD insertion proc by including the bbox
+#	source -e -v /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/FP_DEFS/M2/DTCD_CELL_INSERTION.tcl
+#}
+##
+
+bbset pnr.innovus.FloorplanRowsAndTracksPostCallback {
+	dbset top.Fplan.isCore2Io 0
+	###Floorplan of macros 
+	defIn "/google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/FP_DEFS/M3/macros06Jun25.def"
+}
+
+##FIDUCIAL CELLS
+bbset pnr.floorplan.InsertFiducialCell {1}
+
+bbset pnr.floorplan.VoltageAreas {PD_GDMC_M55 {{0.9120 29.0680 297.9360 261.2480} {297.9360 51.6880 349.9200 261.2480} {349.9200 68.9780 398.7840 162.9680}} PD_ISO_LATCH {{858.2965 0.9880 911.0880 94.2190} {638.0365 0.9880 858.2965 38.0270}}}
+
+
+bbappend pnr.innovus.SetupReadUPFPostCallback {
+	mark_physical_power_domains -domains {PD_SSWRP_GDMC PD_GDMC_M55 PD_ISO_LATCH} -groupPhyLogicalDomains {{PD_SSWRP_GDMC PD_AXI_MEM} {PD_ISO_LATCH PD_GSPAN_OD}}
+}
+
+bbset pnr.floorplan.PowerDomainOverrides "PD_SSWRP_GDMC {MVDD VDD_STBY_M} PD_GDMC_M55 {MVDD VDD_STBY_M} PD_ISO_LATCH {MVDD VDD_AOSS_AON}"
+
+bbset pnr.floorplan.SVDDNets         {1}
+bbset pnr.floorplan.SVDDNets {
+	{PD_ISO_LATCH {{858.2965 0.9880 911.0880 94.2190} {638.0365 0.9880 858.2965 38.0270}} VDD_AOSS_OD}
+	{PD_SSWRP_GDMC {{858.2965 94.2190 911.0880 151.5300} {638.0365 38.0270 858.2965 69.0110}} VDD_AOSS_OD}
+}
+
+bbset pnr.floorplan.Type {tcl}
+bbset pnr.floorplan.TclFiles "/google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/FP_DEFS/M3/PADFRAME_FP.tcl_19Jun25"
+
+##To create Terminals/Pins over *GPIO*/PAD##
+bbset pnr.innovus.FloorplanBoundaryRoutingBlockagesPreCallback {
+	deselectAll
+	foreach gpio_pin [dbGet top.insts.instTerms.name  u_gdmc_io_mux/ioring*PAD] {
+		createSignalPin -pins $gpio_pin
+	}
+}
+##
+
+
+###creating continuous pin from LATCH to ENDCAP###
+bbappend pnr.innovus.FloorplanCleanUpPreCallback {
+	deselectAll
+	foreach GPIO_PIN {u_gdmc_io_mux/ioring/I_PADSS_GDMC_BK_LATCHUP/VDDPST12 u_gdmc_io_mux/ioring/I_PADSS_GDMC_BK_LATCHUP/VSS} {
+		selectObject PGTerm $GPIO_PIN
+		set net [dbGet selected.net.name]
+		set shapes [dbGet selected.term.pins.allShapes.layer.name M15 -p2]
+		set rect [dbGet -e $shapes.shapes.rect]
+		set boxes [dbTransform -inst [dbGet selected.inst] -localPt $rect]
+		foreach box $boxes {
+		    set llx [expr [lindex $box 0] - 2]; set lly [lindex $box 1]; set urx [lindex $box 2]; set ury [lindex $box 3] 
+		    createPhysicalPin -net $net -layer M15 -rect $llx $lly $urx $ury $GPIO_PIN
+		}
+		deselectAll
+	}
+}
+##
+
+##from kammari kishore##
+bbappend pnr.innovus.FloorplanCleanUpPreCallback {
+	source /google/gchips/workspace/redondo-asia/tpe/user/knandakishore/projects/lajolla/scripts/pg_grid_iopads_conec_gdmc.tcl
+	PGPinConnect
+	SignalPinConnect
+	colorizePowerMesh
+}
+##
+
+###To add 0.624u halo on all sides to esd & clamp cells###
+bbappend pnr.innovus.FloorplanMacroHalosPostCallback {
+	addHaloToBlock 0.624 0.800 0.624 0.884 EFUSE_ESD_1
+	addHaloToBlock 0.624 0.800 0.800 0.884 EFUSE_ESD_2
+	addHaloToBlock 0.800 0.800 0.624 2.028 my_core_clamp_1
+	addHaloToBlock 0.624 0.800 0.800 0.624 my_core_clamp_2
+	addHaloToBlock 0.800 0.624 0.800 0.800 my_core_clamp_3
+}
+###
+
+##as Per EMIR team
+bbset pnr.floorplan.CoreSwitchXPitch {15.36}                                                          {float:CADONLY Core switch X pitch}
+bbset pnr.floorplan.CoreSwitchYPitch {4}                                                              {float:CADONLY Core switch Y pitch}
+
+##LSIO Observed M14 - M15 Tracks are not fully utilized by default in repo 3.0 , for the M14-m15 all Tracks to be utilize , we need to use explicitly use this variable
+bbset pnr.floorplan.EnableFullPGInM14M15 {1}
+
+###Mem PG settings
+bbset pnr.floorplan.MemoryPGRecipe   {recipe2}                {str: Can be default, recipe1, recipe2 or recipe3}
+bbset pnr.floorplan.MemoryPGExtraM7M9 {MVDD}            {str: Can be MVDD or AVDD. Applicable for Recipe1,2,3}
+#{str: List of memory insts to apply recipe2}
+bbset pnr.floorplan.MemoryPGRecipe2Insts { \
+	u_gdmc_top/axi_ram_gdmc_inst/u_gdmc_gen_ram/GEN_BANKS_15__u_gdmc_sram/ram_0_0 \
+	u_gdmc_top/axi_ram_gdmc_inst/u_gdmc_gen_ram/GEN_BANKS_14__u_gdmc_sram/ram_0_0 \
+	u_gdmc_top/axi_ram_gdmc_inst/u_gdmc_gen_ram/GEN_BANKS_13__u_gdmc_sram/ram_0_0 \
+	u_gdmc_top/axi_ram_gdmc_inst/u_gdmc_gen_ram/GEN_BANKS_12__u_gdmc_sram/ram_0_0 \
+	u_gdmc_top/axi_ram_gdmc_inst/u_gdmc_gen_ram/GEN_BANKS_3__u_gdmc_sram/ram_0_0 \
+	u_gdmc_top/axi_ram_gdmc_inst/u_gdmc_gen_ram/GEN_BANKS_10__u_gdmc_sram/ram_0_0 \
+	u_gdmc_top/axi_ram_gdmc_inst/u_gdmc_gen_ram/GEN_BANKS_9__u_gdmc_sram/ram_0_0 \
+	u_gdmc_top/axi_ram_gdmc_inst/u_gdmc_gen_ram/GEN_BANKS_8__u_gdmc_sram/ram_0_0 \
+}
+
+##EMIR feedback to enable trickle chain in channels to meet inrush 
+##https://buganizer.corp.google.com/issues/404399154#comment29
+bbset pnr.floorplan.ExcludeChannelSwitchesFromTrickleChain {0}
+#########################################################################
+
+
+#################################################
+##### connect_supply_net - GNC for synthopt #####
+#################################################
+bbappend sif.fc.ApplyCommonSettingsPreCallback {
+	if { $::STAGE == "synthopt" } {
+		##connect supply net commands for FC - for physical - esd clamp/gpio pads added in innovus##
+		source -e -v /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/FP_DEFS/M2/connect_supply_nets_esd_clamps_gpio_pads.tcl
+		global IO_BANK_INST
+		set IO_BANK_INST [lindex [regsub {/ioring} [lindex [get_object_name [get_cells -hierarchical -filter "is_io == true && name =~ *POC*"]] 0] { }] 0]
+		source -e -v /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/PADFRAME_PG_FC/sswrp_gdmc_connect_abut_physical.tcl
+		source -e -v /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/PADFRAME_PG_FC/sswrp_gdmc_connect_power_net.innovus.tcl
+		source -e -v /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/PADFRAME_PG_FC/io_filler_globalNetConnect.tcl		
+		connect_pg_net -pg
+		commit_upf
+	}
+}
+################################################
+
+
+#########################################
+##mapping the retention clamp iso cells##
+#########################################
+bbappend syn.fc.ElaborateReadUPFPostCallback {
+	catch {set_lib_cell_purpose -include all [get_lib_cells {*/RETLVLLHSRCGOOGD*BWP130HPNPN3P48CPDLVT}]}
+	catch {set_attribute [get_lib_cells {*/RETLVLLHSRCGOOGD*BWP130HPNPN3P48CPDLVT}] dont_use false}
+	map_isolation_cell iso_PD_ISO_LATCH_out -lib_cells {RETLVLLHSRCGOOGD4BWP130HPNPN3P48CPDLVT} -domain PD_ISO_LATCH
+	commit_upf
+}
+#########################################
+
+
+#######################################################
+##removing dont use on the retention clamp iso cells###
+#######################################################
+bbappend sif.fc.ExecuteStagePreCallback {
+	if { $STAGE != "elaborate" } {	
+		catch {set_lib_cell_purpose -include all [get_lib_cells {*/RETLVLLHSRCGOOGD*BWP130HPNPN3P48CPDLVT}]}
+		catch {set_attribute [get_lib_cells {*/RETLVLLHSRCGOOGD*BWP130HPNPN3P48CPDLVT}] dont_use false}
+	}
+}
+#######################################################
+
+
+#######################################################
+##Sizing the GCUSTOM CLK DIV cell from ULVT to ULVTLL###
+#######################################################
+bbappend sif.fc.ExecuteStagePreCallback {
+	if { $STAGE == "synth" } {	
+		catch {size_cell [get_cells -quiet -of_objects GCUSTOM_GSL_CLK_DIV50_DP_2R_130HPNPN3P48CPDULVT] GCUSTOM_GSL_CLK_DIV50_DP_2R_130HPNPN3P48CPDULVTLL}
+		catch {size_cell [get_cells -quiet -of_objects GCUSTOM_GSL_CLK_DIV_1P5_130HPNPN3P48CPDULVT] GCUSTOM_GSL_CLK_DIV_1P5_130HPNPN3P48CPDULVTLL}
+	}
+}
+#######################################################
+
+
+#################################################################
+###updating PD_AXI_MEM supplies to create a share voltage area###
+#################################################################
+bbappend sif.fc.ExecuteStagePreCallback {
+    if { ${::STAGE} == "synthopt" } {
+	create_power_domain PD_AXI_MEM -available_supplies "SS_VDDQ12_GDMC SS_VDDQ08_GDMC SS_VDDQ04_GDMC SS_AVDD18_OTP2 SS_VDD_AOSS_OD SS_VDD_STBY_M" -update 
+      	catch { set_design_attributes -elements {.} -attribute {shared_voltage_area "{PD_SSWRP_GDMC PD_AXI_MEM}"} }  
+    	set_voltage_area  DEFAULT_VA  -add_power_domains {PD_SSWRP_GDMC PD_AXI_MEM}
+      	catch { set_design_attributes -elements {.} -attribute {shared_voltage_area "{PD_ISO_LATCH PD_GSPAN_OD}"} }  
+    	set_voltage_area  PD_ISO_LATCH  -add_power_domains {PD_ISO_LATCH PD_GSPAN_OD}
+	
+    }
+}
+################################################################
+
+####To override io user cosntraints file###
+##bbset syn.fc.ElaborateSetupScenariosPreProcessCallback {
+##	set io_pd_overrides /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/REPO_2.0.0_21Dec24/run/huge_io_delay_ports_list_SSWRP_GDMC.tcl
+##}
+####
+
+
+###Since GPIO *POC* cells were getting removed at synth - below WA
+bbappend syn.fc.SynthSetupPostCallback {
+	foreach i [get_object_name [get_cells -hierarchical -filter "is_io == true"]] {
+    		puts "Before dont_touch $i :: [get_attr [get_cells $i] ref_name] :: [get_attr [get_cells $i] dont_touch]"
+    		set_attr [get_cells $i] dont_touch true 
+    		puts "After dont_touch $i :: [get_attr [get_cells $i] ref_name] :: [get_attr [get_cells $i] dont_touch]"
+	}
+}
+###
+
+
+####These settings to prevent routing of the *ABUT signals. (These are just logical signals, should not have any physical routes)####
+bbappend sif.fc.ExecuteStagePreCallback {
+	if { $STAGE != "elaborate" } {
+		set pad_abut_nets [get_nets -hier -filter "full_name =~ *ABUT*"]
+		set_dont_touch $pad_abut_nets
+		set_attribute $pad_abut_nets dont_touch true
+		set_attribute -objects $pad_abut_nets -name physical_status -value locked
+	}
+}
+####
+
+
+###To Prevent std cells in the narrow channels b/w OTP to eFuse###
+bbappend sif.fc.ExecuteStagePreCallback {
+	if { $STAGE != "elaborate" } {
+		if {![sizeof_collection [get_placement_blockages -quiet blockage_otp_channel*]]} {
+			create_placement_blockage -boundary {{{254.0640 411.6495} {259.9200 547.0400}}} -type hard -purpose user -name blockage_otp_channel
+			puts "create_placement_blockage -boundary {{{254.0640 411.6495} {259.9200 547.0400}}} -type hard -purpose user -name blockage_otp_channel"
+		}
+	}
+}
+bbappend sif.fc.ExecuteStagePreCallback {
+        if { $STAGE != "elaborate" } { 
+		if {![sizeof_collection [get_placement_blockages -quiet ppb1_*]]} { 
+			create_placement_blockage -name ppb1_hard -type hard -boundary { {0.9120 262.2880} {122.7030 265.6680} }
+			create_placement_blockage -name ppb1_0 -type partial -blocked_percentage 95  -boundary { {122.7030 262.2880} {143.1840 265.6680} }
+			create_placement_blockage -name ppb1_1 -type partial -blocked_percentage 95   -boundary { {143.1840 262.2880} {163.6650 265.6680} }
+			create_placement_blockage -name ppb1_10 -type partial -blocked_percentage 95     -boundary { {307.1520 262.2880} {327.6330 265.6680} }
+			create_placement_blockage -name ppb1_11 -type partial -blocked_percentage 95     -boundary { {327.6480 262.2880} {348.1290 265.6680} }
+			create_placement_blockage -name ppb1_18 -type partial -blocked_percentage 95     -boundary { {254.0640 388.2200} {259.9200 411.6495} }
+			create_placement_blockage -name ppb1_19 -type partial -blocked_percentage 95     -boundary { {254.0640 364.7930} {259.9200 388.2225} }
+			create_placement_blockage -name ppb1_2 -type partial -blocked_percentage 95     -boundary { {163.6800 262.2880} {184.1610 265.6680} }
+			create_placement_blockage -name ppb1_20 -type partial -blocked_percentage 95     -boundary { {254.0640 341.3635} {259.9200 364.7930} }
+			create_placement_blockage -name ppb1_21 -type partial -blocked_percentage 95     -boundary { {254.0640 317.9280} {259.9200 341.3575} }
+			create_placement_blockage -name ppb1_22 -type partial -blocked_percentage 95     -boundary { {254.0640 294.4985} {259.9200 317.9280} }
+			create_placement_blockage -name ppb1_23 -type partial -blocked_percentage 95     -boundary { {254.0640 265.6680} {259.9200 294.4925} }
+			create_placement_blockage -name ppb1_3 -type partial -blocked_percentage 95     -boundary { {184.1760 262.2880} {204.6570 265.6680} }
+			create_placement_blockage -name ppb1_4 -type partial -blocked_percentage 95     -boundary { {204.6720 262.2880} {225.1530 265.6680} }
+			create_placement_blockage -name ppb1_6 -type partial -blocked_percentage 95     -boundary { {225.1680 262.2880} {245.6490 265.6680} }
+			create_placement_blockage -name ppb1_7 -type partial -blocked_percentage 95     -boundary { {245.6640 262.2880} {266.1450 265.6680} }
+			create_placement_blockage -name ppb1_8 -type partial -blocked_percentage 95     -boundary { {266.1600 262.2880} {286.6410 265.6680} }
+			create_placement_blockage -name ppb1_9 -type partial -blocked_percentage 95     -boundary { {286.6560 262.2880} {307.1370 265.6680} }
+			create_placement_blockage -name ppb1_24 -type partial -blocked_percentage 95     -boundary { {368.6100 262.2880} {389.0910 265.6680} }
+			create_placement_blockage -name ppb1_25 -type partial -blocked_percentage 95     -boundary { {389.0910 262.2880} {409.5720 265.6680} }
+			create_placement_blockage -name ppb1_26 -type partial -blocked_percentage 95     -boundary { {409.5720 262.2880} {430.0530 265.6680} }
+			create_placement_blockage -name ppb1_27 -type partial -blocked_percentage 95     -boundary { {430.0530 262.2880} {450.5340 265.6680} }
+			create_placement_blockage -name ppb1_28 -type partial -blocked_percentage 95     -boundary { {450.5340 262.2880} {471.0150 265.6680} }
+			create_placement_blockage -name ppb1_29 -type partial -blocked_percentage 95     -boundary { {471.0150 262.2880} {491.4960 265.6680} }
+			create_placement_blockage -name ppb1_30 -type partial -blocked_percentage 95     -boundary { {491.4960 262.2880} {506.4735 265.6680} }
+			create_placement_blockage -name ppb1_5 -type partial -blocked_percentage 95     -boundary { {348.1290 262.2880} {368.6100 265.6680} }
+		}
+
+		##partial blockages with 95% - checker board - between GPIO & Core std region
+		source -e -v /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/FP_DEFS/M3/partial_blockages_GPIOpadframe_CoreStdCell_06Jun25.tcl
+	}
+}
+###
+
+
+#####################################################
+###########Tightening Clock & Data Tran##############
+#####################################################
+bbset pnr.drv.ClockConstraintDenominatorOverrides {{* 7} {*NM* 10} {*UD* 10} {*SUD* 10} {*UUD* 10}}                    {Overrides of Denominator for clock slew calculation. eg {{*SUD* val1} {*uud* val2}}}
+bbset pnr.drv.DataConstraintDenominatorOverrides {{* 4} {*NM* 6} {*UD* 5} {*SUD* 4} {*UUD* 4}}                    {Overrides of Denominator for data slew calculation. eg {{*SUD* val1} {*uud* val2}}}
+bbset syn.drv.ClockConstraintDenominatorOverrides {{* 7} {*NM* 10} {*UD* 10} {*SUD* 10} {*UUD* 10}}                    {# No Comment}  
+bbset syn.drv.DataConstraintDenominatorOverrides {{* 4} {*NM* 6} {*UD* 5} {*SUD* 4} {*UUD* 4}}                    {# No Comment}  
+#####################################################
+
+
+################################################################################################################
+#########Applying 250ps uncertainty procs/fc/procs.timing.tcl - ::timing::apply_user_clock_uncertainity#########
+######################################################
+#bbset syn.ClockUncertainityOverrides {
+#	{*NM* {setup {clkg_occ_sswrp_gpca_gpca_occ_gpca_core_clk 0.3870}}}
+#}
+#bbset pnr.placeopt.ClockUncertainityOverrides {
+#	{*NM* {setup {clkg_occ_sswrp_gpca_gpca_occ_gpca_core_clk 0.3870}}}
+#}
+###############################################################################################################
+
+
+###Excluding IO buffering on GPIO/PAD signal ports###
+bbset pnr.IOBufferExcludeNetsFile "/google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/io_buffer_exclude_ports.tcl"
+
+### TO DISABLE TIE CELL ADDITION ON PAD CELL PINS ##
+bbappend sif.fc.ApplyCommonSettingsPostCallback {
+	if { $STAGE != "elaborate" } {
+	## To disable tie cell addition on gpio pads abut pins
+        set_disable_tie_insert -objects [get_pins -hierarchical -filter "(name == RTE || name == POCCTRL || name == POCCTRL12 || name == POCCTRLD) && (full_name !~ u_gdmc_io_mux/ioring/I_XGDMC_* && full_name !~ u_gdmc_io_mux/ioring/I_PADSS_GDMC_BK_POC*)"]
+	}
+}
+###
+
+##Path Groups Recreating to get right list of violating endpoints##
+bbset syn.synthopt.RecreatePathGroups {1}
+
+##Applying halos manually as zero spacing halo were creating huge tcic errors and white spaces unevenly b/w boundary end cap cells##
+bbset pnr.floorplan.MacroPlacementHalo {0.576 0.52 0.576 0.52}                                          {str: Default placement halo spacing to apply for macros. {<left> <bottom> <right> <top>}}
+##
+
+
+#####################################
+#####GSPAN IN & OUT Timing###########
+#####################################
+bbappend sif.fc.ExecuteStagePreCallback {
+        if { $STAGE != "elaborate" } {  
+		source -e -v /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/GSPAN_TIMING/input_ports.tcl
+		set PRO_gspan_input_ports  [get_ports -filter "port_type == signal && name !~ *clk*" [get_selection ]]
+		group_path -weight 2.0 -name PRO_gspan_input -from [get_ports $PRO_gspan_input_ports ] -to [all_fanout -from [get_ports $PRO_gspan_input_ports] -flat -endpoints_only]
+		source -e -v /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/GSPAN_TIMING/output_ports.tcl
+		set PRO_gspan_output_ports  [get_ports -filter "port_type == signal && name !~ *clk*" [get_selection ]]
+		group_path -weight 3.0 -name PRO_gspan_output -from [all_fanin -to [get_ports $PRO_gspan_output_ports] -flat -startpoints_only] -to [get_ports $PRO_gspan_output_ports]
+	}
+}
+#####################################
+
+
+################Bound Creation for OD supply related cells that reside in Default_VA###############
+bbappend sif.fc.ExecuteStagePreCallback {
+	if { ($STAGE == "synthopt") } {
+		if {![sizeof_collection [get_bounds -quiet OD_cells_bounds]]} {
+			create_bound -name OD_cells_bounds -type hard -boundary {{{858.2965 94.2190} {911.0880 151.5300}} {{638.0365 38.0270} {858.2965 69.0110}}} [get_cells -of_objects [get_flat_pins -hierarchical  -filter "UPF_related_supply_set.name == SS_VDD_AOSS_OD && power_domain == PD_SSWRP_GDMC"]]
+		}
+	}
+	if { (${::STAGE} in {synthdft synthdftopt placeopt clock clockopt route routeopt}) } {
+		add_to_bound OD_cells_bounds [get_cells -of_objects [get_flat_pins -hierarchical  -filter "UPF_related_supply_set.name == SS_VDD_AOSS_OD && power_domain == PD_SSWRP_GDMC"]]
+	}
+}
+######################################
+
+
+##############################################################################
+#####AOSS interface ports timing push as per feedback from STA team###########
+##############################################################################
+bbappend sif.fc.ExecuteStagePreCallback {
+        if { $STAGE != "elaborate" } {  
+		create_bound -name aoss_ss_preq_data_bound -boundary {{183.1170 0.9880} {203.4480 47.0080}} [get_cells [all_fanin -to [get_ports -filter "full_name =~ aoss_ss_preq_data* && direction == out" ] -flat -only_cells -startpoints_only]]
+		group_path -weight 5.0 -name aoss_ss_preq_data_PATHGROUP -from [all_fanin -to [get_ports -filter "full_name =~ aoss_ss_preq_data* && direction == out" ] -flat -startpoints_only] -to [get_ports -filter "full_name =~ aoss_ss_preq_data* && direction == out" ]
+		set_path_margin 150 -from [all_fanin -to [get_ports -filter "full_name =~ aoss_ss_preq_data* && direction == out" ] -flat -startpoints_only] -to [get_ports -filter "full_name =~ aoss_ss_preq_data* && direction == out" ]
+
+		group_path -weight 5.0 -name aoss_ss_prsp_data_PATHGROUP -from [get_ports -filter "full_name =~ aoss_ss_prsp_data* && direction == in" ] -to [all_fanout -from [get_ports -filter "full_name =~ aoss_ss_prsp_data* && direction == in" ] -flat -endpoints_only] 
+		set_path_margin 250 -from [get_ports -filter "full_name =~ aoss_ss_prsp_data* && direction == in" ] -to [all_fanout -from [get_ports -filter "full_name =~ aoss_ss_prsp_data* && direction == in" ] -flat -endpoints_only] 
+	}
+}
+##############################################################################
+
+
+######################################REgister Blockage to restrict all register to core############
+bbappend sif.fc.ExecuteStagePreCallback {
+        if { $STAGE == "synthopt" } {  
+		###Creating Register blockage in the left-bottom channel - to push register placement towards core - to control clock ID
+		create_placement_blockage -boundary {{{0.9120 0.9880} {183.1170 61.0480}}} -type register -purpose user -name register_blockage -blocked_percentage 100
+	}
+}
+######################################
+
+
+######################################
+####GLS DV team given hierarchies to preserve during synth : https://buganizer.corp.google.com/issues/412383961#comment5
+bbappend sif.fc.ApplyCommonSettingsPostCallback {
+        if { $STAGE != "elaborate" } {  	
+		source -e -v /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/GLS_DV_PRESERVE_CELLS_LIST/hier_preserve.tcl
+		set_boundary_optimization [get_cells $GLS_PRESERVE_CELLS] none
+		set_attribute [get_cells $GLS_PRESERVE_CELLS] ungroup false
+		set_ungroup [get_cells $GLS_PRESERVE_CELLS] false
+		sizeof_collection [get_cells $GLS_PRESERVE_CELLS]
+		
+		###list 2 for memories : https://buganizer.corp.google.com/issues/412383961#comment10
+		source -e -v /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/GLS_DV_PRESERVE_CELLS_LIST/hier_preserve_list2.tcl
+		set_boundary_optimization [get_cells $GLS_PRESERVE_CELLS2] none
+		set_attribute [get_cells $GLS_PRESERVE_CELLS2] ungroup false
+		set_ungroup [get_cells $GLS_PRESERVE_CELLS2] false
+		sizeof_collection [get_cells $GLS_PRESERVE_CELLS2]
+
+		###list 3 given on top of above : https://buganizer.corp.google.com/issues/412383961#comment19
+		source -e -v /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/GLS_DV_PRESERVE_CELLS_LIST/hier_preserve_list3.tcl
+		##set_boundary_optimization [get_cells $GLS_PRESERVE_CELLS3] none
+		set_attribute [get_cells $GLS_PRESERVE_CELLS3] ungroup false
+		set_ungroup [get_cells $GLS_PRESERVE_CELLS3] false
+		sizeof_collection [get_cells $GLS_PRESERVE_CELLS3]
+
+		##Preserve scandump.cnt from https://buganizer.corp.google.com/issues/408400336
+		set_boundary_optimization [get_cells u_lpcm_gdmc_wrapper/u_lpm_wrapper/scandump_u] none
+		set_attribute [get_cells u_lpcm_gdmc_wrapper/u_lpm_wrapper/scandump_u] ungroup false
+		set_ungroup [get_cells  u_lpcm_gdmc_wrapper/u_lpm_wrapper/scandump_u] false
+		sizeof_collection [get_cells u_lpcm_gdmc_wrapper/u_lpm_wrapper/scandump_u]
+
+		##Preserving the following internal signal as per of GLS DV requirement 
+		set_dont_touch [get_nets wakeup_mask_m55*]
+		set_attribute [get_nets wakeup_mask_m55*] user_dont_touch true
+		set_attribute [get_nets wakeup_mask_m55*] dont_touch true
+
+		##DFT team requested to preserve following list of flops from C0r & ulr : https://buganizer.corp.google.com/issues/414577766#comment2
+		source -e -v /google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/TRANSFORMED_REG_PRESERVE/dft_preserve_reg_list.tcl
+		set_attribute [get_cells $DFT_PRESERVE_REG] user_size_only true
+		set_size_only [get_cells $DFT_PRESERVE_REG]
+
+		##From GSPAN : https://buganizer.corp.google.com/issues/421349834#comment4 
+		set_attribute [get_cells * -hierarchical -filter "full_name =~ *gspan_sender_subsys" -nocase] ungroup false
+		set_ungroup [get_cells * -hierarchical -filter "full_name =~ *gspan_sender_subsys" -nocase] false
+
+		##Preserving the pins specified from DV team : https://buganizer.corp.google.com/issues/412383961#comment22
+		set_boundary_optimization [get_pins {u_gdmc_top/scan2mem_inst/apb_paddr[*] u_gdmc_top/scan2mem_inst/apb_psel}] none
+
+	}
+}
+#####################################
+
+
+#####################################
+bbappend sif.fc.ExecuteStagePreCallback {
+	if { (${::STAGE} in {placeopt clock clockopt route routeopt}) } {
+		##Procedure to swap all clock path - ISO/PT/LS cells to ULVTLL Vt-dominate##
+		change_selection [get_cells -hierarchical -filter "is_clock_network_cell == true && (full_name =~ *UPF_ISO || full_name =~ *UPF_LS || ref_name =~ PT*)"]
+
+		foreach_in_collection cell [get_selection ] {
+			puts "size_cell [get_object_name $cell] [regsub "CPD.*" [get_attr [get_cell [get_object_name $cell]] ref_name] "CPDULVTLL"]"
+			size_cell [get_cell [get_object_name $cell]] [regsub "CPD.*" [get_attr [get_cell [get_object_name $cell]] ref_name] "CPDULVTLL"]
+		}
+	}
+}
+#####################################
+
+
+#####################################
+bbappend sif.fc.ExecuteStagePreCallback {
+        if { $STAGE == "clock" } {
+	##setting target latency
+	set_clock_tree_options -target_latency 0.7500 -corners ssgnp-NM-0-cworst_ccworst_t -clocks clkm_cpm_pllstby_576m_clk 
+	}
+}
+
+bbappend pnr.fc.ClockBuildClockPreCallback {
+        if { $STAGE == "clock" } {
+	##setting target latency
+	set_clock_tree_options -target_latency 0.7500 -corners ssgnp-NM-0-cworst_ccworst_t -clocks clkm_cpm_pllstby_576m_clk 
+	}
+}
+
+bbappend pnr.fc.ClockBuildClockPreCallback {
+        if { $STAGE == "clock" } {
+		##Procedure to swap all clock path - ISO/PT/LS cells to ULVTLL Vt-dominate##
+		change_selection [get_cells -hierarchical -filter "is_clock_network_cell == true && (full_name =~ *UPF_ISO || full_name =~ *UPF_LS || ref_name =~ PT*)"]
+
+		foreach_in_collection cell [get_selection ] {
+			puts "size_cell [get_object_name $cell] [regsub "CPD.*" [get_attr [get_cell [get_object_name $cell]] ref_name] "CPDULVTLL"]"
+			size_cell [get_cell [get_object_name $cell]] [regsub "CPD.*" [get_attr [get_cell [get_object_name $cell]] ref_name] "CPDULVTLL"]
+		}
+	}
+}
+####################################
+
+
+####################################
+bbappend sif.fc.ExecuteStagePreCallback {
+    	if { ${::STAGE} != "elaborate" } { 
+		###Blocking GOOG cells###
+		set_attribute [get_lib_cells */*GOOG* -filter "name !~ *RETLVLLHSRCGOOG*"] dont_use true
+		set_lib_cell_purpose -include none [get_lib_cells *GOOG* -filter "name !~ *RETLVLLHSRCGOOG*"]
+                ###Blocking Buf/Inv Low drive strength 0p7/0p8 cells###
+                set_attribute [get_lib_cells */*D0P7* -filter "is_inverter == true"] dont_use true
+                set_lib_cell_purpose -include none [get_lib_cells *D0P7* -filter "is_inverter == true"]
+                set_attribute [get_lib_cells */*D0P7* -filter "is_buffer == true"] dont_use true
+                set_lib_cell_purpose -include none [get_lib_cells *D0P7* -filter "is_buffer == true"]
+		set_attribute [get_lib_cells */*D0P8* -filter "is_inverter == true"] dont_use true
+                set_lib_cell_purpose -include none [get_lib_cells *D0P8* -filter "is_inverter == true"]
+                set_attribute [get_lib_cells */*D0P8* -filter "is_buffer == true"] dont_use true
+                set_lib_cell_purpose -include none [get_lib_cells *D0P8* -filter "is_buffer == true"]
+
+	}
+}
+####################################
+
+
+###########IDPP###########
+bbset Modules.Tool.primepower "tools/synopsys/primetime/V-2023.12-SP5-2-T-20250321"
+#bbset syn.EnablePrimePower {1}
+bbset syn.TotalPowerOptimizationEffort {high}
+
+#Power Opt Settings
+bbset syn.SaifActivityFile "{/google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/FSDB/M3/waves.saif sswrp_gdmc_tb/dut}"
+bbset syn.InputSAIFScenario "func.tt-NMP-85-cworst_ccworst_t"
+bbset syn.InputActivityFile "{/google/gchips/workspace/redondo-asia/tpe/user/sunilkotrakona/LAJOLLA/DTA/SSWRP_GDMC/FSDB/M3/waves.saif}"
+bbset syn.InputSAIFInstanceName "sswrp_gdmc_tb/dut"
+
+#bbset pnr.EnablePrimePower {1}
+bbset pnr.TotalPowerOptimizationEffort {high}
+
+##bbappend sif.fc.ApplyCommonSettingsPostCallback {
+##    ## IDPP Settings - FSDB Path
+##    #########  IDPP proc_update for all stages ##############
+##    proc common::run_prime_power { output_dir } {
+##        sif::minfo "Applying In-design prime power settings"
+##        if {[get_scenarios -filter power] == ""} {
+##            sif::mwarn "No active scenarios configured for power analysis. Skipping indesign_primepower_flow"
+##            return 1
+##        }
+##        set active_power_scen [current_scenario [get_scenarios -filter power]]
+##        current_scenario $active_power_scen
+##        set primepowershell_path /google/gchips/tools/synopsys/primetime/V-2023.12-SP5-2/bin/pwr_shell
+##        #set_app_options -name power.saif_toggle_rate_conflict_resolution -value average
+##        #Enabled for glitch using delay shifted even analysis option
+##        set_indesign_primepower_options -fsdbs {{ /google/gchips/ipreleases/lajolla_power/SSWRP_GDMC/POWER_VECTORS/LAJ_A0_SSWRP_GDMC_M3_V2_R4_D1/Maxpwr/waves.fsdb -strip_path sswrp_gdmc_tb/dut  -time "342114.5 402051.5"}}  -pwr_shell {/google/gchips/tools/synopsys/primetime/V-2023.12-SP5-2/bin/pwr_shell} -delay_shifted_event_analysis
+##        ###-concurrent_event_analysis_max_process 1                    
+##        echo "date is [date]"
+##        sif::minfo "Starting In-Design Prime Power Flow"
+##        #update_indesign_activity -keep all -saif_suffix opto_done  -use_highest_toggle_rate ; ##if you are using multiple fsdbs
+##        update_indesign_activity -keep all -saif_suffix opto_done -power ; ##if you are using single fsdb
+##        redirect -append -tee ./rpt_activity.rpt {report_activity -driver -verbose }
+##        echo "date is [date]"
+##        redirect -append -tee ./idpp_power.rpt {report_power }
+##        return 0
+##     }
+##
+##	if { $STAGE != "elaborate" } { 
+##    		# Low Power setting
+##     		set_app_options -name place.coarse.enhanced_low_power_effort -value medium
+##
+##     		# Workaround for CTS fanout issue during IDPP
+##     		sif::minfo "WA for random Added 0 Repeaters issue"
+##    		set_app_options -name cts.compile.skip_illegal_state -value true
+##	}
+##
+##     ## Helps to print the power trajectory in log file during poweropt runs, to help in debug. 
+##     #source /google/gchips/workspace/redondo-asia/tpe/user/kishorbabu/projects/malibu/sswrp_gsa/collaterals/power_trajectory_tbc_16Jul2024/tbc_customer_debug_fc_pre_route_optimization_power_trajectory_printing_20240515.tbc
+##}
+############################
+
+# END

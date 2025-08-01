@@ -1,0 +1,1593 @@
+bbset fc.EnableCentralNDMs           {0} 
+bbset syn.EnableWaterMarkInsertion {true}
+bbset syn.WatermarkRTLTag  {LAJ_A0_SSWRP_HSIO_S_M4_V3_R3_D1_RTLDFT}
+
+
+bbset fc.SwapRTLClkCellsToDominantVT {1}
+bbset fc.ForcePSWStrategyAssociation {1}
+
+
+#libgen
+bbset libgen.syn.EnableExtraNDMGeneration {1}  {PARTH : This will enable extra search for libs where process name does not match}
+bbset libgen.pnr.EnableExtraNDMGeneration {1}  {PARTH : This will enable extra search for libs where process name does not match}
+
+
+
+#elab
+bbappend syn.fc.ElaborateSaveNetlistPreCallback {
+
+  #Preserve list of objects for sdc recived from design.
+  set syn.preserve_list.file "/google/gchips/workspace/redondo-asia/tpe/user/annug/syn_sdc_preserve_latest_update.list"
+  redirect -tee preserve_obj.log {source -e -v /google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/Lajolla_ufs/block/ufs_top/common_scripts/preserve_obj.elab.tcl}
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_PUPD[2]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_PUPD[0]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_PUPD[1]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_SLEW] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_RXMODE] dont_touch true
+  set_attribute [get_net  XHSIOS_UFS_PWR_EN_1] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_ie_to_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_oe_to_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_PUPD[0]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_PUPD[1]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_DRV[1]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_DRV[1]] dont_touch true
+  set_attribute [get_net  XHSIOS_UFS_PWR_EN_0] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_din_from_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_PUPD[0]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_SLEW] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_din_from_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_DRV[3]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_PUPD[2]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_DRV[2]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_PUPD[0]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_DRV[1]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_PUPD[1]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_DRV[0]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_SLEW] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_RXMODE] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_DRV[3]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_DRV[2]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_DRV[1]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_DRV[0]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_RXMODE] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_DRV[0]] dont_touch true
+  set_attribute [get_net  XHSIOS_UFS_RESETB_1] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/ioring/POCCTRL12_CUTD1_ABUT] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/ioring/RTE_CUTD1_ABUT] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/ioring/POCCTRLD_CUTD1_ABUT] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_dout_to_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/ioring/POCCTRL_CUTD1_ABUT] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_DRV[2]] dont_touch true
+  set_attribute [get_net  XHSIOS_UFS_RESETB_0] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_ie_to_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_oe_to_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_dout_to_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_lpcm_hsi1_wrapper_hsio_s_gpio_ref_clk_0[0]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_ie_from_core] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_DRV[1]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_DRV[2]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_DRV[3]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_DRV[3]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_SLEW] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_PUPD[1]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_din_from_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_PUPD[0]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_PUPD[2]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_din_from_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_dout_to_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_RXMODE] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/*Logic1*] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_DRV[0]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_ie_from_core] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_ie_to_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/*Logic0*] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/POCCTRL_CUTD1_ABUT] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_PUPD[2]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/POCCTRLD_CUTD1_ABUT] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_PUPD[1]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/RTE_CUTD1_ABUT] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_oe_to_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/POCCTRL12_CUTD1_ABUT] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_dout_to_io] dont_touch true
+  set_attribute [get_net  XHSIOS_UFS_REFCLK_1] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_RXMODE] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_PUPD[2]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_DRV[0]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_oe_to_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_DRV[1]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_ie_to_io] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_DRV[2]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_DRV[0]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_DRV[3]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_DRV[3]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_SLEW] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_SLEW] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_PUPD[1]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_din_from_io] dont_touch true
+  set_attribute [get_net  XHSIOS_UFS_REFCLK_0] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_PUPD[0]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_RXMODE] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_PUPD[2]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_DRV[2]] dont_touch true
+  set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_din_from_io] dont_touch true
+}
+
+bbappend syn.elaborate.RTLSizeOnlyPatterns {  *_hand_bcm_* }  {PARTH : As some of the constraints are applied on these cells}
+
+bbappend syn.fc.ElaborateReadRTLPostCallback {
+  # PARTHL --> Setting to avoid boundary optimization and flattening
+  set_app_options -name compile.flow.autoungroup -value false
+  set_app_options -name compile.flow.boundary_optimization -value false
+  # PARTHL --> setting to convernt infer_mux into a mux and preserve
+  set_app_options -name hdlin.elaborate.infer_mux_size_only -value  2
+}
+
+bbappend syn.fc.ElaborateReadRTLPreCallback {
+  set_app_options -name hdlin.elaborate.maximum_while_loop_iterations -value 8000
+}
+
+
+#synth
+bbappend syn.synth.SkipICGInsertionModulePatterns {*lpm*csr*}
+bbset syn.fc.SynthPostCallback       {
+  
+    # PARTHL --> Special settings.
+    # In case floating ACK net is tied , below loop will remove the connection.
+    foreach my_pd [upfutils::get_switched_power_domains *] {
+      foreach sw_type {ALL PRE} {
+        set sw_rule [upfutils::get_power_domain_switch_rule $my_pd $sw_type] 
+  
+        # Remove dont_touch from ack nets.
+  
+        set_dont_touch [get_nets  [upfutils::get_power_switch_ack_port $sw_rule ] ] false 
+  
+        # ACK port is on net, converting that into pin
+        set pn [get_pins [get_object_name [get_nets  [upfutils::get_power_switch_ack_port $sw_rule ] ] ]] 
+        set nt [get_nets -quiet -of $pn -filter "name=~*Logic0*"]
+        
+        # Check if Logic0 net exists
+        if {[sizeof_collection $nt] == 1} {
+          puts "PARTH : Disconnectin Logic0 net from [get_object_name $pn] "
+          disconnect_net $nt $pn
+        }
+  
+  
+        # Check if or_all_ack exists and needs clean up.
+        set check_or [get_pins -quiet [regsub "and_all_ack" [get_object_name $pn] "or_all_ack" ]]
+        if {[sizeof_collection $check_or] > 0} {
+          set nt [get_nets -quiet -of $pn -filter "name=~*Logic0*"]
+          
+          # Check if Logic0 net exists
+          if {[sizeof_collection $nt] == 1} {
+            puts "PARTH : Disconnectin Logic0 net from [get_object_name $pn] "
+            disconnect_net $nt $pn
+          }
+          
+        }
+      }
+    } 
+  
+    # Settings to preserve extra logic
+ 
+  
+ 
+
+  # PARTHL --> Special settings.
+  # In case floating ACK net is tied , below loop will remove the connection.
+  foreach my_pd [upfutils::get_switched_power_domains *] {
+    foreach sw_type {ALL PRE} {
+      set sw_rule [upfutils::get_power_domain_switch_rule $my_pd $sw_type] 
+
+      # Remove dont_touch from ack nets.
+
+      set_dont_touch [get_nets  [upfutils::get_power_switch_ack_port $sw_rule ] ] false 
+
+      # ACK port is on net, converting that into pin
+      set pn [get_pins [get_object_name [get_nets  [upfutils::get_power_switch_ack_port $sw_rule ] ] ]] 
+      set nt [get_nets -quiet -of $pn -filter "name=~*Logic0*"]
+
+      
+      # Check if Logic0 net exists
+      if {[sizeof_collection $nt] == 1} {
+        puts "PARTH : Disconnectin Logic0 net from [get_object_name $pn] "
+        disconnect_net $nt $pn
+      }
+    }
+  } 
+
+  # Settings to preserve extra logic
+#  set syn.preserve_list.file "${::REPO_TOP}/${::IP_PROJ}/${::BLOCK}/sdc_preserve_refined.list"
+#  redirect -tee preserve_obj.log {source -e -v [sif::rpath ${::REPO_TOP}/${::IP_PROJ}/common_scripts/preserve_obj.tcl]}
+
+
+  foreach my_pd [upfutils::get_switched_power_domains *] {
+    foreach sw_type {ALL PRE} {
+      set sw_rule [upfutils::get_power_domain_switch_rule $my_pd $sw_type] 
+      # ACK port is on net, converting that into pin
+      set pn [get_pins [get_object_name [get_nets  [upfutils::get_power_switch_ack_port $sw_rule ] ] ]] 
+      set nt [get_nets -quiet -of $pn -filter "name=~*Logic0*"]
+
+      # Check if Logic0 net exists
+      if {[sizeof_collection $nt] == 1} {
+        puts "PARTH : Disconnectin Logic0 net from [get_object_name $pn] "
+        disconnect_net $nt $pn
+      }
+    }
+  } 
+
+}
+
+bbappend syn.fc.SynthPreProcessCallback {
+
+  # Reference : https://solvnetplus.synopsys.com/s/article/Preserving-Undriven-Nets-in-Fusion-Compiler
+  # Preserve ACK nets from optimization
+  set nt_count 0 
+  foreach my_pd [upfutils::get_switched_power_domains *] {
+    foreach sw_type {ALL PRE} {
+      set sw_rule [upfutils::get_power_domain_switch_rule $my_pd $sw_type]
+      set nt      [get_nets  [upfutils::get_power_switch_ack_port $sw_rule ] ] 
+
+        puts "PARTH - Setting Dont_touch on ACK net [get_object_name $nt] "
+        set_dont_touch  $nt true
+        set cells      [get_cells -of [get_pins -leaf -of $nt]]
+        if {[sizeof_collection $cells] > 0} {
+          foreach_in_collection cl $cells {
+            puts "PARTHL - Setting size_only on cell [get_object_name $cl]"
+            set_size_only $cl true 
+          }
+        }
+    }
+  }
+
+}
+
+bbappend syn.fc.SynthSetupPostCallback {
+  # PARTHL --> Setting to avoid boundary optimization and flattening
+  set_app_options -name compile.flow.autoungroup -value false
+  set_app_options -name compile.flow.boundary_optimization -value false
+}
+
+
+
+##
+# synthopt settings
+##
+
+# Break SLEEPIN -> SLEEPOUT arc
+bbset syn.synthopt.SwapNonClkCellsToClkCells {1} {PARTHL : Swap non-clock cell to clock cell}
+
+
+bbset fc.EnableHybridRowCells {0}
+
+bbappend syn.fc.SynthOptSetupPreCallback {
+ 
+
+
+     foreach_in_collection  scenario [get_scenarios ] {
+	    current_scenario $scenario;
+	
+		set_false_path -to u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/I_XHSIOS_UFS_REFCLK_1/PAD
+	set_false_path -to u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/I_XHSIOS_UFS_REFCLK_0/PAD
+
+	catch {source -e -v /google/gchips/workspace/redondo-asia/tpe/user/annug/6feb/Addl_sfp_libclkremoval_in2regmaxdel.Feb6.tcl}  
+	}
+	enable_runtime_improvement
+}
+
+
+
+
+##
+# syn/synthdftOpt settings
+##
+
+bbset fc.SynthDftOpt.EnableCCD       {0}
+bbappend  syn.fc.SynthDFTOptInitialOptoPreCallback { 
+	deselectAll
+	change_sel [get_ports "XHSIOS_UFS_RESETB_0
+	XHSIOS_UFS_RESETB_1
+	XHSIOS_UFS_PWR_EN_1
+	XHSIOS_UFS_PWR_EN_0
+	XHSIOS_CLKBUF_1
+	XHSIOS_ATB1
+	XHSIOS_UFS_REFCLK_0
+	XHSIOS_UFS_REFCLK_1"]
+	change_sel  [get_ports *mphy*] -add
+	catch {remove_terminals [get_terminals -of_objects [get_sel] -filter "layer.name !~ sRDL"]}
+	set_attribute  [get_nets {ufs1_mphy__txdp_1 ufs1_mphy__txdp_0 ufs1_mphy__txdm_1 ufs1_mphy__txdm_0 ufs1_mphy__rxdp_1 ufs1_mphy__rxdp_0 ufs1_mphy__rxdm_1 XHSIOS_UFS_RESETB_0 XHSIOS_UFS_RESETB_1 XHSIOS_UFS_PWR_EN_1 XHSIOS_UFS_PWR_EN_0 XHSIOS_CLKBUF_1 XHSIOS_ATB1 XHSIOS_UFS_REFCLK_0 XHSIOS_UFS_REFCLK_1 ufs0_mphy__ref_pad_clk_m ufs0_mphy__ref_pad_clk_p ufs0_mphy__resref ufs0_mphy__rxdm_0 ufs0_mphy__rxdm_1 ufs0_mphy__rxdp_0 ufs0_mphy__rxdp_1 ufs0_mphy__txdm_0 ufs0_mphy__txdm_1 ufs0_mphy__txdp_0 ufs0_mphy__txdp_1 ufs1_mphy__ref_pad_clk_m ufs1_mphy__ref_pad_clk_p ufs1_mphy__resref ufs1_mphy__rxdm_0}] dont_touch true
+ 
+    foreach_in_collection  scenario [get_scenarios ] {
+    current_scenario $scenario
+	set_false_path -to u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/I_XHSIOS_UFS_REFCLK_1/PAD
+	set_false_path -to u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/I_XHSIOS_UFS_REFCLK_0/PAD
+	catch {source -e -v /google/gchips/workspace/redondo-asia/tpe/user/annug/6feb/Addl_sfp_libclkremoval_in2regmaxdel.Feb6.tcl}  
+	}
+   
+	enable_runtime_improvement
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_PUPD[2]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_PUPD[0]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_PUPD[1]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_SLEW] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_RXMODE] dont_touch false
+	set_attribute [get_net  XHSIOS_UFS_PWR_EN_1] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_ie_to_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_oe_to_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_PUPD[0]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_PUPD[1]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_DRV[1]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_DRV[1]] dont_touch false
+	set_attribute [get_net  XHSIOS_UFS_PWR_EN_0] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_din_from_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_PUPD[0]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_SLEW] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_din_from_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_DRV[3]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_PUPD[2]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_DRV[2]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_PUPD[0]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_DRV[1]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_PUPD[1]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_DRV[0]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_SLEW] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_RXMODE] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_DRV[3]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_DRV[2]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_DRV[1]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_DRV[0]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_RXMODE] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_DRV[0]] dont_touch false
+	set_attribute [get_net  XHSIOS_UFS_RESETB_1] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/ioring/POCCTRL12_CUTD1_ABUT] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/ioring/RTE_CUTD1_ABUT] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/ioring/POCCTRLD_CUTD1_ABUT] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_dout_to_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/ioring/POCCTRL_CUTD1_ABUT] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_DRV[2]] dont_touch false
+	set_attribute [get_net  XHSIOS_UFS_RESETB_0] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_ie_to_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_oe_to_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_0_dout_to_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_lpcm_hsi1_wrapper_hsio_s_gpio_ref_clk_0[0]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_ie_from_core] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_DRV[1]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_DRV[2]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_DRV[3]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_DRV[3]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_SLEW] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_PUPD[1]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_din_from_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_PUPD[0]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_PUPD[2]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_din_from_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_dout_to_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_RXMODE] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/*Logic1*] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_0_DRV[0]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_ie_from_core] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_ie_to_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/*Logic0*] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/POCCTRL_CUTD1_ABUT] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_PUPD[2]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/POCCTRLD_CUTD1_ABUT] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_PUPD[1]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/RTE_CUTD1_ABUT] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_RESETB_1_oe_to_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/POCCTRL12_CUTD1_ABUT] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_dout_to_io] dont_touch false
+	set_attribute [get_net  XHSIOS_UFS_REFCLK_1] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_RXMODE] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_PUPD[2]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_DRV[0]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_oe_to_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_DRV[1]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_ie_to_io] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_DRV[2]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_DRV[0]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_DRV[3]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_DRV[3]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_SLEW] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_SLEW] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_PUPD[1]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_1_din_from_io] dont_touch false
+	set_attribute [get_net  XHSIOS_UFS_REFCLK_0] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_PUPD[0]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_RXMODE] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_PUPD[2]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_pg/u_gpio_HSIOS_BK/XHSIOS_UFS_PWR_EN_0_DRV[2]] dont_touch false
+	set_attribute [get_net  u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/XHSIOS_UFS_REFCLK_1_din_from_io] dont_touch false
+	#source -e -v /google/gchips/workspace/redondo-asia/tpe/user/annug/REPO_3.31/run/13jun_M3V2R2_testpoint/20jun_fixed_fp/syn/synthdft/21jun/fp.tcl
+	#source -e -v /google/gchips/workspace/redondo-asia/tpe/user/annug/3.2a/clk_default/main/pnr/clock/21jun_ref_clock_bound/fp.tcl
+}
+
+
+#setup
+
+
+
+
+#floorplan
+bbset pnr.floorplan.RectilinearDesign {1}
+bbset pnr.EnableFloorplanInInnovus {1}
+
+# pnr/placeopt settings
+##
+
+bbset pnr.placeopt.Exports       {netlist lec_map macro_list spef}
+
+
+
+
+
+bbappend pnr.fc.PlaceOptFinalOptoPreCallback {
+	source -e -v /google/gchips/workspace/redondo-asia/tpe/user/annug/script/ufs_top_buf.tcl 
+	foreach_in_collection  scenario [get_scenarios ] {
+	current_scenario $scenario;
+	 set_false_path -to [get_pins u_ufs*_top/*imem*_SD]
+	 set_false_path -to [get_pins u_ufs*_top/*imem_*DSLP]}
+	 save_block -as cons_sourced
+	save_lib -as cons_sourced
+}
+
+##
+#  Syn settings
+## 
+bbset syn.MaxTransitionOverrides     {
+        {*NM* {data {* 0.35} clock {* 0.15}}}
+        {*-UD-* {data {* 0.35} clock {* 0.17}}}
+        {*SUD* {data {* 0.7} clock {* 0.2}}}
+        {*UUD* {data {* 0.7} clock {* 0.23}}}
+} {PARTH : max transition overrides based on libs. eg {{*SUD* {data {*clk* 0.70} clock {*clk* 0.60}}} {*NM* {data {*clk* 0.70} clock {*clk*
+ 0.60}}}}}
+
+bbappend  sif.fc.ApplyCommonSettingsPostCallback { 
+  if { $STAGE != "elaborate" && $STAGE != "setup" && $STAGE != "socclocks"} {
+    current_scen [current_scenario]
+    set curr_scen [get_object_name [current_scenario]]
+    foreach scen [get_object_name [get_scenarios]] {
+      current_scenario $scen
+      if {[regexp  {\-NM\-} $scen]} {set ck_tran 0.09 ;
+      } elseif {[regexp  {\-UD\-} $scen]} {set ck_tran 0.12 ;
+      } elseif {[regexp  {\-SUD\-} $scen]} {set ck_tran 0.18 ;
+      } elseif {[regexp  {\-UUD\-} $scen]} {set ck_tran 0.20 ;
+      } else { set ck_tran 0.09 }
+      sif::minfo "PARTH : Setting transition of \'[expr $ck_tran * 1000]ps\' on Clock pins of Sequential cells in Scenraio : $scen"
+      set_max_transition $ck_tran -scenarios $scen [get_lib_pins -of_objects [get_lib_cells -filter "is_sequential==true"] -filter "is_clock_pin==true"]
+    }
+    current_scen $curr_scen
+  }
+}
+
+
+
+
+
+
+##
+# pnr/clock setting
+## 
+# TODO --> Clock cell list ..
+bbset pnr.clock.IgnoreOutOfDesignShapes "true"
+bbset pnr.clockopt.IgnoreOutOfDesignShapes "true"
+
+
+bbset pnr.clock.SwapNonClkCellsToClkCells 1 {PARTHL : Swap NonCk cells to CK cells}
+bbset pnr.clockopt.SwapNonClkCellsToClkCells 1 {PARTHL : Swap NonCk cells to CK cells}
+bbset pnr.clock.ApplyDFTGuidelines 	1   {PARTHL : To keep others happy }
+
+bbset pnr.fc.ClockSetupPreCallback {
+ 
+source -e -v /google/gchips/workspace/redondo-asia/tpe/user/annug/3.2a/15may_testpoint_new/main/pnr/placeopt/20may_eco.tcl
+ source -e -v /google/gchips/workspace/redondo-asia/tpe/user/annug/3.2a/M2Beta/main/syn/synthdft/cell/fp.tcl
+set_ref_libs -remove /google/gchips/workspace/redondo-asia/tpe/user/annug/REPO_3.31/run/13jun_M3V2R2/main/syn/libgen/outs/ndm/ufs_top.ndm
+set_ref_libs -add /google/gchips/workspace/redondo-asia/tpe/user/annug/REPO_3.31/run/libgen_20jun/main/syn/libgen/outs/ndm/ufs_top.ndm
+link -rebind -force
+#set_eco_power_intention -cells [get_flat_cells *annu_custom_ref*]
+ get_power_domains -of_objects [get_flat_cells *annu_custom_ref*]
+set t [current_scenario]
+current_scenario func_NM.ssgnp-NM-0-cworst_ccworst_t
+insert_buffer -lib_cell [get_lib_cells */DCCKBDHD6BWP130HPNPN3P48CPDULVTLL] -new_cell_names annu_custom_clock_balance -new_net_names annu_custom_ u_ufs0_top/u_ufs_top_LP_pclk_UFS 
+insert_buffer -lib_cell [get_lib_cells */DCCKBDHD6BWP130HPNPN3P48CPDULVTLL] -new_cell_names annu_custom_clock_balance -new_net_names annu_custom_ u_ufs0_top/u_ufs_top_u_ufs_ss_CG_Cfgclk 
+insert_buffer -lib_cell [get_lib_cells */DCCKBDHD6BWP130HPNPN3P48CPDULVTLL] -new_cell_names annu_custom_clock_balance -new_net_names annu_custom_ u_ufs0_top/u_ufs_top_u_ufs_ss_Sysclk
+insert_buffer -lib_cell [get_lib_cells */DCCKBDHD6BWP130HPNPN3P48CPDULVTLL] -new_cell_names annu_custom_clock_balance -new_net_names annu_custom_ u_ufs1_top/u_ufs_top_LP_pclk_UFS 
+insert_buffer -lib_cell [get_lib_cells */DCCKBDHD6BWP130HPNPN3P48CPDULVTLL] -new_cell_names annu_custom_clock_balance -new_net_names annu_custom_ u_ufs1_top/u_ufs_top_u_ufs_ss_CG_Cfgclk 
+insert_buffer -lib_cell [get_lib_cells */DCCKBDHD6BWP130HPNPN3P48CPDULVTLL] -new_cell_names annu_custom_clock_balance -new_net_names annu_custom_ u_ufs1_top/u_ufs_top_u_ufs_ss_Sysclk
+
+set_clock_balance_points -delay 1.00 -balance_points  annu_custom_clock_balance_1_0/Z
+set_clock_balance_points -delay 1.00  -balance_points annu_custom_clock_balance/Z
+set_clock_balance_points -delay 1.00  -balance_points annu_custom_clock_balance_0/Z
+set_clock_balance_points -delay 1.00  -balance_points annu_custom_clock_balance_4_0/Z
+set_clock_balance_points -delay 1.00  -balance_points annu_custom_clock_balance_2_0/Z
+set_clock_balance_points -delay 1.00  -balance_points annu_custom_clock_balance_3_0/Z
+current_scenario [get_object_name $t]
+
+ foreach_in_collection  scenario [get_scenarios ] {
+	    current_scenario $scenario;
+ set glitchless_mux_or_gates [get_cells -quiet -hier -filter "full_name=~*/u_lcm_core/u_glitchless_clk_mux_*/u_glitchless_clk_mux/or_u/*/SIZEONLY_or"]
+  if {[sizeof_collection $glitchless_mux_or_gates] > 0} {
+    foreach cell [get_object_name $glitchless_mux_or_gates] {
+      set in_pins [get_pins -of [get_cells $cell] -filter "direction==in"]
+      set out_pin [get_pins -of [get_cells $cell] -filter "direction==out"]
+
+      puts "**STA_SDC_INFO: Adding set_clock_exclusivity on out_pins: [get_object_name $out_pin] in_pins: [get_object_name $in_pins]"
+           
+set_clock_exclusivity -output $out_pin -inputs $in_pins -type user_defined
+                
+                
+    }
+}
+  	
+	set_false_path -to u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/I_XHSIOS_UFS_REFCLK_1/PAD
+	set_false_path -to u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/I_XHSIOS_UFS_REFCLK_0/PAD
+source /google/gchips/ipreleases/lajolla_scf/dft_common_constraints/LAJ_A0_M3/LAJ_A0_M3_25_MAR_2025_REV1/sswrp_dft_common_exceptions/overrides_margins.tcl
+	
+	catch {source -e -v /google/gchips/workspace/redondo-asia/tpe/user/annug/6feb/Addl_sfp_libclkremoval_in2regmaxdel.Feb6.tcl}  
+	}
+foreach_in_collection  scenario [get_scenarios func* ] {
+	    current_scenario $scenario;
+## in2sync
+set synced_inputs "
+cpm_hsios_icd_bypass
+sre_restore_pend
+dp_abort_req
+hsios_debug_mode
+sec_sdm_gsa_debug_state
+sec_sdm_ns_debug_state
+sec_sdm_s_debug_state
+idft_test_clk
+cpm_hsios_warm_rst_n
+ufs_gspan_acelite_ini_r_ss_clkreq
+ufs_gspan_acelite_ini_b_ss_clkreq
+hsios_gspan_axi_tgt_ar_ss_clkreq
+hsios_gspan_axi_tgt_aw_ss_clkreq
+hsios_gspan_axi_tgt_w_ss_clkreq
+gspan_ilink_endpoint_rxd_ss_clkreq
+gspan_ilink_endpoint_rxcr_ss_clkreq
+gspan_apb_target_preq_ss_clkreq
+gspan_atb_initiator_flush_req
+gspan_atb_initiator_sync_req_req
+gspan_atb_initiator_atret_ss_clkreq
+ufs_gspan_kdn_tgt_aw_ss_clkreq
+ufs_gspan_kdn_tgt_w_ss_clkreq
+ufs_gspan_acelite_ini_icd_idiack
+ufs_gspan_acelite_ini_icd_idinak
+ufs_gspan_acelite_ini_icd_idireq
+ufs_gspan_acelite_ini_icd_idimode
+hsios_gspan_axi_tgt_icd_idiack
+hsios_gspan_axi_tgt_icd_idinak
+hsios_gspan_axi_tgt_icd_idireq
+hsios_gspan_axi_tgt_icd_idimode
+gspan_atb_initiator_icd_idiack
+gspan_atb_initiator_icd_idinak
+gspan_atb_initiator_icd_idireq
+gspan_atb_initiator_icd_idimode
+ufs_gspan_kdn_tgt_icd_idiack
+ufs_gspan_kdn_tgt_icd_idinak
+ufs_gspan_kdn_tgt_icd_idireq
+ufs_gspan_kdn_tgt_icd_idimode
+u_CPHBWHSIOS_ifabric_HBW_HSIO_S_FABHBW_IWL__rx_idack
+u_CPHBWHSIOS_ifabric_HBW_HSIO_S_FABHBW_IWL__rx_idnak
+u_CPHBWHSIOS_ifabric_HBW_HSIO_S_FABHBW_IWL__rx_idreq
+u_CPHBWHSIOS_ifabric_HBW_HSIO_S_FABHBW_IWL__rx_idmode
+DBG_CTI_M_pulse_ack[3]
+DBG_CTI_M_pulse_ack[2]
+DBG_CTI_M_pulse_ack[1]
+DBG_CTI_M_pulse_ack[0]
+DBG_CTI_S_pulse_req[3]
+DBG_CTI_S_pulse_req[2]
+DBG_CTI_S_pulse_req[1]
+DBG_CTI_S_pulse_req[0]
+global_timestamp[63]
+global_timestamp[62]
+global_timestamp[61]
+global_timestamp[60]
+global_timestamp[59]
+global_timestamp[58]
+global_timestamp[57]
+global_timestamp[56]
+global_timestamp[55]
+global_timestamp[54]
+global_timestamp[53]
+global_timestamp[52]
+global_timestamp[51]
+global_timestamp[50]
+global_timestamp[49]
+global_timestamp[48]
+global_timestamp[47]
+global_timestamp[46]
+global_timestamp[45]
+global_timestamp[44]
+global_timestamp[43]
+global_timestamp[42]
+global_timestamp[41]
+global_timestamp[40]
+global_timestamp[39]
+global_timestamp[38]
+global_timestamp[37]
+global_timestamp[36]
+global_timestamp[35]
+global_timestamp[34]
+global_timestamp[33]
+global_timestamp[32]
+global_timestamp[31]
+global_timestamp[30]
+global_timestamp[29]
+global_timestamp[28]
+global_timestamp[27]
+global_timestamp[26]
+global_timestamp[25]
+global_timestamp[24]
+global_timestamp[23]
+global_timestamp[22]
+global_timestamp[21]
+global_timestamp[20]
+global_timestamp[19]
+global_timestamp[18]
+global_timestamp[17]
+global_timestamp[16]
+global_timestamp[15]
+global_timestamp[14]
+global_timestamp[13]
+global_timestamp[12]
+global_timestamp[11]
+global_timestamp[10]
+global_timestamp[9]
+global_timestamp[8]
+global_timestamp[7]
+global_timestamp[6]
+global_timestamp[5]
+global_timestamp[4]
+global_timestamp[3]
+global_timestamp[2]
+global_timestamp[1]
+global_timestamp[0]
+cpm_hsios_restore_ack
+cpm_hsios_restore_nack
+cpm_hsios_access_rst_disable
+cpm_hsios_mem_rst_disable
+cpm_hsios_trigger_done
+gmrc_done"
+
+#foreach p [get_ports $synced_inputs] {
+#	if {[info exists synopsys_programe_name]} {
+#		remove_input_delay $p
+#	} else {
+#		reset_input_delay $p
+#	}
+#	set_max_delay 5 -from [get_object_name $p]
+#}
+
+foreach_in_collection p [get_ports $synced_inputs] {
+	if {[info exists ::synopsys_program_name]} {
+		remove_input_delay $p
+	} else {puts "reseting input delay"
+		reset_input_delay $p
+	}
+	set_max_delay 5 -from [get_object_name $p]
+}
+
+
+
+
+
+
+
+# /google/gchips/workspace/redondo-asia/tpe/user/annug/3.2a/ufs_outgoing_clocks.tcl
+}
+
+
+save_block -as 20may_clock_ref
+}
+
+bbset pnr.clock.InverterCellList     {CKNZPDD3BWP130HPNPN3P48CPDULVTLL CKNDHZPDD4BWP130HPNPN3P48CPDULVTLL CKNDHZPDD5BWP130HPNPN3P48CPDULVTLL CKNDHZPDD6BWP130HPNPN3P48CPDULVTLL  CKNDHZPDD8BWP130HPNPN3P48CPDULVTLL CKNDHZPDD10BWP130HPNPN3P48CPDULVTLL DCCKNDHZPDD12BWP130HPNPN3P48CPDULVTLL PTINVHDCWD3BWP130HPNPN3P48CPDULVTLL PTINVHDCWD4BWP130HPNPN3P48CPDULVTLL  PTINVHDCWD6BWP130HPNPN3P48CPDULVTLL  } {List of inverter cells}
+bbset pnr.clock.TopInverterCellList  {CKNZPDD3BWP130HPNPN3P48CPDULVTLL CKNDHZPDD4BWP130HPNPN3P48CPDULVTLL CKNDHZPDD5BWP130HPNPN3P48CPDULVTLL CKNDHZPDD6BWP130HPNPN3P48CPDULVTLL  CKNDHZPDD8BWP130HPNPN3P48CPDULVTLL CKNDHZPDD10BWP130HPNPN3P48CPDULVTLL DCCKNDHZPDD12BWP130HPNPN3P48CPDULVTLL PTINVHDCWD3BWP130HPNPN3P48CPDULVTLL PTINVHDCWD4BWP130HPNPN3P48CPDULVTLL  PTINVHDCWD6BWP130HPNPN3P48CPDULVTLL } {Leaf Specific Inverter Cell List}
+bbset pnr.clock.LeafInverterCellList {CKNZPDD3BWP130HPNPN3P48CPDULVTLL CKNDHZPDD4BWP130HPNPN3P48CPDULVTLL CKNDHZPDD5BWP130HPNPN3P48CPDULVTLL CKNDHZPDD6BWP130HPNPN3P48CPDULVTLL  CKNDHZPDD8BWP130HPNPN3P48CPDULVTLL CKNDHZPDD10BWP130HPNPN3P48CPDULVTLL DCCKNDHZPDD12BWP130HPNPN3P48CPDULVTLL PTINVHDCWD4BWP130HPNPN3P48CPDULVTLL  PTINVHDCWD6BWP130HPNPN3P48CPDULVTLL } {Leaf specific inverter cell list}
+bbset pnr.clock.BufferCellList       {PTBUFFHDCWD4BWP130HPNPN3P48CPDULVTLL PTBUFFHDCWD6BWP130HPNPN3P48CPDULVTLL PTBUFFHDIWLACFGOLD6BWP130HPNPN3P48CPDULVTLL} {List of buffer cells}
+bbset pnr.clock.ICGCellList          {CKLNQZPDD3BWP130HPNPN3P48CPDULVTLL CKLNQZPDD4BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBZPDD4BWP130HPNPN3P48CPDULVTLL  CKLNQZPDD5BWP130HPNPN3P48CPDULVTLL CKLNQZPDD6BWP130HPNPN3P48CPDULVTLL CKLNQZPDD8BWP130HPNPN3P48CPDULVTLL  CKLNQOPTBBZPDD8BWP130HPNPN3P48CPDULVTLL CKLNQZPDD10BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBZPDD10BWP130HPNPN3P48CPDULVTLL  CKLNQZPDD12BWP130HPNPN3P48CPDULVTLL CKLNQOPTBBZPDD12BWP130HPNPN3P48CPDULVTLL} {List of clock gating cells}
+  
+ bbset pnr.fc.ClockBuildClockPreCallback {
+  
+    ## PARTHL --> Some extra setting to restrict tool to use only CK cells 
+    set_lib_cell_purpose -exclude cts  [get_lib_cell */*CPDLVT* ]    ;# Avoid LVT and LVTLL
+    set_lib_cell_purpose -exclude cts  [get_lib_cell */AN3* ]    ;# Avoid multi input AND gate
+    set_lib_cell_purpose -exclude cts  [get_lib_cell */AN4* ]    ;# Avoid multi input AND gate
+    set_lib_cell_purpose -exclude cts  [get_lib_cell */ND3* ]    ;# Avoid multi input NAND gate
+    set_lib_cell_purpose -exclude cts  [get_lib_cell */ND4* ]    ;# Avoid multi input NAND gate
+    set_lib_cell_purpose -exclude cts  [get_lib_cell */OR3* ]    ;# Avoid multi input OR gate
+    set_lib_cell_purpose -exclude cts  [get_lib_cell */OR4* ]    ;# Avoid multi input OR gate
+    set_lib_cell_purpose -exclude cts  [get_lib_cell */NR3* ]    ;# Avoid multi input NOR gate
+    set_lib_cell_purpose -exclude cts  [get_lib_cell */NR4* ]    ;# Avoid multi input NOR gate
+    set_lib_cell_purpose -exclude cts  [get_lib_cell */DEL* ]    ;# Avoid Delay cells in cts 
+    set_lib_cell_purpose -exclude cts  [get_lib_cell */INVSK* ]    ;# Avoid skew inv cells
+    set_lib_cell_purpose -exclude cts  [get_lib_cell */INVDVG* ]    ;# Avoid skew inv cells
+    set_lib_cell_purpose -exclude cts  [get_lib_cell */INVPAD* ]    ;# Avoid skew inv cells
+    set_lib_cell_purpose -exclude cts  [get_lib_cell  */ISO*D1BWP*]  ;# Avoid D1 ISO
+    set_lib_cell_purpose -exclude cts [get_lib_cell  */LVL*D1BWP*] ;# Avoid D1 LVL
+    set_lib_cell_purpose -exclude cts [get_lib_cell  */*D1BWP*]   ;# Ignore all D1 cells
+    set_lib_cell_purpose -exclude cts [get_lib_cell  */*D2BWP* ]  ;# Ignore all D2 cells
+    set_lib_cell_purpose -exclude cts [get_lib_cell  */*D?P?BWP*] ;# PARTHL --> Ignore all D0P5
+    set_lib_cell_purpose -exclude cts [get_lib_cell */*LLKG*]   ;# PARTHL --> Ignore all Low leakage cell
+
+    set_lib_cell_purpose -include cts { CKLVLLHCLSRCCWBALZPDGOLD4BWP130HPNPN3P48CPDULVTLL  CKLVLLHBUFFSNKCWBALZPDGOLD4BWP130HPNPN3P48CPDULVTLL CKLVLLHCHSNKCWBALZPDGOLD4BWP130HPNPN3P48CPDULVTLL  CKLVLLHCHSRCCWBALZPDGOLD4BWP130HPNPN3P48CPDULVTLL CKLVLLHCLSNKCWBALZPDGOLD4BWP130HPNPN3P48CPDULVTLL  CKAN2D4BWP130HPNPN3P48CPDULVTLL  CKBDHD4BWP130HPNPN3P48CPDULVTLL CKLHQD4BWP130HPNPN3P48CPDULVTLL  CKLNQD4BWP130HPNPN3P48CPDULVTLL CKMUX2D4BWP130HPNPN3P48CPDULVTLL  CKND2D4BWP130HPNPN3P48CPDULVTLL CKNDHD4BWP130HPNPN3P48CPDULVTLL CKNR2D4BWP130HPNPN3P48CPDULVTLL  CKOR2D4BWP130HPNPN3P48CPDULVTLL CKXOR2D4BWP130HPNPN3P48CPDULVTLL  PTINVHDCWD3BWP130HPNPN3P48CPDULVTLL PTINVHDCWD4BWP130HPNPN3P48CPDULVTLL  PTINVHDCWD6BWP130HPNPN3P48CPDULVTLL  PTBUFFHDCWD4BWP130HPNPN3P48CPDULVTLL PTBUFFHDCWD6BWP130HPNPN3P48CPDULVTLL PTBUFFHDIWLACFGOLD6BWP130HPNPN3P48CPDULVTLL  }
+  
+  
+
+    
+  
+
+   # PARTH --> Vt swap non dominant vt cells to dominant vt. 
+   set dom_vt "ULVTLL" 
+   set clk_tree_insts [get_flat_cells * -quiet -filter is_mapped==true&&is_clock_network_cell==true]
+   append_to_collection clk_tree_insts [get_flat_cells * -quiet -filter "is_integrated_clock_gating_cell"]
+   set incorrect_vt_clk_inst [get_cell $clk_tree_insts -filter "ref_name!~*${dom_vt}"]
+   if {[sizeof_collection $incorrect_vt_clk_inst]} {
+     sif::minfo "Found total [sizeof_collection $incorrect_vt_clk_inst] cells of vt other than type ${dom_vt}"
+     sif::minfo "Begin to swap RTL instantiated clock cells to dominant VT flavour"
+     foreach inst [get_object_name $incorrect_vt_clk_inst] {
+         set ref_name [get_attr [get_cells $inst] ref_name]
+         set pattern1 [lindex [regsub "BWP" $ref_name " "] 0]
+         set pattern2 [lindex [regsub "CPD" [lindex [regsub "BWP" $ref_name " "] 1] " "] 0]
+         set new_cell ${pattern1}BWP${pattern2}CPD${dom_vt}
+         if {[sizeof_collection [get_lib_cells */${new_cell}]]} {
+             sif::minfo "Executing size_cell $inst $new_cell to swap cell to dominant VT"
+             size_cell $inst $new_cell
+         } else {
+             sif::minfo "No lib cell found with name ${new_cell}. Not swapping inst ${inst}."
+         }
+     }
+   } else {
+       puts "No hard instantiated clock cells found in the design"
+   }
+  
+
+
+
+  
+}
+
+
+#clockopt
+bbset pnr.fc.ClockOptFinalOptoPreCallback {
+set_lib_cell_purpose -include none [get_lib_cells */*DSVT ]
+set_lib_cell_purpose -include none [get_lib_cells */*DELVT ]
+
+}
+bbset pnr.clockopt.Exports {stage_netlist netlist def scan_def upf lightdb lef lec_map spef}
+
+## 
+# pnr/route setting
+##
+bbappend pnr.fc.RouteSetupPreProcessCallback {
+  set_app_options  -name route.detail.save_after_iterations -value {  1 5 }
+}
+
+##
+# pnr.chipfinish
+##
+bbset fc.WriteChipFinishPkg 1 {PARTHL : Writing out libpkg to avoid std cell ndm linking issue}
+bbset fc.CreateFrameArgs             {-block_all M15}                                         {# Based on LGA-B0 learning}  
+bbappend sif.fc.QORSummaryPreCallback {
+  if { $STAGE == "chipfinish" } {
+    set pnr.fc.EnableQORSummary 0
+  } 
+
+}
+
+
+
+
+#RTL  
+bbset .info.BLOCK "sswrp_hsio_s"
+bbset Release_area "/google/gchips/ipreleases/lajolla_hsio/sswrp_hsio_s/LAJ_A0_SSWRP_HSIO_S_M4_V3_R3_D1_RTLDFT/fe_release"
+bbset SSWRP_HSIO_S_RELEASE_PROJECT_TOP "[bbget .Release_area]"
+bbset syn.elaborate.RTLParsingVars ""
+bbset syn.elaborate.RTLSearchPath "/google/gchips/ipreleases/lajolla_hsio/sswrp_hsio_s/LAJ_A0_SSWRP_HSIO_S_M4_V3_R3_D1_RTLDFT/fe_release/sswrp_hsio_s/dft_rtl"
+bbset syn.elaborate.RTLFileList "/google/gchips/ipreleases/lajolla_hsio/sswrp_hsio_s/LAJ_A0_SSWRP_HSIO_S_M4_V3_R3_D1_RTLDFT/fe_release/sswrp_hsio_s/dft_rtl/synth/sswrp_hsio_s.vf"
+bbset syn.elaborate.InputUPFFile "/google/gchips/ipreleases/lajolla_hsio/sswrp_hsio_s/LAJ_A0_SSWRP_HSIO_S_M4_V3_R3_D1_RTLDFT/fe_release/sswrp_hsio_s/dft_upf/sswrp_hsio_s/sswrp_hsio_s.upf"
+#/google/gchips/workspace/redondo-asia/tpe/user/shenoyn/mbu/integ/sswrp_hsio_s_M3_r1/sswrp_hsio_s/sswrp_hsio_s/dft_upf/sswrp_hsio_s/sswrp_hsio_s.upf
+
+
+
+bbset mmmc.mode.func_NM.synSdcs "/google/gchips/ipreleases/lajolla_hsio/sswrp_hsio_s/LAJ_A0_SSWRP_HSIO_S_M4_V3_R3_D1_RTLDFT/fe_release/sswrp_hsio_s/dft_sdc/sswrp_hsio_s.mission.tcl"
+
+bbset mmmc.mode.func_NM.pnrSdcs "/google/gchips/ipreleases/lajolla_hsio/sswrp_hsio_s/LAJ_A0_SSWRP_HSIO_S_M4_V3_R3_D1_RTLDFT/fe_release/sswrp_hsio_s/dft_sdc/sswrp_hsio_s.mission.tcl"
+bbset mmmc.mode.shift_NM.synSdcs "/google/gchips/ipreleases/lajolla_hsio/sswrp_hsio_s/LAJ_A0_SSWRP_HSIO_S_M4_V3_R3_D1_RTLDFT/fe_release/sswrp_hsio_s/dft_sdc/sswrp_hsio_s.shift.tcl"
+bbset mmmc.mode.shift_NM.pnrSdcs "/google/gchips/ipreleases/lajolla_hsio/sswrp_hsio_s/LAJ_A0_SSWRP_HSIO_S_M4_V3_R3_D1_RTLDFT/fe_release/sswrp_hsio_s/dft_sdc/sswrp_hsio_s.shift.tcl"
+
+
+
+
+##mmmc 
+bbset mmmc.mode.modes {func_NM shift_NM }
+bbset mmmc.vdomain.vdomains {AVDD075_CLKBUF_HSIOS AVDD075_UFS0_EMBD_VP AVDD075_UFS1_EMBD_VP AVDD12_UFS0_EMBD AVDD12_UFS1_EMBD VDDQ04_HSIOS VDDQ08_HSIOS VDDQ12_HSIOS VDD_HSIOS VDD_INFRA VDD_INFRA_M VDD_STBY_S PADSS_HSIOS_BK_ESD12B_cut1 PADSS_HSIOS_BK_ESD12_cut1 PADSS_HSIOS_BK_ESDB_cut1 PADSS_HSIOS_STBY_BK_ESD12B_cut1 PADSS_HSIOS_STBY_BK_ESD12_cut1 PADSS_HSIOS_STBY_BK_ESDB_cut1 AVDD075_UFS0_EMBD_VPDIG AVDD075_UFS1_EMBD_VPDIG}
+bbset mmmc.vdomain.AVDD075_CLKBUF_HSIOS.rail {AVDD075_CLKBUF_HSIOS$}
+bbset mmmc.vdomain.AVDD075_UFS0_EMBD_VP.rail {AVDD075_UFS0_EMBD_VP$}
+bbset mmmc.vdomain.AVDD075_UFS1_EMBD_VP.rail {AVDD075_UFS1_EMBD_VP$}
+bbset mmmc.vdomain.AVDD12_UFS0_EMBD.rail {AVDD12_UFS0_EMBD$}
+bbset mmmc.vdomain.AVDD12_UFS1_EMBD.rail {AVDD12_UFS1_EMBD$}
+bbset mmmc.vdomain.VDDQ04_HSIOS.rail {VDDQ04_HSIOS$}
+bbset mmmc.vdomain.VDDQ08_HSIOS.rail {VDDQ08_HSIOS$}
+bbset mmmc.vdomain.VDDQ12_HSIOS.rail {VDDQ12_HSIOS$}
+bbset mmmc.vdomain.VDD_HSIOS.rail {VDD_HSIOS$}
+bbset mmmc.vdomain.VDD_INFRA.rail {VDD_INFRA$}
+bbset mmmc.vdomain.VDD_INFRA_M.rail {VDD_INFRA_M$}
+bbset mmmc.vdomain.VDD_STBY_S.rail {VDD_STBY_S$}
+bbset mmmc.vdomain.PADSS_HSIOS_BK_ESD12B_cut1.rail {PADSS_HSIOS_BK_ESD12B_cut1$}
+bbset mmmc.vdomain.PADSS_HSIOS_BK_ESD12_cut1.rail {PADSS_HSIOS_BK_ESD12_cut1$}
+bbset mmmc.vdomain.PADSS_HSIOS_BK_ESDB_cut1.rail {PADSS_HSIOS_BK_ESDB_cut1$}
+bbset mmmc.vdomain.PADSS_HSIOS_STBY_BK_ESD12B_cut1.rail {PADSS_HSIOS_STBY_BK_ESD12B_cut1$}
+bbset mmmc.vdomain.PADSS_HSIOS_STBY_BK_ESD12_cut1.rail {PADSS_HSIOS_STBY_BK_ESD12_cut1$}
+bbset mmmc.vdomain.PADSS_HSIOS_STBY_BK_ESDB_cut1.rail {PADSS_HSIOS_STBY_BK_ESDB_cut1$}
+bbset mmmc.vdomain.AVDD075_UFS0_EMBD_VPDIG.rail {AVDD075_UFS0_EMBD_VPDIG$|VVDD_AVDD075_UFS0_EMBD_VPDIG_PG}
+bbset mmmc.vdomain.AVDD075_UFS1_EMBD_VPDIG.rail {AVDD075_UFS1_EMBD_VPDIG$|VVDD_AVDD075_UFS1_EMBD_VPDIG_PG$}
+
+bbset mmmc.scenarios.constraints {
+           {apply *.ssgnp-NM-* {AVDD075_CLKBUF_HSIOS 0p6750} {AVDD075_UFS0_EMBD_VP 0p6750}  {AVDD075_UFS1_EMBD_VP 0p6750}  {AVDD12_UFS0_EMBD 0p6750} {AVDD12_UFS1_EMBD 0p6750} {VDDQ04_HSIOS 0p6750}  {VDDQ08_HSIOS 0p6750}  {VDDQ12_HSIOS 0p6750}  {VDD_HSIOS 0p6750} {VDD_INFRA 0p6750} {VDD_INFRA_M 0p6750} {VDD_STBY_S 0p6750} {PADSS_HSIOS_BK_ESD12B_cut1 0p6750} {PADSS_HSIOS_BK_ESD12_cut1 0p6750} {PADSS_HSIOS_BK_ESDB_cut1 0p6750} {PADSS_HSIOS_STBY_BK_ESD12B_cut1 0p6750} {PADSS_HSIOS_STBY_BK_ESD12_cut1 0p6750} {PADSS_HSIOS_STBY_BK_ESDB_cut1 0p6750}}
+            {apply *.ffgnp-NM-* {AVDD075_CLKBUF_HSIOS 0p8250} {AVDD075_UFS0_EMBD_VP 0p8250}  {AVDD075_UFS1_EMBD_VP 0p8250}  {AVDD12_UFS0_EMBD 1p3200} {AVDD12_UFS1_EMBD 1p3200} {VDDQ04_HSIOS 0p8250}  {VDDQ08_HSIOS 0p8250}  {VDDQ12_HSIOS 1p3200}  {VDD_HSIOS 0p8250} {VDD_INFRA 0p8250} {VDD_INFRA_M 0p8250} {VDD_STBY_S 0p8250} {PADSS_HSIOS_BK_ESD12B_cut1 0p8250} {PADSS_HSIOS_BK_ESD12_cut1 0p8250} {PADSS_HSIOS_BK_ESDB_cut1 0p8250} {PADSS_HSIOS_STBY_BK_ESD12B_cut1 0p8250} {PADSS_HSIOS_STBY_BK_ESD12_cut1 0p8250} {PADSS_HSIOS_STBY_BK_ESDB_cut1 0p8250}}
+            {apply *.ssgnp-UUD-* {AVDD075_CLKBUF_HSIOS 0p6750} {AVDD075_UFS0_EMBD_VP 0p6750}  {AVDD075_UFS1_EMBD_VP 0p6750}  {AVDD12_UFS0_EMBD 0p6750} {AVDD12_UFS1_EMBD 0p6750} {VDDQ04_HSIOS 0p6750}  {VDDQ08_HSIOS 0p6750}  {VDDQ12_HSIOS 0p6750}  {VDD_HSIOS 0p6750} {VDD_INFRA 0p4750} {VDD_INFRA_M 0p6750} {VDD_STBY_S 0p6750} {PADSS_HSIOS_BK_ESD12B_cut1 0p6750} {PADSS_HSIOS_BK_ESD12_cut1 0p6750} {PADSS_HSIOS_BK_ESDB_cut1 0p6750} {PADSS_HSIOS_STBY_BK_ESD12B_cut1 0p6750} {PADSS_HSIOS_STBY_BK_ESD12_cut1 0p6750} {PADSS_HSIOS_STBY_BK_ESDB_cut1 0p6750}}
+            {create *.*}
+}
+#extra lib settings
+bbset syn.MacroLibraryFileExclude {}
+bbset pnr.MacroLibraryFileExclude {}
+bbset libgen.syn.EnableExtraNDMGeneration {1}  
+bbset libgen.pnr.EnableExtraNDMGeneration {1}  
+bbset syn.ExtraLibs.Enable           {True} 
+bbset pnr.ExtraLibs.Enable           {True} 
+
+bbset libgen.LibraryPriority.syn.LibComplements {_pmc_|_lvlc_|_basec_|_base_|_pm_|_mb_|_base2_|l3p48cpd_goog|gsl_clk_div|fll_top|IP93X12C|prtn_pu_143_top|prtn_pu_169_top|prtn_stb_top|tcxo_clock_buffer_top|12gpio|12od18|dwc_sensors_dts2rs_ndnw|ts6|amux_top}
+bbset libgen.LibraryPriority.pnr.LibComplements {_pmc_|_lvlc_|_basec_|_base_|_pm_|_mb_|_base2_|l3p48cpd_goog|gsl_clk_div|fll_top|IP93X12C|prtn_pu_143_top|prtn_pu_169_top|prtn_stb_top|tcxo_clock_buffer_top|12gpio|12od18|dwc_sensors_dts2rs_ndnw|ts6|amux_top}
+bbns syn {
+        bbset  MacroLibraryFileExclude ".*"
+        bbset  MacroLibraryFileInclude  {ip_tphn02p_075od12gpio_c240708|amux_top|tcxo_clock_buffer_top|ts1n02psblvta64x76m2wzhodcp|ts6n02psvtb64x92m1zhocp|ts6n02psvtb64x164m1zhocp|ts1n02psbsvta16x136m1zhocp|ts1n02psbsvta64x74m1zhocp|ts6n02psvtb480x132m2zhocp|ts6n02psvtb384x74m2wzhocp|ts6n02psvtb192x36m2zhocp|ts6n02psvtb120x172m1wzhocp|prtn_ro_143mh|tphn02p_075od12gpio_c240708|bwp143mh169l3p48cpd_base_gcustom_gsl_clk_div50_dp|bwp143mh169l3p48cpd_base_gcustom_gsl_clk_div50_dp_2r|ts1n02pmbsvta4096x16m4qbzhocp|ts6n02psvtb64x180m1bzhocp|ts6n02psvta512x128m2sbzhocp|ts6n02psvta144x128m2sbzhocp|ts6n02psvta200x128m2sbzhocp|ts1n02psbsvta512x118m2bzhocp|ts6n02psvtb512x128m2bzhocp|ts6n02psvtb256x132m1bzhocp|ts6n02psvtb64x132m1bzhocp|ts6n02psvtb512x26m4zhocp|ts6n02psvtb512x24m4zhocp|ts6n02psvtb512x8m4zhocp|ts6n02psvtb512x14m4zhocp|ts6n02psvtb512x32m2zhocp|ts6n02psvtb512x92m2zhocp|ts6n02psvtb512x82m2zhocp|ts6n02psvtb480x132m2zhocp|ts6n02psvtb512x26m4zhocp|ts6n02psvtb512x32m2zhocp|ts6n02psvtb512x24m4zhocp|ts6n02psvtb512x92m2zhocp|ts6n02psvtb512x82m2zhocp|ts6n02psvtb512x8m4zhocp|ts6n02psvtb512x14m4zhocp|ts1n02psbsvta16x136m1zhocp|ts1n02psbsvta64x74m1zhocp|prtn_ro_h130|N02_DTCD_ALL_M13_240912|fiducial_h130|bwph130pnpnl3p48cpd_base_gcustom_gsl_clk_div50_dp_2r|ts6n02psvtb384x130m2zhocp|ts6n02psvtb640x38m4wzhocp|LUP_V_C240708|LUP_H_C240708|N02P_DTCD_M13_v0d9_2|tpmn02p_lup_15lm|tpmn02p_esd_15lm}
+        bbns ExtraLibs {
+        bbset Enable {True} {# True(default)|False, Super option to enable(default)/disable ExtraLibs feature}
+        bbns libgen {
+            bbset ccs_db {
+{
+func_NM.ssgnp-UUD-0-cworst_ccworst_t {
+/google/gchips/workspace/redondo-asia/tpe/user/annug/M4.V3.R1.sythopt_jul26/ufs_top_func_ssgnp_0p6750v_0c_cworst_ccworst_t_lib.db
+} 
+}
+
+{
+func_NM.ssgnp-NM-0-cworst_ccworst_t {
+/google/gchips/workspace/redondo-asia/tpe/user/annug/M4.V3.R1.sythopt_jul26/ufs_top_func_ssgnp_0p6750v_0c_cworst_ccworst_t_lib.db
+}
+ 
+}
+{
+func_NM.tt-NMP-85-cworst_ccworst_t	 {
+/google/gchips/workspace/redondo-asia/tpe/user/annug/M4.V3.R1.sythopt_jul26/ufs_top_func_tt_0p7500v_85c_cworst_ccworst_t_lib.db
+}
+ 
+}
+{
+func_NM.ssgnp-NM-125-rcworst_ccworst_t {
+
+/google/gchips/workspace/redondo-asia/tpe/user/annug/M4.V3.R1.sythopt_jul26/ufs_top_func_ssgnp_0p6750v_125c_rcworst_ccworst_t_lib.db
+}
+ }
+{
+func_NM.ffgnp-NM-125-rcworst_ccworst {
+
+/google/gchips/workspace/redondo-asia/tpe/user/annug/M4.V3.R1.sythopt_jul26/ufs_top_func_ffgnp_0p8250v_125c_rcworst_ccworst_lib.db
+ }
+}
+{
+shift_NM.ssgnp-NM-125-rcworst_ccworst_t {
+
+/google/gchips/workspace/redondo-asia/tpe/user/annug/M4.V3.R1.sythopt_jul26/ufs_top_shift_ssgnp_0p6750v_125c_rcworst_ccworst_t_lib.db
+}
+}
+{ 
+shift_NM.ffgnp-NM-125-rcworst_ccworst {
+/google/gchips/workspace/redondo-asia/tpe/user/annug/M4.V3.R1.sythopt_jul26/ufs_top_shift_ffgnp_0p8250v_125c_rcworst_ccworst_lib.db
+} 
+}
+
+
+ }                  }
+    }
+
+   
+    bbset EnablePhysicalSynthesis "0" 
+}
+ bbset syn.ExtraLibs.libgen.lef {
+/google/gchips/workspace/redondo-asia/tpe/user/mirzasadiqbeg/Lajolla_ufs/block/ufs_top/M4/LAJ_A0_UFS_TOP_M4V3R1D1_RTLDFT/run/LAJ_A0_UFS_TOP_M4V3R1D1_RTLDFT_Jul18_1st_run/main/syn/floorplan/outs/ufs_top.lef
+
+
+
+
+
+
+}
+
+bbset syn.MacroLibraryFileInclude    {ip_tphn02p_075od12gpio_c240708|amux_top|tcxo_clock_buffer_top|ts1n02psblvta64x76m2wzhodcp|ts6n02psvtb64x92m1zhocp|ts6n02psvtb64x164m1zhocp|ts1n02psbsvta16x136m1zhocp|ts1n02psbsvta64x74m1zhocp|ts6n02psvtb480x132m2zhocp|ts6n02psvtb384x74m2wzhocp|ts6n02psvtb192x36m2zhocp|ts6n02psvtb120x172m1wzhocp|prtn_ro_143mh|tphn02p_075od12gpio_c240708|bwp143mh169l3p48cpd_base_gcustom_gsl_clk_div50_dp|bwp143mh169l3p48cpd_base_gcustom_gsl_clk_div50_dp_2r|ts1n02pmbsvta4096x16m4qbzhocp|ts6n02psvtb64x180m1bzhocp|ts6n02psvta512x128m2sbzhocp|ts6n02psvta144x128m2sbzhocp|ts6n02psvta200x128m2sbzhocp|ts1n02psbsvta512x118m2bzhocp|ts6n02psvtb512x128m2bzhocp|ts6n02psvtb256x132m1bzhocp|ts6n02psvtb64x132m1bzhocp|ts6n02psvtb512x26m4zhocp|ts6n02psvtb512x24m4zhocp|ts6n02psvtb512x8m4zhocp|ts6n02psvtb512x14m4zhocp|ts6n02psvtb512x32m2zhocp|ts6n02psvtb512x92m2zhocp|ts6n02psvtb512x82m2zhocp|ts6n02psvtb480x132m2zhocp|ts6n02psvtb512x26m4zhocp|ts6n02psvtb512x32m2zhocp|ts6n02psvtb512x24m4zhocp|ts6n02psvtb512x92m2zhocp|ts6n02psvtb512x82m2zhocp|ts6n02psvtb512x8m4zhocp|ts6n02psvtb512x14m4zhocp|ts1n02psbsvta16x136m1zhocp|ts1n02psbsvta64x74m1zhocp|prtn_ro_h130|N02_DTCD_ALL_M13_240912|fiducial_h130|bwph130pnpnl3p48cpd_base_gcustom_gsl_clk_div50_dp_2r|ts6n02psvtb384x130m2zhocp|ts6n02psvtb640x38m4wzhocp|LUP_V_C240708|LUP_H_C240708|N02P_DTCD_M13_v0d9_2|tpmn02p_lup_15lm|tpmn02p_esd_15lm} {Exclude all macros till we get a memory compiler}
+bbset syn.MacroLibraryFileExclude    {}                                                               {use to exclude macro libraries match this regep} 
+#scenario
+
+bbset syn.scenarios.Scenarios { func_NM.ssgnp-NM-0-cworst_ccworst_t func_NM.ssgnp-NM-125-rcworst_ccworst_t func_NM.ffgnp-NM-125-rcworst_ccworst func_NM.ffgnp-NM-m25-cworst_ccworst func_NM.tt-NMP-85-cworst_ccworst_t shift_NM.ssgnp-NM-125-rcworst_ccworst_t shift_NM.ffgnp-NM-125-rcworst_ccworst func_NM.ssgnp-UUD-0-cworst_ccworst_t}
+
+bbset syn.scenarios.status.Default   {
+	{func_NM.ssgnp-NM-0-cworst_ccworst_t		{setup active max_trans max_cap min_cap}}
+	{func_NM.ssgnp-NM-125-rcworst_ccworst_t		{setup active max_trans max_cap min_cap}}
+	{func_NM.ffgnp-NM-125-rcworst_ccworst		{hold  	      max_trans max_cap min_cap}}
+ 	{func_NM.ffgnp-NM-m25-cworst_ccworst		{hold  	      max_trans max_cap min_cap}}
+	{func_NM.tt-NMP-85-cworst_ccworst_t		{leakage dynamic active}}
+	{shift_NM.ssgnp-NM-125-rcworst_ccworst_t	{setup active max_trans max_cap min_cap}}
+	{shift_NM.ffgnp-NM-125-rcworst_ccworst		{hold  	      max_trans max_cap min_cap}}
+	{func_NM.ssgnp-UUD-0-cworst_ccworst_t           {setup active max_trans max_cap min_cap}}
+}
+#bbset syn.scenarios.Scenarios { func_NM.ssgnp-NM-0-cworst_ccworst_t} 
+
+#bbset syn.scenarios.status.Default   {
+#	{func_NM.ssgnp-NM-0-cworst_ccworst_t		{setup active max_trans max_cap min_cap}}
+
+#}
+
+
+bbset pnr.scenarios.Scenarios	{[bbget .syn.scenarios.Scenarios]} 
+bbset pnr.scenarios.status.Default   {
+	{func_NM.ssgnp-NM-0-cworst_ccworst_t		{setup active max_trans max_cap min_cap}}
+	{func_NM.ssgnp-NM-125-rcworst_ccworst_t		{setup active max_trans max_cap min_cap}}
+	{func_NM.ffgnp-NM-125-rcworst_ccworst		{hold  active max_trans max_cap min_cap}}
+ 	{func_NM.ffgnp-NM-m25-cworst_ccworst		{hold  active max_trans max_cap min_cap}}
+	{func_NM.tt-NMP-85-cworst_ccworst_t		{leakage dynamic active}}
+	{shift_NM.ssgnp-NM-125-rcworst_ccworst_t	{setup active max_trans max_cap min_cap}}
+	{shift_NM.ffgnp-NM-125-rcworst_ccworst		{hold  active max_trans max_cap min_cap}}
+        {func_NM.ssgnp-UUD-0-cworst_ccworst_t           {setup active max_trans max_cap min_cap}}
+}
+
+bbset pnr.scenarios.status.Floorplan   {
+         {func_NM.ssgnp-NM-0-cworst_ccworst_t        {setup hold active max_trans max_cap }}
+}
+
+##
+#  PnR settings
+##
+bbset pnr.MaxTransitionOverrides     {[bbget syn.MaxTransitionOverrides]}
+
+
+# END
+bbset pnr.innovus.FloorplanRowsAndTracksPreCallback {
+addInst -inst test4 -cell BUFFD1BWP130HPNPN3P48CPDULVTLL -moduleBased sswrp_hsio_s_infra_m_wrapper
+write_power_intent -1801 31dec.upf
+free_power_intent
+read_power_intent -1801 31dec.upf;
+commit_power_intent
+mark_physical_power_domains -domains {PD_CLKBUF PD_HSIOS PD_HSIOS_GSPAN PD_HSIOS_REFCLK PD_INFRA_M}
+
+
+
+}
+bbset pnr.innovus.SetupCreateFloorplanPreCallback {
+	 dbSetFPlanIoBox [dbGet top.fplan.] [uu2dbu [dbGet top.fplan.box_llx]] [uu2dbu [dbGet top.fplan.box_lly]] [uu2dbu [dbGet top.fplan.box_urx]] [uu2dbu [dbGet top.fplan.box_ury]]
+}
+bbset pnr.setup.EnableASCIIFlow {1}
+
+
+
+bbset pnr.floorplan.ConvertVABoxesToPolygon {0}  
+bbset pnr.floorplan.VABoxesRectBoxList {0}  
+bbset pnr.floorplan.PowerDomainOverrides "PD_HSIOS {MVDD VDD_STBY_S} PD_HSIOS_GSPAN {MVDD VDD_STBY_S} PD_HSIOS_REFCLK {MVDD VDD_STBY_S}"
+
+
+#bbset pnr.innovus.FloorplanPowerSwitchesPreProcessCallback {
+#}
+
+
+
+bbset pnr.floorplan.AlignM14M15Tracks {1}
+
+bbset pnr.floorplan.PGM14M15OffsetFile {/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/mbu_pushdown_m2v2_02052025/offsets/pg_offset.tcl}
+bbset pnr.floorplan.TrackOffsetFile  {/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/mbu_pushdown_m2v2_02052025/offsets/track_offset.tcl}
+  bbset pnr.innovus.FloorplanPowerGridPreCallback {
+createRouteBlk -layer {M14 M15} -boxList {770.016 0.0 1258.56 124.02} -name annu_custom
+createRouteBlk -layer {M15} -boxList {1110 119 1132.5 2000} -name annu_custom
+replaceLefMacro -macros LUP_V_C240708 /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-05-07/lef/ip_LUP_V_C240708/LUP_V_C240708.lef
+
+} 
+
+
+
+
+bbset pnr.floorplan.VoltageAreas     {PD_HSIOS_GSPAN {{1004.4480 1168.6480 1232.6880 1248.7280}} PD_HSIOS_REFCLK {{694.176 90.428 769.728 137.228} {1258.608 0.988 1399.92 138.008} {1189.5840 676 1233.0240 750} {860.2 912.47 933 1248.728} {933 912.47 1004.2 1180.55} {1004.2 912.47 1021 1166.828}} PD_CLKBUF {{694.0320 1.0400 779.7600 90}} PD_INFRA_M {{933.2640 1182.6155 1004.2 1248.7280}}}
+#{{694.0320 0.9880} {779.7600 89.9080}} {{860.2080 910.3380} {1021.6800 1248.7280}} {{1258.6080 0.9880} {1399.9200 138.0080}} {{1189.5840 726.9080} {1233.0240 801.0080}}
+
+bbset pnr.floorplan.SVDDNets {
+{PD_INFRA_M {933.2640 1182.6155 1004.20 1248.7280} VDD_HSIOS}
+{PD_HSIOS_GSPAN {1004.4480 1168.6480 1232.6880 1248.7280} VDD_HSIOS}
+{PD_HSIOS {0 0 1668 1303.68} VDD_HSIOS}
+{PD_HSIOS_REFCLK {1004.2 912.47 1021 1166.828} VDD_STBY_S}
+{PD_HSIOS_REFCLK {933 912.47 1004.2 1180.55} VDD_STBY_S}
+{PD_HSIOS_REFCLK {860.2 912.47 933 1248.728} VDD_STBY_S}
+{PD_HSIOS_REFCLK {694.176 90.428 769.728 137.228} VDD_STBY_S}
+{PD_HSIOS_REFCLK {1258.608 0.988 1399.92 138.008} VDD_STBY_S}
+{PD_HSIOS_REFCLK {1189.5840 676 1233.0240 750} VDD_STBY_S}
+{PD_CLKBUF {694.0320 1.0400 779.7600 90} VSS}
+}
+#{PD_HSIOS_REFCLK {860.2 912.47  1021 1167.478} VDD_STBY_S}
+#{PD_HSIOS_REFCLK {860.2 1167.47 1004.2 1182.5 } VDD_STBY_S}
+#{PD_HSIOS_REFCLK {860.2 1182.5  933 1249.82  } VDD_STBY_S}
+
+
+bbset pnr.floorplan.MacroPlacementHaloOverrides {ufs_top {0.624 0.78 0.624 0.78} amux_top {10 10 20 10} PCLAMPCOD_V_C240708 {1.152 1.04 1.152 1.04} PCLAMPCCOD_H_C240708 {1.152 1.04 1.152 1.04}  PCLAMPCCOD_V_C240708 {1.152 1.04 1.152 1.04} tcxo_clock_buffer_top {1.152 1.04 1.152 1.04} prtn_ro_h130 {10.032 8.788 10.032 8.788} N02_DTCD_ALL_M11_240912 {2.064 2.064 2.064 2.064} fiducial_* {0 0 0 0} N02_DTCD_ALL_M13_250331 {2.064 2.064 2.064 2.064}}
+
+
+
+bbset pnr.floorplan.CustomMacroList {amux_top tcxo_clock_buffer_top PCLAMPCCOD_H_C240708 PCLAMPCCOD_V_C240708 PCLAMPCOD_V_C240708 }
+
+bbset pnr.floorplan.MacroPlacementHalo {0.576 0.52 0.576 0.52} 
+bbset pnr.floorplan.PGM15VSSOffset   {6.284}                                                           {float: M15 PG VSS offset value}
+bbset pnr.floorplan.PGM14VSSOffset   {0.9000}                                                           {float: M14 PG VSS offset value}
+bbset pnr.floorplan.PGM15VDDOffset   {1.244}
+bbset pnr.floorplan.PGM14VDDOffset   {2.3400}
+bbset pnr.floorplan.AlignM14M15Tracks {1}
+bbset pnr.floorplan.PushDownTrackOffsetLayers {M12 M13 M14 M15}
+bbset pnr.floorplan.PowerDomainOverrides "PD_HSIOS {MVDD VDD_STBY_S} PD_HSIOS_GSPAN {MVDD VDD_STBY_S} PD_HSIOS_REFCLK {MVDD VDD_STBY_S} PD_INFRA_M {MVDD VDD_HSIOS} PD_CLKBUF {MVDD AVDD075_CLKBUF_HSIOS}"
+
+
+
+
+
+
+bbset pnr.innovus.FloorplanSetupPostCallback {
+
+
+
+#globalNetConnect "VSS" -singleInstance AMUX_IO1 -pin "VSSESD" -override
+globalNetConnect "VSS" -singleInstance AMUX_IO2 -pin "VSSESD" -override
+#globalNetConnect "VSS" -singleInstance AMUX_CORE1 -pin "VSSESD" -override
+globalNetConnect "VSS" -singleInstance AMUX_CORE2 -pin "VSSESD" -override
+globalNetConnect "VSS" -singleInstance TCXO_CORE1 -pin "VSSESD" -override
+globalNetConnect "VSS" -singleInstance TCXO_CORE2 -pin "VSSESD" -override
+globalNetConnect "VSS" -singleInstance ESD_VDD_STBY_2 -pin "VSSESD" -override
+globalNetConnect "VSS" -singleInstance ESD_VDD_STBY_1 -pin "VSSESD" -override
+globalNetConnect "VSS" -singleInstance ESD_VDD_INFRA_1 -pin "VSSESD" -override
+globalNetConnect "VSS" -singleInstance ESD_VDD_INFRA_M_1 -pin "VSSESD" -override
+globalNetConnect "VSS" -singleInstance ESD_VDD_INFRA_M_2 -pin "VSSESD" -override
+globalNetConnect "VSS" -singleInstance ESD_HSIOS_1 -pin "VSSESD" -override
+globalNetConnect "VSS" -singleInstance ESD_HSIOS_2 -pin "VSSESD" -override
+
+#globalNetConnect "VDDQ12_HSIOS" -singleInstance AMUX_IO1 -pin "VDDESD" -override/ESD_HSIOS_1
+globalNetConnect "VDDQ12_HSIOS" -singleInstance AMUX_IO2 -pin "VDDESD" -override
+#globalNetConnect "VDDQ04_HSIOS" -singleInstance AMUX_CORE1 -pin "VDDESD" -override
+globalNetConnect "VDDQ08_HSIOS" -singleInstance AMUX_CORE2 -pin "VDDESD" -override
+globalNetConnect "AVDD075_CLKBUF_HSIOS" -singleInstance TCXO_CORE1 -pin "VDDESD" -override
+globalNetConnect "AVDD075_CLKBUF_HSIOS" -singleInstance TCXO_CORE2 -pin "VDDESD" -override
+globalNetConnect "VDD_STBY_S" -singleInstance ESD_VDD_STBY_2 -pin "VDDESD" -override
+globalNetConnect "VDD_STBY_S" -singleInstance ESD_VDD_STBY_1 -pin "VDDESD" -override
+globalNetConnect "VDD_INFRA" -singleInstance ESD_VDD_INFRA_1 -pin "VDDESD" -override
+globalNetConnect "VDD_INFRA_M" -singleInstance ESD_VDD_INFRA_M_1 -pin "VDDESD" -override
+globalNetConnect "VDD_INFRA_M" -singleInstance ESD_VDD_INFRA_M_2 -pin "VDDESD" -override
+globalNetConnect "VDD_HSIOS" -singleInstance ESD_HSIOS_2 -pin "VDDESD" -override
+globalNetConnect "VDD_HSIOS" -singleInstance ESD_HSIOS_1 -pin "VDDESD" -override
+
+}
+bbset pnr.setup.CustomMacros {	
+AMUX_IO2 {cell PCLAMPCOD_V_C240708 loc {1348.848 4.9400} orient {R0} pg_hookup {VDDESD VDDQ12_HSIOS VSSESD VSS}}
+AMUX_CORE2 {cell PCLAMPCCOD_H_C240708 loc {1285.9200 34.5800} orient {R0} pg_hookup {VDDESD VDDQ08_HSIOS VSSESD VSS}}
+TCXO_CORE1 {cell PCLAMPCCOD_H_C240708 loc {702.2400 39.5200} orient {R0} pg_hookup {VDDESD AVDD075_CLKBUF_HSIOS VSSESD VSS}}
+TCXO_CORE2 {cell PCLAMPCCOD_H_C240708 loc {702.2400 69.1600} orient {R0} pg_hookup {VDDESD AVDD075_CLKBUF_HSIOS VSSESD VSS}}
+ESD_VDD_STBY_2 {cell PCLAMPCCOD_V_C240708 loc {866.4000 1032.4600} orient {R0} pg_hookup {VDDESD VDD_STBY_S VSSESD VSS}}
+ESD_VDD_STBY_1 {cell PCLAMPCCOD_V_C240708 loc {898.3200 1032.4600} orient {R0} pg_hookup {VDDESD VDD_STBY_S VSSESD VSS}}
+ESD_VDD_INFRA_1 {cell PCLAMPCCOD_V_C240708 loc {1204.752 1190.54} orient {R0} pg_hookup {VDDESD VDD_INFRA VSSESD VSS}}
+ESD_VDD_INFRA_M_1 {cell PCLAMPCCOD_V_C240708 loc {870.9600 1175.7200} orient {R0} pg_hookup {VDDESD VDD_INFRA_M VSSESD VSS}}
+ESD_VDD_INFRA_M_2 {cell PCLAMPCCOD_V_C240708 loc {902.8800 1175.7200} orient {R0} pg_hookup {VDDESD VDD_INFRA_M VSSESD VSS}}
+ESD_HSIOS_1 {cell PCLAMPCCOD_V_C240708 loc {861.8400 604.6560} orient {R0} pg_hookup {VDDESD VDD_HSIOS VSSESD VSS}} 
+ESD_HSIOS_2 {cell PCLAMPCCOD_V_C240708 loc {861.8400 548.3400} orient {R0} pg_hookup {VDDESD VDD_HSIOS VSSESD VSS}}
+ }
+
+
+bbset pnr.floorplan.PGM14M15OffsetFile {/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pre_m4_06132025/offsets/pg_offset.tcl}
+bbset pnr.floorplan.TrackOffsetFile  {/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pre_m4_06132025/offsets/track_offset.tcl}
+bbset pnr.innovus.FloorplanGuardRingPostProcessCallback {}
+bbset pnr.pg.GlobalGridPreCallback {
+dbSet top.fplan.isCore2Io 0
+
+}
+bbset pnr.innovus.FloorplanChannelBlockagesPostProcessCallback {
+
+proc psutils::get_core_switch_rows { args } {
+
+    argparse {
+        {-area= -required}
+        {-switch_cell= -required}
+        {-switch_bottom_offset= -required}
+        {-switch_ypitch= -required}
+        {-sizing= -default {0 0}}
+        {-debug -boolean}
+    }
+
+    set switch_height [psutils::get_switch_height $switch_cell]
+
+    if {[regexp "HDR78X" ${::pnr.floorplan.CoreSwitchCell}]} {
+	set box_width [expr $switch_height / 2]
+    } else {
+        set box_width $switch_height
+    }
+
+    set box_ypitch [expr ( $switch_ypitch + 1 ) * $box_width]
+
+    set psw_cell_insts [dbget top.insts.cell.name ${::pnr.floorplan.CoreSwitchCell} -p2 -e]
+    if { $psw_cell_insts != "" } {
+        set y [lindex [lsort -u -real [dbGet -e $psw_cell_insts.box_lly]] 0]
+    } else {
+        set y [expr $switch_bottom_offset + [lindex ${::pnr.floorplan.CoreOffset} 1]]
+    }
+
+
+    #set y [expr $switch_bottom_offset + [dbget top.fplan.core2Bot]]
+    set llx [dbget top.fplan.coreBox_llx]
+    set urx [dbget top.fplan.coreBox_urx]
+    set box [list]
+
+    while {$y < [dbget top.fplan.coreBox_ury]} {
+        lappend box [list $llx $y $urx [expr $y + $box_width]]
+        set y [expr $y + $box_ypitch ]
+    }
+ 
+    set switch_row [dbShape [dbShape -output polygon $box] AND $area]
+
+    lassign $sizing xsizing ysizing
+    if { $xsizing > 0 || $ysizing > 0 } {
+        set switch_row [dbShape $switch_row SIZEX $xsizing SIZEY $ysizing]
+    }
+
+    set switch_rows ""
+
+    foreach box $switch_row {
+        lassign $box bllx blly burx bury
+	if {[expr $bury - $blly] > [expr $box_width - 0.001]} {
+            lappend switch_rows $box
+	}
+    }
+
+
+    return $switch_rows
+
+}
+
+}
+bbappend pnr.innovus.PowerDomainBoundaryPreCallback {
+
+    proc floorplan::define_power_domain_boundary {args} {
+    
+        if { ${::pnr.floorplan.FlipFirstRow} } {
+            set options "-rowFlip first"
+        } else {
+            set options "-rowFlip second"
+        }
+    
+        setFPlanMode -user_define_grid ${::pnr.floorplan.UserDefineSnapConstraintGrid}
+        setFPlanMode  -snapConstraintGrid userDefine
+    
+            foreach {pd boxes} ${::pnr.floorplan.VoltageAreas} {
+    
+                    if { [llength [dbGet -e top.pds.name $pd]] == 0 } {
+                            sif::merror "Failed to find power domain matching $pd"; continue
+                    }
+    
+                    sif::minfo "Creating voltage areas for power domain $pd at $boxes"
+    
+    
+                    set CORE_BOXES [dbget top.fplan.boxes]
+                    set boxes [dbShape $boxes AND $CORE_BOXES]
+    
+                    set joint_boxes ""
+    
+                    if { [expr [llength $boxes] - 1] > 0} {
+                            foreach box $boxes {
+                                set n_boxes [dbShape $boxes ANDNOT $box]
+                                set new_boxes {}
+                                foreach bbox $n_boxes {
+                                    set bbox [dbShape $bbox SIZE 0.5]
+                                   # set bbox [regsub "{" $bbox ""]; set bbox [regsub "}" $bbox ""]
+                                    lappend new_boxes $bbox
+                                }
+    
+                                foreach new_box $new_boxes {
+                                    if {[dbShape $box AND $new_box] != "" } {
+                                        lappend joint_boxes $box
+                                        break
+                                    }
+                                }
+                            }
+                    }
+    
+                    set disjoint_boxes [dbShape $boxes ANDNOT $joint_boxes]
+    
+                    if {$joint_boxes != "" && $disjoint_boxes != ""} {
+                        sif::minfo "Given that the pd boundary has a polygon and a disjoint rectangle, defining $pd as a disjoint boxes"
+                        lappend disjoint_boxes $joint_boxes
+                        set joint_boxes ""
+                    }
+    
+                    sif::minfo "Joint_Boxes $joint_boxes"
+                    sif::minfo "Disjoint_Boxes $disjoint_boxes"
+    
+    
+                    if {[llength ${::pnr.floorplan.CoreOffset}] > 0} {
+                            if { $joint_boxes != "" } {
+                                set mul_joint_box $joint_boxes
+                                set njbox {}
+                                lappend njbox [lindex $mul_joint_box 0]
+                                set jbox [dbShape $njbox SIZE 0.5]
+                                set jbox [regsub "{" $jbox ""]; set jbox [regsub "}" $jbox ""]
+                                set mul_joint_box [dbShape $mul_joint_box ANDNOT $njbox]
+                                for {set i 0} {$i < [llength $mul_joint_box]} {incr i} {
+                                    #puts "i : $i"; puts [lindex $exp_joint_box $i]
+                                    if {[dbShape $jbox AND [lindex $mul_joint_box $i]] != ""} {
+                                        set temp [lindex $mul_joint_box $i]
+                                        lappend njbox $temp
+                                        set mul_joint_box [dbShape $mul_joint_box ANDNOT $njbox]
+                                        set jbox {}
+                                        foreach njb $njbox {
+                                            set njb [dbShape $njb SIZE 0.5]
+                                            set njb [regsub "{" $njb ""]; set njb [regsub "}" $njb ""]
+                                            lappend jbox $njb
+                                        }
+                                        set i -1
+                                    }
+    
+                                }
+                                if {$mul_joint_box != ""} {
+                                    sif::minfo "Given that the pd boundary has multiple polygon, defining $pd as a disjoint boxes"
+                                    lappend disjoint_boxes $joint_boxes
+                                    set joint_boxes ""
+                                }
+    
+                                if { $joint_boxes != ""} {
+                                    set joint_boxes [dbShape $joint_boxes -output polygon]
+                                    sif::minfo "Executing setObjFPlanPolygon Group $pd \"$joint_boxes\""
+    
+                        setObjFPlanPolygon Group $pd "$joint_boxes"
+                    if { ${::Track} == "174m" } {
+                                        sif::minfo "Executing modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} -rowPatternSite coreExtW48M174H696 $options"
+                        modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} -rowPatternSite coreExtW48M174H696 -firstRowSiteIndex 0 -lastRowSiteIndex 0
+                    } else {
+                        sif::minfo "Executing modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} $options"
+                        modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} -rowFlip first
+                        }
+                                }
+    
+                            }
+                            if { $disjoint_boxes != "" } {
+                                sif::minfo "Executing setObjFPlanBoxList Group $pd \"$disjoint_boxes\""
+                    setObjFPlanBoxList Group $pd "$disjoint_boxes"
+                                if { ${::Track} == "174m" } { 
+                        sif::minfo "Executing modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} -rowPatternSite coreExtW48M174H696 $options"
+                        modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} -rowPatternSite coreExtW48M174H696 -firstRowSiteIndex 0 -lastRowSiteIndex 0
+                    } else {
+                        sif::minfo "Executing modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} $options"
+                        modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} -rowFlip first
+                        }
+                            }
+    
+                    } else {
+                            sif::merror "::pnr.floorplan.CoreOffset is empty. Power domain boundary not set"
+                            return 1
+                    }
+    
+    
+               }
+    
+    
+        if { [llength ${::pnr.floorplan.VoltageAreas}] > 0 } {
+            sif::minfo "Running cut row post power domain boundary definitions"
+            cutRow
+        }
+    
+        return 0
+    
+    }
+}
+bbset pnr.floorplan.ToolVersion {tools/cadence/innovus/23.15-e011_1}
+bbset pnr.innovus.FloorplanCleanUpPostCallback {
+source /google/gchips/workspace/redondo-asia/tpe/user/annug/REPO_3.31/run/run1/main/syn/floorplan/create_terminal.inv.tcl
+source /google/gchips/workspace/redondo-asia/tpe/user/parthl/Scripts/LAJ_HSIO/pg_extenstion_for_IOENDCAP.tcl
+source /google/gchips/workspace/redondo-asia/tpe/user/annug/DPA_PG_EXTEND.tcl
+foreach pgnet {VSS VDD_STBY_S VDD_HSIOS} {                       
+		pgutils::merge_stripes -layer M14 -net $pgnet -user_class svdd_grid -max_spacing 4.0 -width 1.08
+		pgutils::merge_stripes -layer M15 -net $pgnet -user_class svdd_grid -max_spacing 4.0 -width 4.04
+		pgutils::merge_stripes -layer M14 -net $pgnet -user_class mvdd_grid -max_spacing 4.0 -width 1.08
+		pgutils::merge_stripes -layer M15 -net $pgnet -user_class mvdd_grid -max_spacing 4.0 -width 4.04
+
+	}
+
+ }
+#bbset pnr.floorplan.ToolVersion {tools/cadence/innovus/23.15-e011_1}
+bbset pnr.floorplan.InsertFiducialCell {1}
+
+#bbset pnr.floorplan.AutoFixFloorplan {0}
+bbset pnr.innovus.SetupCreateFloorplanPreCallback {
+	 dbSetFPlanIoBox [dbGet top.fplan.] [uu2dbu [dbGet top.fplan.box_llx]] [uu2dbu [dbGet top.fplan.box_lly]] [uu2dbu [dbGet top.fplan.box_urx]] [uu2dbu [dbGet top.fplan.box_ury]]
+}
+bbset pnr.setup.EnableASCIIFlow {1}
+
+#bbset pnr.innovus.FloorplanSetupPreCallback {
+#
+
+#}
+bbset pnr.innovus.FloorplanTCICPostCallback {
+saveDesign tcic.enc
+}
+
+bbset pnr.innovus.FloorplanRowsAndTracksPreCallback {
+addInst -inst test4 -cell BUFFD1BWP130HPNPN3P48CPDULVTLL -moduleBased sswrp_hsio_s_infra_m_wrapper
+write_power_intent -1801 31dec.upf
+free_power_intent
+read_power_intent -1801 31dec.upf;
+commit_power_intent
+mark_physical_power_domains -domains {PD_CLKBUF PD_HSIOS PD_HSIOS_GSPAN PD_HSIOS_REFCLK PD_INFRA_M}
+
+}
+
+#bbset pnr.innovus.FloorplanPowerSwitchesPreProcessCallback {
+#}
+bbset pnr.floorplan.ConvertVABoxesToPolygon {0}  
+bbset pnr.floorplan.VABoxesRectBoxList {0}  
+
+bbset pnr.floorplan.AlignM14M15Tracks {1}
+
+
+
+
+bbset pnr.innovus.SetupCreateFloorplanPreProcessCallback {
+# catch {deleteInst [get_db  [get_db insts  {sswrp_hsio_s/u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/I_PADSS_HSIOS_STBY_BK_POC_1 sswrp_hsio_s/u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/I_PADSS_HSIOS_STBY_BK_POC_3 sswrp_hsio_s/u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/I_PADSS_HSIOS_STBY_BK_POC_4 u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/I_PADSS_HSIOS_STBY_BK_POC_2}] .name ]}
+#sswrp_hsio_s/u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/I_PADSS_HSIOS_STBY_BK_POC 
+#deleteInst u_sswrp_hsio_s_aux/u_sswrp_hsio_s_aon/u_gpio_HSIOS_STBY_BK/ioring/I_PADSS_HSIOS_BK_POC
+createPlaceBlockage -box {{770 0} {1258.56 124}} -type hard
+createPlaceBlockage -box {{932.304 1180.608 932.976 1248.728}} -type hard
+#createPlaceBlockage -box {{1211.76 1233} {2104.896 1305}} -type hard
+createPlaceBlockage -box {{1211.808 1233.908 2104.896 1305}} -type hard
+createPlaceBlockage -box {{2093 0} {2104.896 1305}} -type hard
+createPlaceBlockage -box {{2092.992 0.0 2104.896 1304.03}} -type hard
+createPlaceBlockage -box {{694.0320 1.0400 779.7600 90}} -type hard
+#createPlaceBlockage -box {988.0965 1175.668 1003.619 1175.896} -type hard
+#createPlaceBlockage -box {{892.608 388.908 893.52 989.18}} -type hard
+#createPlaceBlockage -box {{959.354 610.948 959.424 725.0015}} -type hard
+#createPlaceBlockage -box {{931.968 610.4 932.016 725.0015}} -type hard
+#createPlaceBlockage -box {{931.968 616.408 932.016 730.548}} -type hard
+createPlaceBlockage -box {{1005.216 1168.778 1005.264 1200}} -type hard
+
+
+
+#loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-04-14/lef/ip_DTCD/N02P_DTCD_M13_v0d9_2.lef
+deselectAll
+catch {selectInstByCellName {LUP_V_C240708 PENDCAPCOD_V_C240708 PVDD1CODCDGM_V_C240708 PVDD08CODCDGM_V_C240708 PVDD1204CODCDGM_V_C240708 PRCUTCOD_V_C240708 LUP_H_C240708 PENDCAPCOD_H_C240708 PVDD1CODCDGM_H_C240708 PVDD08CODCDGM_H_C240708 PVDD1204CODCDGM_H_C240708 PVDD12CODCDGM_V_C240708 PCORNERCOD_V_C240708 PFILLERCOD00048_V_C240708 PFILLERSTRAPCOD06240_H_C240708 PFILLERSTRAPCOD06240_V_C240708 PFILLERROUTECOD06240_V_C240708 }}
+catch {deleteInst [dbGet selected.name ]}
+deselectAll
+#loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk//lef/ip_LUP_H_C240708/LUP_H_C240708.lef
+#loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-04-19/lef/ip_LUP_V_C240708/LUP_V_C240708.lef
+
+
+ set DIR "/google/gchips/ipreleases/lajolla_hsio/sswrp_hsio_s/laj_pushdown_m3v2_05042025/padframe"
+
+
+ set tool "innovus"
+ set IO_BANK_INST [lindex [regsub {/ioring} [lindex [dbGet [dbGet top.insts.cell.name *POC* -p2].name *I_PADSS_HSIOS_BK_POC -u] 0] { }] 0]
+ source -v  $DIR/sswrp_hsio_s_padframe.tcl
+ source -v  $DIR/sswrp_hsio_s_PADSS_HSIOS_BK_padframe_iofill.tcl
+
+ set tool "innovus"
+ set IO_BANK_INST [lindex [regsub {/ioring} [lindex [dbGet [dbGet top.insts.cell.name *POC* -p2].name *I_PADSS_HSIOS_STBY_BK_POC -u] 0] { }] 0]
+ source -v  $DIR/sswrp_hsio_s_HSIOS_STBY_padframe.tcl
+ source -v  $DIR/sswrp_hsio_s_PADSS_HSIOS_STBY_BK_padframe_iofill.tcl
+
+if { ${tool} == "innovus" } {
+ source -v  $DIR/io_filler_globalNetConnect.tcl
+} elseif {${tool} == "fc" } {
+ source -v  $DIR/io_filler_globalNetConnect.fc.tcl
+}
+
+ 
+ set tool "innovus"
+ set IO_BANK_INST [lindex [regsub {/ioring} [lindex [dbGet [dbGet top.insts.cell.name *POC* -p2].name *I_PADSS_HSIOS_BK_POC -u] 0] { }] 0]
+ source -v  $DIR/sswrp_hsio_s_connect_abut_physical.tcl
+ if { ${tool} == "innovus" } {
+  source -v  $DIR/sswrp_hsio_s_connect_power_net.innovus.tcl
+ } elseif {${tool} == "fc" } {
+  source -v  $DIR/sswrp_hsio_s_connect_power_net.fc.tcl
+ }
+ set tool "innovus"
+ set IO_BANK_INST [lindex [regsub {/ioring} [lindex [dbGet [dbGet top.insts.cell.name *POC* -p2].name *I_PADSS_HSIOS_STBY_BK_POC -u] 0] { }] 0]
+ source -v  $DIR/sswrp_hsio_s_HSIOS_STBY_connect_abut_physical.tcl
+ if { ${tool} == "innovus" } {
+ source -v  $DIR/sswrp_hsio_s_HSIOS_STBY_connect_power_net.innovus.tcl
+ } elseif {${tool} == "fc" } {
+ source -v  $DIR/sswrp_hsio_s_HSIOS_STBY_connect_power_net.fc.tcl
+ } 
+
+ }
+
+bbset pnr.floorplan.MacroPlacementHaloOverrides {ufs_top {0.576 0.520 0.576 0.520} amux_top {10 10 10 10} PCLAMPCOD_V_C240708 {1.152 1.04 1.152 1.04} PCLAMPCCOD_H_C240708 {1.152 1.04 1.152 1.04}  PCLAMPCCOD_V_C240708 {1.152 1.04 1.152 1.04} tcxo_clock_buffer_top {1.152 1.04 1.152 1.04} prtn_ro_h130 {10 10 10 10} N02_DTCD_ALL_M11_240912 {2.064 2.064 2.064 2.064} fiducial_* {0 0 0 0} N02_DTCD_ALL_M13_240912 {2.064 2.064 2.064 2.064}} 
+
+bbset  pnr.setup.InputDEFFile {/google/gchips/workspace/redondo-asia/tpe/user/annug/11mar/11mar_run1_with_fid/15mar_new_fp/syn/floorplan/19mar.def}
+bbset pnr.setup.InputDEFFile {/google/gchips/workspace/redondo-asia/tpe/user/annug/REPO_3.31/run/clock_ulvtll/main/pnr/clock/7jun.def}
+bbset pnr.setup.InputDEFFile {/google/gchips/workspace/redondo-asia/tpe/user/annug/REPO_3.31/run/run1/main/syn/floorplan/19jun.def}
+bbset pnr.floorplan.PGM14M15OffsetFile {/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pre_m4_06132025/offsets/pg_offset.tcl}
+bbset pnr.floorplan.TrackOffsetFile  {/google/gchips/ipreleases/lajolla_soc/soc_to_sswrp_common/laj_pre_m4_06132025/offsets/track_offset.tcl}
+bbset pnr.setup.DTCDCell {N02_DTCD_ALL_M13_240912}
+bbset pnr.setup.CustomMacros {	
+
+AMUX_IO2 {cell PCLAMPCOD_V_C240708 loc {1348.848 4.9400} orient {R0} pg_hookup {VDDESD VDDQ12_HSIOS VSSESD VSS}}
+AMUX_CORE2 {cell PCLAMPCCOD_H_C240708 loc {1285.9200 34.5800} orient {R0} pg_hookup {VDDESD VDDQ08_HSIOS VSSESD VSS}}
+TCXO_CORE1 {cell PCLAMPCCOD_H_C240708 loc {702.2400 39.5200} orient {R0} pg_hookup {VDDESD AVDD075_CLKBUF_HSIOS VSSESD VSS}}
+TCXO_CORE2 {cell PCLAMPCCOD_H_C240708 loc {702.2400 69.1600} orient {R0} pg_hookup {VDDESD AVDD075_CLKBUF_HSIOS VSSESD VSS}}
+ESD_VDD_STBY_2 {cell PCLAMPCCOD_V_C240708 loc {866.4000 1032.4600} orient {R0} pg_hookup {VDDESD VDD_STBY_S VSSESD VSS}}
+ESD_VDD_STBY_1 {cell PCLAMPCCOD_V_C240708 loc {898.3200 1032.4600} orient {R0} pg_hookup {VDDESD VDD_STBY_S VSSESD VSS}}
+ESD_VDD_INFRA_1 {cell PCLAMPCCOD_V_C240708 loc {1204.752 1190.54} orient {R0} pg_hookup {VDDESD VDD_INFRA VSSESD VSS}}
+ESD_VDD_INFRA_M_1 {cell PCLAMPCCOD_H_C240708 loc {870.9600 1175.7200} orient {R0} pg_hookup {VDDESD VDD_INFRA_M VSSESD VSS}}
+ESD_VDD_INFRA_M_2 {cell PCLAMPCCOD_H_C240708 loc {902.8800 1175.7200} orient {R0} pg_hookup {VDDESD VDD_INFRA_M VSSESD VSS}}
+
+}
+bbset pnr.innovus.SetupReadDEFPostCallback  {
+
+#defIn /google/gchips/workspace/redondo-asia/tpe/user/annug/18mar/run/libgen_with_new_ufs_top/main/syn/synthopt/esd.def
+defIn /google/gchips/workspace/redondo-asia/tpe/user/annug/REPO_3.31/run/clock_ulvtll/main/pnr/clock/7jun_esd.def
+}
+
+
+bbset pnr.floorplan.PGM15VSSOffset   {1.4840}                                                           {float: M15 PG VSS offset value}
+bbset pnr.floorplan.PGM14VSSOffset   {0.9000}                                                           {float: M14 PG VSS offset value}
+bbset pnr.floorplan.PGM15VDDOffset   {6.5240}
+bbset pnr.floorplan.PGM14VDDOffset   {2.3400}
+bbset pnr.floorplan.AlignM14M15Tracks {1}
+bbset pnr.floorplan.PushDownTrackOffsetLayers {M12 M13 M14 M15}
+bbset pnr.setup.DTCDCell             {N02_DTCD_ALL_M13_250331}
+bbset pnr.setup.InsertDTCDCells      {0}
+
+
+bbset pnr.setup.CustomMacros {	
+AMUX_IO2 {cell PCLAMPCOD_V_C240708 loc {1348.848 4.9400} orient {R0} pg_hookup {VDDESD VDDQ12_HSIOS VSSESD VSS}}
+AMUX_CORE2 {cell PCLAMPCCOD_H_C240708 loc {1285.9200 34.5800} orient {R0} pg_hookup {VDDESD VDDQ08_HSIOS VSSESD VSS}}
+TCXO_CORE1 {cell PCLAMPCCOD_H_C240708 loc {702.2400 39.5200} orient {R0} pg_hookup {VDDESD AVDD075_CLKBUF_HSIOS VSSESD VSS}}
+TCXO_CORE2 {cell PCLAMPCCOD_H_C240708 loc {702.2400 69.1600} orient {R0} pg_hookup {VDDESD AVDD075_CLKBUF_HSIOS VSSESD VSS}}
+ESD_VDD_STBY_2 {cell PCLAMPCCOD_V_C240708 loc {866.4000 1032.4600} orient {R0} pg_hookup {VDDESD VDD_STBY_S VSSESD VSS}}
+ESD_VDD_STBY_1 {cell PCLAMPCCOD_V_C240708 loc {898.3200 1032.4600} orient {R0} pg_hookup {VDDESD VDD_STBY_S VSSESD VSS}}
+ESD_VDD_INFRA_1 {cell PCLAMPCCOD_V_C240708 loc {1204.752 1190.54} orient {R0} pg_hookup {VDDESD VDD_INFRA VSSESD VSS}}
+ESD_VDD_INFRA_M_1 {cell PCLAMPCCOD_V_C240708 loc {870.9600 1175.7200} orient {R0} pg_hookup {VDDESD VDD_INFRA_M VSSESD VSS}}
+ESD_VDD_INFRA_M_2 {cell PCLAMPCCOD_V_C240708 loc {902.8800 1175.7200} orient {R0} pg_hookup {VDDESD VDD_INFRA_M VSSESD VSS}}
+ESD_HSIOS_1 {cell PCLAMPCCOD_V_C240708 loc {861.8400 604.6560} orient {R0} pg_hookup {VDDESD VDD_HSIOS VSSESD VSS}} 
+ESD_HSIOS_2 {cell PCLAMPCCOD_V_C240708 loc {861.8400 548.3400} orient {R0} pg_hookup {VDDESD VDD_HSIOS VSSESD VSS}}
+ }
+
+bbset pnr.innovus.SetupReadDEFPreCallback {
+loadLefFile /google/gchips/lib/foundry/tsmc/n2p/tsmc/dk/v1.0_2025-05-17/lef/ip_DTCD/N02P_DTCD_M13_v1d0.lef}
+bbappend pnr.innovus.PowerDomainBoundaryPreCallback {
+
+    proc floorplan::define_power_domain_boundary {args} {
+    
+        if { ${::pnr.floorplan.FlipFirstRow} } {
+            set options "-rowFlip first"
+        } else {
+            set options "-rowFlip second"
+        }
+    
+        setFPlanMode -user_define_grid ${::pnr.floorplan.UserDefineSnapConstraintGrid}
+        setFPlanMode  -snapConstraintGrid userDefine
+    
+            foreach {pd boxes} ${::pnr.floorplan.VoltageAreas} {
+    
+                    if { [llength [dbGet -e top.pds.name $pd]] == 0 } {
+                            sif::merror "Failed to find power domain matching $pd"; continue
+                    }
+    
+                    sif::minfo "Creating voltage areas for power domain $pd at $boxes"
+    
+    
+                    set CORE_BOXES [dbget top.fplan.boxes]
+                    set boxes [dbShape $boxes AND $CORE_BOXES]
+    
+                    set joint_boxes ""
+    
+                    if { [expr [llength $boxes] - 1] > 0} {
+                            foreach box $boxes {
+                                set n_boxes [dbShape $boxes ANDNOT $box]
+                                set new_boxes {}
+                                foreach bbox $n_boxes {
+                                    set bbox [dbShape $bbox SIZE 0.5]
+                                   # set bbox [regsub "{" $bbox ""]; set bbox [regsub "}" $bbox ""]
+                                    lappend new_boxes $bbox
+                                }
+    
+                                foreach new_box $new_boxes {
+                                    if {[dbShape $box AND $new_box] != "" } {
+                                        lappend joint_boxes $box
+                                        break
+                                    }
+                                }
+                            }
+                    }
+    
+                    set disjoint_boxes [dbShape $boxes ANDNOT $joint_boxes]
+    
+                    if {$joint_boxes != "" && $disjoint_boxes != ""} {
+                        sif::minfo "Given that the pd boundary has a polygon and a disjoint rectangle, defining $pd as a disjoint boxes"
+                        lappend disjoint_boxes $joint_boxes
+                        set joint_boxes ""
+                    }
+    
+                    sif::minfo "Joint_Boxes $joint_boxes"
+                    sif::minfo "Disjoint_Boxes $disjoint_boxes"
+    
+    
+                    if {[llength ${::pnr.floorplan.CoreOffset}] > 0} {
+                            if { $joint_boxes != "" } {
+                                set mul_joint_box $joint_boxes
+                                set njbox {}
+                                lappend njbox [lindex $mul_joint_box 0]
+                                set jbox [dbShape $njbox SIZE 0.5]
+                                set jbox [regsub "{" $jbox ""]; set jbox [regsub "}" $jbox ""]
+                                set mul_joint_box [dbShape $mul_joint_box ANDNOT $njbox]
+                                for {set i 0} {$i < [llength $mul_joint_box]} {incr i} {
+                                    #puts "i : $i"; puts [lindex $exp_joint_box $i]
+                                    if {[dbShape $jbox AND [lindex $mul_joint_box $i]] != ""} {
+                                        set temp [lindex $mul_joint_box $i]
+                                        lappend njbox $temp
+                                        set mul_joint_box [dbShape $mul_joint_box ANDNOT $njbox]
+                                        set jbox {}
+                                        foreach njb $njbox {
+                                            set njb [dbShape $njb SIZE 0.5]
+                                            set njb [regsub "{" $njb ""]; set njb [regsub "}" $njb ""]
+                                            lappend jbox $njb
+                                        }
+                                        set i -1
+                                    }
+    
+                                }
+                                if {$mul_joint_box != ""} {
+                                    sif::minfo "Given that the pd boundary has multiple polygon, defining $pd as a disjoint boxes"
+                                    lappend disjoint_boxes $joint_boxes
+                                    set joint_boxes ""
+                                }
+    
+                                if { $joint_boxes != ""} {
+                                    set joint_boxes [dbShape $joint_boxes -output polygon]
+                                    sif::minfo "Executing setObjFPlanPolygon Group $pd \"$joint_boxes\""
+    
+                        setObjFPlanPolygon Group $pd "$joint_boxes"
+                    if { ${::Track} == "174m" } {
+                                        sif::minfo "Executing modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} -rowPatternSite coreExtW48M174H696 $options"
+                        modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} -rowPatternSite coreExtW48M174H696 -firstRowSiteIndex 0 -lastRowSiteIndex 0
+                    } else {
+                        sif::minfo "Executing modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} $options"
+                        modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} -rowFlip first
+                        }
+                                }
+    
+                            }
+                            if { $disjoint_boxes != "" } {
+                                sif::minfo "Executing setObjFPlanBoxList Group $pd \"$disjoint_boxes\""
+                    setObjFPlanBoxList Group $pd "$disjoint_boxes"
+                                if { ${::Track} == "174m" } { 
+                        sif::minfo "Executing modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} -rowPatternSite coreExtW48M174H696 $options"
+                        modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} -rowPatternSite coreExtW48M174H696 -firstRowSiteIndex 0 -lastRowSiteIndex 0
+                    } else {
+                        sif::minfo "Executing modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} $options"
+                        modifyPowerDomainAttr $pd -minGaps ${::pnr.floorplan.CoreOffset} -rowFlip first
+                        }
+                            }
+    
+                    } else {
+                            sif::merror "::pnr.floorplan.CoreOffset is empty. Power domain boundary not set"
+                            return 1
+                    }
+    
+    
+               }
+    
+    
+        if { [llength ${::pnr.floorplan.VoltageAreas}] > 0 } {
+            sif::minfo "Running cut row post power domain boundary definitions"
+            cutRow
+        }
+    
+        return 0
+    
+    }
+}
+  bbappend sif.fc.OpenDesignPostCallback {
+set_process_label -clear -corners [get_corners *]
+}

@@ -126,46 +126,6 @@ bbset syn.scenarios.status.Floorplan   {
 
 bbset syn.EnableGKCNode {1}
 
-########### Dont Use Cells ################
-bbns dontuse {
-   bbset MyHighHoldFlopListCells {{.*DF.*CPDLVTLL\$}}
-   bbset MyAllD0P7Cells [list {.*D0P7BWP.*\$}]
-   bbset MyAllD0P8Cells [list {.*D0P8BWP.*\$}]
-   bbset MyGOLDCells [list {.*GOLD.*}]
-   bbset MyLeakageCells [list {.*LLKG.*}]
-   bbset MyGOOGCells [list {.*GOOG.*}]
-   bbset MyISOLVTCells [list {.*ISO.*CPDLVT.*}]
-   bbset MyISOULVTLLCells [list {.*ISO.*CPDULVTLL\$}]
-   bbset MyLVLLLVTCells [list {.*LVLL.*CPDLVT.*}]
-   bbset MyLVLLULVTLLCells [list {.*LVLL.*CPDULVTLL\$}]
-}
-
-bbconcat syn.DontUseCells { restrict(SvtCells) }
-bbconcat syn.DontUseCells { restrict(MyHighHoldFlopListCells) }
-bbconcat syn.DontUseCells { restrict(NoMbitEquivalentFlopCells)}
-bbconcat syn.DontUseCells { restrict(UlvtCells) }
-bbconcat syn.DontUseCells { restrict(UlvtllCells) }
-bbconcat syn.DontUseCells { restrict(AllElvtCells) }
-bbconcat syn.DontUseCells { restrict(NppnCells) }
-bbconcat syn.DontUseCells { restrict(PnnpCells) }
-bbconcat syn.DontUseCells { restrict(PpnnCells) }
-bbconcat syn.DontUseCells { restrict(D14PlusCells) }
-bbconcat syn.DontUseCells { restrict(D16PlusCells) }
-bbconcat syn.DontUseCells { restrict(D18PlusCells) }
-bbconcat syn.DontUseCells { restrict(D20PlusCells) }
-bbconcat syn.DontUseCells { restrict(AllD24PlusCells) }
-bbconcat syn.DontUseCells { restrict(D32PlusCells) }
-bbconcat syn.DontUseCells { restrict(D48PlusCells) }
-bbconcat syn.DontUseCells { restrict(MyAllD0P7Cells) }
-bbconcat syn.DontUseCells { restrict(MyAllD0P8Cells) }
-bbconcat syn.DontUseCells { restrict(MyGOLDCells) }
-bbconcat syn.DontUseCells { restrict(MyLeakageCells) }
-bbconcat syn.DontUseCells { restrict(MyGOOGCells) }
-bbconcat syn.DontUseCells { allow(MyISOLVTCells) }
-bbconcat syn.DontUseCells { allow(MyISOULVTLLCells) }
-bbconcat syn.DontUseCells { allow(MyLVLLLVTCells) }
-bbconcat syn.DontUseCells { allow(MyLVLLULVTLLCells) }
-
 ########## libgen ############
 bbset libgen.syn.EnableExtraNDMGeneration {1}
 bbset syn.ExtraLibs.Enable      {True}
@@ -335,18 +295,6 @@ set pnr.floorplan.VoltageAreas {PD_LSIO_S {{250.0885 448.445} {0.912 448.445} {0
 }
 
 
-bbset syn.fc.ElaborateSetupScenariosPostCallback {
-    # check_timing report
-    foreach scenario [get_object_name [all_scenarios]] {
-        redirect -compress rpts/check_timing.${scenario}.rpt.gz { check_timing -scenarios $scenario -all }
-    }
-}
-
-bbset syn.SaifActivityFile "{/google/gchips/workspace/redondo-asia/tpe/user/knandakishore/projects/lajolla/sswrp_lsios/SAIF/M4_V4_R6_saifs/sswrp_lsios/M4_V4_R6_lsios.fsdb.saif sswrp_lsios_tb/dut}"
-bbset syn.InputSAIFScenario "func.tt-NMP-85-cworst_ccworst_t"
-bbset syn.InputActivityFile "{/google/gchips/workspace/redondo-asia/tpe/user/knandakishore/projects/lajolla/sswrp_lsios/SAIF/M4_V4_R6_saifs/sswrp_lsios/M4_V4_R6_lsios.fsdb.saif}"
-bbset syn.InputSAIFInstanceName "sswrp_lsios_tb/dut"
-
 ################## synth ############################
 bbset syn.fc.CompileAutoUngroup      {false} 
 bbset syn.fc.CompileBoundaryOptimization {true}
@@ -368,13 +316,6 @@ bbset syn.fc.SynthSetupPostCallback {
 
 bbappend syn.fc.SynthDFTOptInitialOptoPreCallback {
     remove_placement_spacing_rules -rule {NW1 NW1}
-}
-
-bbappend sif.fc.ApplyCommonSettingsPostCallback {
-    if { $STAGE != "elaborate" } {
-    	set_app_options -name opt.common.max_fanout -value 10	
-    	set_app_options -name opt.tie_cell.max_fanout -value 5
-    }
 }
 
 bbconcat syn.synth.SkipICGInsertionInstPatterns { *lpm_lsio_s_csr* } 
@@ -526,14 +467,6 @@ source -e -v "/google/gchips/workspace/redondo-asia/tpe/user/knandakishore/proje
 source -e -v "/google/gchips/workspace/redondo-asia/tpe/user/knandakishore/projects/lajolla/scripts/my_fc_app_options.tcl"
 }
 
-bbset syn.synthopt.QuickRtlFeedback {1}
-bbset syn.synth.QuickRtlFeedback {1}
-
-
-########### synthdft ###########################
-bbset syn.fc.SynthDFTOptInitialOptoPostCallback {
-		report_multibit -nosplit > rm_synth.rpt
-}
 ############# testpoint ########################
 bbset syn.testpoint.BlackBoxList {PLLTS2INTQ GCUSTOM_GSL_CLK_DIV50_DP_2R_130HPNPN3P48CPDULVT}
 bbset syn.synthdft.InputTestPointFile    "../testpoint/outs/[bbget .info.BLOCK].test_point.rpt"
@@ -623,33 +556,6 @@ bbset pnr.ExtraLibs.libgen.ccs_lib  {
 bbset pnr.EnableGKCNode {1}
 bbset pnr.ValidGKCStages {placeopt routeopt chipfinish}
 
-
-########### Dont Use Cells ################
-bbconcat pnr.DontUseCells { restrict(SvtCells) }
-bbconcat pnr.DontUseCells { restrict(MyHighHoldFlopListCells) }
-bbconcat pnr.DontUseCells { restrict(NoMbitEquivalentFlopCells)}
-bbconcat pnr.DontUseCells { restrict(UlvtCells) }
-bbconcat pnr.DontUseCells { restrict(UlvtllCells) }
-bbconcat pnr.DontUseCells { restrict(AllElvtCells) }
-bbconcat pnr.DontUseCells { restrict(NppnCells) }
-bbconcat pnr.DontUseCells { restrict(PnnpCells) }
-bbconcat pnr.DontUseCells { restrict(PpnnCells) }
-bbconcat pnr.DontUseCells { restrict(D14PlusCells) }
-bbconcat pnr.DontUseCells { restrict(D16PlusCells) }
-bbconcat pnr.DontUseCells { restrict(D18PlusCells) }
-bbconcat pnr.DontUseCells { restrict(D20PlusCells) }
-bbconcat pnr.DontUseCells { restrict(AllD24PlusCells) }
-bbconcat pnr.DontUseCells { restrict(D32PlusCells) }
-bbconcat pnr.DontUseCells { restrict(D48PlusCells) }
-bbconcat pnr.DontUseCells { restrict(MyAllD0P7Cells) }
-bbconcat pnr.DontUseCells { restrict(MyAllD0P8Cells) }
-bbconcat pnr.DontUseCells { restrict(MyGOLDCells) }
-bbconcat pnr.DontUseCells { restrict(MyLeakageCells) }
-bbconcat pnr.DontUseCells { restrict(MyGOOGCells) }
-bbconcat pnr.DontUseCells { allow(MyISOLVTCells) }
-bbconcat pnr.DontUseCells { allow(MyISOULVTLLCells) }
-bbconcat pnr.DontUseCells { allow(MyLVLLLVTCells) }
-bbconcat pnr.DontUseCells { allow(MyLVLLULVTLLCells) }
 
 ############# Path group ######################
 bbset pnr.PathGroupOverrides      {INPUT {effortLevel low}  IN2OUT {effortLevel low}
